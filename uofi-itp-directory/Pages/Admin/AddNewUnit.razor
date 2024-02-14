@@ -1,0 +1,48 @@
+﻿@page "/Admin/NewUnit"
+
+<PageTitle>Add New Unit | UIUC</PageTitle>
+
+<il-section class="iled-section">
+<il-breadcrumbs>
+    <il-breadcrumbs-page href="/about">Administration</il-breadcrumbs-page>
+    <il-breadcrumbs-page current="">Add New Unit</il-breadcrumbs-page>
+</il-breadcrumbs>
+</il-section>
+
+<il-section-with-sidebar>
+    <div slot="sidebar">
+        <il-section-nav>
+            <h3><a href="/">Administration</a></h3>
+            <ul>
+                <li>
+                    <a title="Add New Unit" href="/admin/newunit" class="active">Add New Unit</a>
+                </li>
+                <li>
+                    <a title="User Administration" href="/about/culture-community">User Administration</a>
+                </li>
+            </ul>
+        </il-section-nav>
+    </div>
+    <il-section>
+        <h1>Add a New Unit</h1>
+        <p>Global Administrators may add new units. Please assign a name to the unit and a primary contact. This primary contact will be able to go into this application and:</p>
+        <ul>
+            <li>Add and remove individual administrators to the area</li>
+            <li>Change contact information for the area (like web addresses, title, etc.)</li>
+            <li>Add and remove offices to this area, and assign administrative rights to all offices in this area</li>
+            <li>Have administrative control over all offices and profiles inside the office</li>
+        </ul>
+        <p>As a Global Administrator, you will have full access to this area, including the ability to add and remove individual administrators to the area.</p>
+        <p>@Error</p>
+    </il-section>
+    <div class="iled-section-split">
+        @if (TextFields != null)
+        {
+            <LabelAndText Required Label="Unit Name" @ref="TextFields[0]">Unit Name of the unit you are creating.</LabelAndText>
+            <LabelAndText Required Label="Primary Contact NetId" @ref="TextFields[1]">NetID of the primary contact of the unit. The <em>@@illinois.edu</em> suffix is optional.</LabelAndText>
+        }
+    </div>
+    <button class="il-button" @onclick="LookupId">Look up NetID</button>
+    <button class="il-button" @onclick="Send">Save</button>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+</il-section-with-sidebar>

@@ -1,0 +1,19 @@
+﻿<div class="iled-input-box-parent">
+@if (Error)
+{
+    <a name="@TextId"></a>
+}
+<div class="iled-input-box @(Error ? "iled-error" : "")">
+    <label for="@TextId" class="@(Required ? "iled-label-required" : "")">@Label</label>
+    @if (Required)
+    {
+        <input id="@TextId" type="text" required @bind="Value">
+    } else
+    {
+        <input id="@TextId" type="text" @bind="Value">
+    }
+</div>
+<div class="iled-instructions">
+    @ChildContent
+</div>
+</div>

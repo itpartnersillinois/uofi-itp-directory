@@ -1,0 +1,57 @@
+﻿<il-nav slot="navigation">
+    @if (IsFullAdmin)
+    {
+        <il-nav-section>
+            <a href="#" slot="label">Administrators</a>
+            <ul class="il-subnav">
+                <li><a href="/Admin/NewUnit">Add a New Unit</a></li>
+                <li><a href="#">Global Administrators</a></li>
+            </ul>
+        </il-nav-section>
+    }
+    @if (IsUnitAdmin)
+    {
+        <il-nav-section>
+            <a href="#" slot="label">Unit Information</a>
+        <ul class="il-subnav">
+            <li><a href="#">General Information</a></li>
+            <li><a href="#">Unit Administrators</a></li>
+            <li><a href="#">Internal Information</a></li>
+            <li><a href="#">Links to Pull Information</a></li>
+        </ul>
+    </il-nav-section>
+    }
+    @if (IsOfficeAdmin)
+    {
+        <il-nav-section>
+            <a href="#" slot="label">Office Information</a>
+        <ul class="il-subnav">
+            <li><a href="#">General Information</a></li>
+            <li><a href="#">Office Hours</a></li>
+            <li><a href="#">People</a></li>
+            <li><a href="#">Unit Administrators</a></li>
+            <li><a href="#">Internal Information</a></li>
+            <li><a href="#">Links to Pull Information</a></li>
+        </ul>
+    </il-nav-section>
+    }
+    @if (HasProfile)
+    {
+        <il-nav-section>
+            <a href="#" slot="label">My Profile</a>
+        <ul class="il-subnav">
+            <li><a href="#">Look up Profile</a></li>
+            <li><a href="#">Preferred Name</a></li>
+            <li><a href="#">Preferred Pronouns</a></li>
+            <li><a href="#">Headshot</a></li>
+            <li><a href="#">CV/Resume</a></li>
+            <li><a href="#">Biography</a></li>
+            <li><a href="#">Activites</a></li>
+            <li><a href="#">Generate Email Signature</a></li>
+        </ul>
+    </il-nav-section>
+    }
+    <il-nav-section>
+        <a href="#" slot="label">Contact Us</a>
+    </il-nav-section>
+</il-nav>

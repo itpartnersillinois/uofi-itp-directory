@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uofi-itp-directory", "uofi-itp-directory\uofi-itp-directory.csproj", "{6D1FA63F-18DB-46F4-8A53-428EE4670E91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uofi-itp-directory-data", "uofi-itp-directory-data\uofi-itp-directory-data.csproj", "{0CC3759D-CFF6-4F35-AD43-A6FF94023329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CD6DA37-8A25-4AD7-88EE-D089087FD38B}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		CODEOWNERS. = CODEOWNERS.
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D1FA63F-18DB-46F4-8A53-428EE4670E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1FA63F-18DB-46F4-8A53-428EE4670E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1FA63F-18DB-46F4-8A53-428EE4670E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1FA63F-18DB-46F4-8A53-428EE4670E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CC3759D-CFF6-4F35-AD43-A6FF94023329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC3759D-CFF6-4F35-AD43-A6FF94023329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC3759D-CFF6-4F35-AD43-A6FF94023329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC3759D-CFF6-4F35-AD43-A6FF94023329}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52DFEBB9-5B96-402F-886C-8349BD5AAF20}
+	EndGlobalSection
+EndGlobal
