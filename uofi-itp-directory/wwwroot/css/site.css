@@ -148,6 +148,21 @@ div.iled-section-split {
     background: #fbb5b5;
 }
 
+.iled-username {
+    padding: 10px 30px;
+    border: 1px solid var(--il-blue);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+    .iled-username span {
+        font-weight: 700;
+        display: inline-block;
+        flex-grow: 1;
+    }
+
 /* Blazor warnings */
 #blazor-error-ui {
     background: lightyellow;

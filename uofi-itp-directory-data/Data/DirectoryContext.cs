@@ -53,8 +53,8 @@ namespace uofi_itp_directory_data.Data {
             Debug.WriteLine($"{id} context starting initial setup.");
             modelBuilder.Entity<SecurityEntry>().HasData(new List<SecurityEntry>
             {
-                new("jonker") { Id = -1 },
-                new("rbwatson") { Id = -2 }
+                new("jonker", "Bryan", "Jonker") { Id = -1 },
+                new("rbwatson", "Rob", "Watson") { Id = -2 }
             });
             Debug.WriteLine($"{id} context finishing initial setup.");
         }

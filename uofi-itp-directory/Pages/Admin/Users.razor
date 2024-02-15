@@ -1,0 +1,25 @@
+﻿@page "/admin/users"
+@using uofi_itp_directory_data.DataModels
+
+<PageTitle>Global Admin | UIUC</PageTitle>
+
+<il-section>
+    <h1>Global Administrators</h1>
+    <p>These people will be able to create new units, new offices, create unit administrators, and office administrators.</p>
+    <p>@Error</p>
+</il-section>
+<il-section class="iled-username-parent">
+    @foreach (var entity in SecurityEntries ?? new List<SecurityEntry>())
+    {
+        <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)"></UsernameItem>
+    }
+</il-section>
+<div>
+    @if (TextFields != null)
+    {
+        <LabelAndText Required Label="Add a New Global Administrator" @ref="TextFields[0]">NetID of the global administrator. The <em>@@illinois.edu</em> suffix is optional.</LabelAndText>
+    }
+</div>
+<button class="il-button" @onclick="LookupId">Look up NetID</button>
+<button class="il-button" @onclick="Send">Save</button>
+<div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>

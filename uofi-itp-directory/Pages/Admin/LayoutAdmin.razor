@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+@layout SidebarLayout
+
+<il-section-with-sidebar>
+    <div slot="sidebar">
+        <il-section-nav>
+            <h3><a href="/">Administration</a></h3>
+            <ul>
+                <li>
+                    <a title="Add New Unit" href="/admin/newunit" class="active">Add New Unit</a>
+                </li>
+                <li>
+                    <a title="Global Administrators" href="/admin/users">Global Administrators</a>
+                </li>
+            </ul>
+        </il-section-nav>
+    </div>
+    @Body
+</il-section-with-sidebar>

@@ -21,6 +21,7 @@ builder.Services.AddScoped<DirectoryRepository>();
 builder.Services.AddScoped(c => new DataWarehouseManager(builder.Configuration["DataWarehouseUrl"], builder.Configuration["DataWarehouseKey"]));
 builder.Services.AddScoped<PersonOptionHelper>();
 builder.Services.AddScoped<AreaHelper>();
+builder.Services.AddScoped<SecurityEntryHelper>();
 
 builder.Services.AddAuthorization(options => {
     // By default, all incoming requests will be authorized according to the default policy
