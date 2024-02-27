@@ -118,9 +118,8 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InstructionsCv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("AutoloadProfiles")
+                        .HasColumnType("bit");
 
                     b.Property<string>("InstructionsEmployee")
                         .IsRequired()
@@ -130,27 +129,19 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InstructionsEmployeeTags")
+                    b.Property<string>("InstructionsEmployeeCv")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InstructionsHeadshot")
+                    b.Property<string>("InstructionsEmployeeHeadshot")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InstructionsMain")
+                    b.Property<string>("InstructionsEmployeeSignature")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InstructionsOfficeTags")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstructionsProfile")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstructionsRefresh")
+                    b.Property<string>("InstructionsOffice")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -230,6 +221,45 @@ namespace uofi_itp_directory_data.Migrations
                     b.ToTable("AreaTags");
                 });
 
+            modelBuilder.Entity("uofi_itp_directory_data.DataModels.DirectoryEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DateRun")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSubmitted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccessful")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NetId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DirectoryEntries");
+                });
+
             modelBuilder.Entity("uofi_itp_directory_data.DataModels.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -253,11 +283,11 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsInExperts")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPhoneHidden")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastRefreshed")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -403,6 +433,9 @@ namespace uofi_itp_directory_data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
                     b.Property<int>("EmployeeProfileId")
                         .HasColumnType("int");
 
@@ -471,7 +504,7 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Detatils")
+                    b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -480,18 +513,6 @@ namespace uofi_itp_directory_data.Migrations
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NewData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
@@ -567,9 +588,6 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OfficeSettingsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("OfficeType")
                         .HasColumnType("int");
 
@@ -596,8 +614,6 @@ namespace uofi_itp_directory_data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
-
-                    b.HasIndex("OfficeSettingsId");
 
                     b.ToTable("Offices");
                 });
@@ -666,7 +682,13 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("OfficeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OfficeId")
+                        .IsUnique();
 
                     b.ToTable("OfficeSettings");
                 });
@@ -689,6 +711,9 @@ namespace uofi_itp_directory_data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFullAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdated")
@@ -724,9 +749,10 @@ namespace uofi_itp_directory_data.Migrations
                             CanEditAllPeopleInUnit = true,
                             IsActive = true,
                             IsFullAdmin = true,
+                            IsPublic = false,
                             LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ListedNameFirst = "",
-                            ListedNameLast = "",
+                            ListedNameFirst = "Bryan",
+                            ListedNameLast = "Jonker",
                             NetId = "jonker@illinois.edu"
                         },
                         new
@@ -735,9 +761,10 @@ namespace uofi_itp_directory_data.Migrations
                             CanEditAllPeopleInUnit = true,
                             IsActive = true,
                             IsFullAdmin = true,
+                            IsPublic = false,
                             LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ListedNameFirst = "",
-                            ListedNameLast = "",
+                            ListedNameFirst = "Rob",
+                            ListedNameLast = "Watson",
                             NetId = "rbwatson@illinois.edu"
                         });
                 });
@@ -791,7 +818,7 @@ namespace uofi_itp_directory_data.Migrations
             modelBuilder.Entity("uofi_itp_directory_data.DataModels.EmployeeHour", b =>
                 {
                     b.HasOne("uofi_itp_directory_data.DataModels.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("EmployeeHours")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -835,22 +862,25 @@ namespace uofi_itp_directory_data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("uofi_itp_directory_data.DataModels.OfficeSettings", "OfficeSettings")
-                        .WithMany()
-                        .HasForeignKey("OfficeSettingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Area");
-
-                    b.Navigation("OfficeSettings");
                 });
 
             modelBuilder.Entity("uofi_itp_directory_data.DataModels.OfficeHour", b =>
                 {
                     b.HasOne("uofi_itp_directory_data.DataModels.Office", "Office")
-                        .WithMany()
+                        .WithMany("OfficeHours")
                         .HasForeignKey("OfficeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Office");
+                });
+
+            modelBuilder.Entity("uofi_itp_directory_data.DataModels.OfficeSettings", b =>
+                {
+                    b.HasOne("uofi_itp_directory_data.DataModels.Office", "Office")
+                        .WithOne("OfficeSettings")
+                        .HasForeignKey("uofi_itp_directory_data.DataModels.OfficeSettings", "OfficeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -886,6 +916,8 @@ namespace uofi_itp_directory_data.Migrations
                 {
                     b.Navigation("EmployeeActivities");
 
+                    b.Navigation("EmployeeHours");
+
                     b.Navigation("JobProfiles");
                 });
 
@@ -899,6 +931,11 @@ namespace uofi_itp_directory_data.Migrations
                     b.Navigation("Admins");
 
                     b.Navigation("JobProfiles");
+
+                    b.Navigation("OfficeHours");
+
+                    b.Navigation("OfficeSettings")
+                        .IsRequired();
 
                     b.Navigation("Tags");
                 });

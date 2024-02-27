@@ -1,0 +1,48 @@
+﻿@page "/office/hours/{officeid:int?}"
+
+<PageTitle>Office General | UIUC</PageTitle>
+
+<il-section>
+    <h1>@OfficeTitle</h1>
+    <p>Edit your office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM".</p>
+</il-section>
+@if (!OfficeId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Office" AreaOfficeThinObjects="_officeThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (OfficeHours != null)
+{
+    foreach (var officeHour in OfficeHours)
+    {
+        <div class="iled-hours-parent">
+           <h2>@officeHour.Day</h2>
+            <div class="iled-hours-time">
+                <label for="ed-date-from-@officeHour.DayNumeric" class="iled-sr-only">From </label>
+                <input id="ed-date-from-@officeHour.DayNumeric" type="time" @bind="@officeHour.Start">
+                <label for="ed-date-to-@officeHour.DayNumeric">to </label>
+                <input id="ed-date-to-@officeHour.DayNumeric" type="time" @bind="@officeHour.End">
+            </div>
+            <div class="iled-hours-location" hidden="@officeHour.HideNotes">
+                <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
+                       name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
+                <label for="ed-date-location-blank-@officeHour.DayNumeric">N/A</label>
+                <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
+                       name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
+                <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
+                <input type="radio" id="ed-date-location-remote-@officeHour.DayNumeric" checked="@(officeHour.NotesEnum == LocationTypeEnum.Remote)"
+                       name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Remote))" />
+                <label for="ed-date-location-remote-@officeHour.DayNumeric">Remote</label>
+                <input type="radio" id="ed-date-location-other-@officeHour.DayNumeric" checked="@(officeHour.NotesEnum == LocationTypeEnum.Other)"
+                       name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Other))" />
+                <label for="ed-date-location-other-@officeHour.DayNumeric">Other</label>
+
+                <label for="ed-date-notes-@officeHour.DayNumeric" class="iled-sr-only">Other Notes</label>
+                <input id="ed-date-notes-@officeHour.DayNumeric" type="text" @bind="@officeHour.Notes" hidden="@(officeHour.NotesEnum != LocationTypeEnum.Other)">
+
+            </div>
+        </div>
+    }
+
+    <button class="il-button" @onclick="Send">Save</button>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+}

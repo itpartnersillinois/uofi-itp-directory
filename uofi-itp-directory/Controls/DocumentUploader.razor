@@ -1,0 +1,18 @@
+﻿<div class="iled-section-vertical">
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="@UploaderId">Upload Document</label>
+            <InputFile OnChange="@SaveFileToTemp" id="@UploaderId" class="iled-cv"/>
+        </div>
+    </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-photocv">
+            @if (!string.IsNullOrWhiteSpace(FileUrl))
+            {
+                <a target="_blank" href="@FileUrl">@DocumentText</a>
+                <button @onclick="@DeleteFile" class="il-button">Delete</button>
+            }
+        </div>
+    </div>
+</div>
+

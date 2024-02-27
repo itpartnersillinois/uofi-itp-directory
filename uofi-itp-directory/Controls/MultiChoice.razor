@@ -1,0 +1,13 @@
+﻿@if (AreaOfficeThinObjects != null)
+{
+    <div class="iled-input-box">
+        <label for="ed-multichoice">@Label[Type]</label>
+        <select id="ed-multichoice" @bind="SelectedId">
+    @foreach (var item in AreaOfficeThinObjects)
+    {
+        <option value="@item.Id"> @item.Title</option>
+    }
+    </select>
+</div>
+    <button class="il-button" @onclick="Click">Choose this</button>
+}

@@ -1,0 +1,22 @@
+﻿@if (Information != null && Information.Any())
+{
+    <div class="iled-float">
+        <h2>Your Office Administrators</h2>
+        <div>
+            @foreach (var office in Information)
+            {
+                <span>@office.OfficeName</span>
+                <br />
+                <span>@office.PersonTitle</span>
+                <br />
+                @foreach (var manager in office.OfficeManagers)
+                {
+                    <span>@manager.Name, @manager.Email</span>
+                    <br />
+                }
+            }
+
+            <p>This is your office administrator who can assist you with updating profile and office information.</p>
+        </div>
+    </div>
+}

@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+@layout SidebarLayout
+
+<il-section-with-sidebar>
+    <div slot="sidebar">
+        <il-section-nav>
+            <h3><a href="/">Profile Administration</a></h3>
+            <ul>
+                <li>
+                    <a title="General Information" href="/profile/general">General Information</a>
+                </li>
+                <li>
+                    <a title="Headshot" href="/profile/headshot">Headshot</a>
+                </li>
+                <li>
+                    <a title="Resume / CV" href="/profile/cv">Resume / CV</a>
+                </li>
+                <li>
+                    <a title="Biography" href="/profile/biography">Biography</a>
+                </li>
+                <li>
+                    <a title="Office Hours" href="/profile/hours">Office Hours</a>
+                </li>
+                <li>
+                    <a title="Activities" href="/profile/activities">Activities</a>
+                </li>
+                <li>
+                    <a title="Generate Email Signature" href="/profile/signature">Generate Email Signature</a>
+                </li>
+            </ul>
+        </il-section-nav>
+        <LoginInformation></LoginInformation>
+    </div>
+    @Body
+</il-section-with-sidebar>
