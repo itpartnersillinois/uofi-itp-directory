@@ -7,6 +7,15 @@ main {
     padding: 0 var(--il-content-margin);
 }
 
+.iled-sr-only {
+    position: absolute !important;
+    left: -10000px !important;
+    top: auto !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+}
+
 .iled-section {
     margin: 0 auto;
     display: grid;
@@ -53,6 +62,25 @@ main {
         width: 100%;
     }
 
+p.iled-instructions-specific {
+    border: thin solid var(--il-orange);
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+div[slot="sidebar"] {
+    display: grid;
+    grid-template-rows: 1fr 35px;
+    height: 100%;
+    row-gap: 20px;
+}
+
+.iled-login {
+    font-size: 1rem;
+    padding: 0 0 0 20px;
+}
+/* Button tweaks */
+
 il-card .iled-buttons {
     margin-top: 30px;
 }
@@ -63,7 +91,20 @@ il-card .iled-buttons {
     justify-content: center;
 }
 
-/* Fadeout options */
+.iled-buttons-left {
+    display: flex;
+    column-gap: 10px;
+    justify-content: left;
+}
+
+button[disabled].il-button, button[disabled].il-button:focus, button[disabled].il-button:hover {
+    color: var(--il-gray-2) !important;
+    border-color: var(--il-cloud-3) !important;
+    background: white !important;
+    cursor: default !important;
+}
+
+/* Alert messages with fadeout */
 
 #update-alert-parent {
     min-width: 100px;
@@ -89,8 +130,18 @@ il-card .iled-buttons {
 
 div.iled-section-split {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: calc(50% - 20px) calc(50% - 20px);
+    column-gap: 40px;
+}
+
+div.iled-section-split-25 {
+    display: grid;
+    grid-template-columns: calc(25% - 30px) calc(25% - 30px) calc(25% - 30px) calc(25% - 30px);
     column-gap: 20px;
+}
+
+.iled-input-box-parent {
+    margin: 5px 0 20px 0;
 }
 
 /* Form Information to replace ils- code */
@@ -104,7 +155,6 @@ div.iled-section-split {
         font-size: 20px;
         font-style: normal;
         font-weight: 700;
-        line-height: 32px;
         margin: 0;
         text-align: left;
         line-height: 1.3em;
@@ -113,11 +163,10 @@ div.iled-section-split {
     .iled-input-box .iled-label-required::before {
         content: '*';
         vertical-align: middle;
-        vertical-align: -moz-middle-with-baseline;
         color: var(--il-altgeld);
     }
 
-    .iled-input-box input {
+    .iled-input-box input, .iled-input-box select, .iled-input-box textarea {
         margin: 0;
         border-radius: 5px;
         padding: 10px;
@@ -126,14 +175,55 @@ div.iled-section-split {
         border: thin var(--il-blue) solid;
     }
 
-        .iled-input-box input:hover {
-            background: var(--il-cloud);
+        .iled-input-box input[type="time"] {
+            width: 150px;
         }
 
-        .iled-input-box input:focus {
-            background: var(--il-cloud);
-            outline: 3px solid var(--il-altgeld);
+    .iled-input-box textarea {
+        height: 50px;
+    }
+
+        .iled-input-box textarea.iled-textbox-large {
+            height: 250px;
         }
+
+    .iled-input-box input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 9px;
+        margin-top: 9px;
+        accent-color: var(--il-blue);
+    }
+
+    .iled-input-box input:hover, .iled-input-box select:hover, .iled-input-box textarea:hover {
+        background-color: var(--il-cloud);
+    }
+
+    .iled-input-box input:focus, .iled-input-box select:focus, .iled-input-box textarea:focus {
+        background-color: var(--il-cloud);
+        outline: 3px solid var(--il-altgeld);
+    }
+
+    .iled-input-box input[disabled], .iled-input-box select[disabled], .iled-input-box textarea[disabled] {
+        border: none;
+        padding-left: 0;
+        background-color: white !important;
+        color: black;
+        background-image: none;
+    }
+
+        .iled-input-box select[disabled] option {
+            color: black;
+        }
+
+    .iled-input-box select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' width='18' height='18' ><path fill='%23ff5f05' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'></path></svg>");
+        background-repeat: no-repeat;
+        background-position-x: calc(100% - 12px);
+        background-position-y: 10px;
+    }
 
 .iled-instructions {
     color: var(--il-gray-2);
@@ -146,6 +236,142 @@ div.iled-section-split {
 
 .iled-error {
     background: #fbb5b5;
+}
+
+/* Username information for administration */
+.iled-username {
+    padding: 10px 30px;
+    border: 1px solid var(--il-blue);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+    .iled-username span {
+        font-weight: 700;
+        display: inline-block;
+        flex-grow: 1;
+    }
+
+    .iled-username button {
+        width: 180px;
+    }
+
+/* Hours of Operations */
+
+.iled-hours-parent {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+    .iled-hours-parent h2, .iled-hours-parent h3 {
+        color: var(--il-blue);
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 32px;
+        margin: 0;
+        text-align: left;
+        line-height: 1.3em;
+    }
+
+    .iled-hours-parent .iled-hours-time input {
+        margin: 0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font: 16px/18px var(--il-source-sans);
+        border: thin var(--il-blue) solid;
+        width: 250px;
+        accent-color: var(--il-orange);
+    }
+
+        .iled-hours-parent .iled-hours-time input:hover, .iled-hours-parent .iled-hours-location input:hover {
+            background-color: var(--il-cloud);
+        }
+
+        .iled-hours-parent .iled-hours-time input:focus, .iled-hours-parent .iled-hours-location input:focus {
+            background-color: var(--il-cloud);
+            outline: 3px solid var(--il-altgeld);
+        }
+
+    .iled-hours-parent .iled-hours-time label {
+        display: inline-block;
+        width: 40px;
+        text-align: center;
+    }
+
+    .iled-hours-parent .iled-hours-location {
+        margin-top: 10px;
+    }
+
+        .iled-hours-parent .iled-hours-location label {
+            margin-right: 15px;
+        }
+
+        .iled-hours-parent .iled-hours-location input[type="text"] {
+            margin: 0 0 0 50px;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font: 16px/18px var(--il-source-sans);
+            border: thin var(--il-blue) solid;
+            width: 360px;
+        }
+
+/* Photo and CV upload */
+div.iled-section-vertical {
+    max-width: 500px;
+}
+
+.iled-input-box input[type="file"] {
+    height: 120px;
+    padding: 80px 0 0 150px;
+}
+
+    .iled-input-box input[type="file"].iled-cv {
+        height: initial;
+        padding: 20px 30px;
+    }
+
+.iled-photocv {
+    display: flex;
+    flex-direction: column;
+}
+
+    .iled-photocv button {
+        width: 150px;
+    }
+
+    .iled-photocv img {
+        max-height: 250px;
+    }
+
+/* Profile activities */
+.iled-activity {
+    margin: 10px 0;
+    border: solid thin var(--il-blue);
+    padding: 0 0 30px 0;
+}
+
+    .iled-activity .iled-activity-title {
+        color: white;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+        line-height: 1.3em;
+        text-align: center;
+        padding: 20px;
+        background: var(--il-blue);
+    }
+
+    .iled-activity .iled-activity-content {
+        padding: 0 30px;
+    }
+
+/* Search screens */
+.iled-input-box select.iled-select-lookup {
+    background: none;
 }
 
 /* Blazor warnings */

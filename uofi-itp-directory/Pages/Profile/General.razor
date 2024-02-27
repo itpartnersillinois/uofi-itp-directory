@@ -1,0 +1,77 @@
+﻿@page "/profile/general"
+
+<PageTitle>Profile | UIUC</PageTitle>
+@if (Employee != null)
+{
+<il-section>
+    <h1>@Employee.ProfileName</h1>
+    <p>Welcome to @(Employee.IsCurrentUser ? "your profile" : "the profile of " + Employee.ProfileName)! Edit the profile information below. Note that you may not be able to edit everything on this page. Some information is only editable by the employee, and others are only editable by the person who manages your office.</p>
+        <Instructions ChildContent="@Instructions"></Instructions>
+
+    <h2>General Information</h2>
+    <h3>Preferred Name</h3>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-firstname">First Name</label>
+                    <input id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-lastname">Last Name</label>
+                    <input id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
+            </div>
+        </div>
+    </div>
+    <h3>Preferred Pronouns</h3>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-pronouns">Preferred Pronouns</label>
+                    <input id="ed-pronouns" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredPronouns">
+            </div>
+        </div>
+    </div>
+    <h3>Job Title(s)</h3>
+    @foreach (var profile in Employee.JobProfiles)
+    {
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-title-@profile.Id">Title</label>
+                        <input id="ed-title-@profile.Id" type="text" disabled="@profile.IsEntryDisabled" @bind="profile.Title">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                        <label for="ed-type-@profile.Id">Job Type</label>
+                        <select id="ed-type-@profile.Id" @bind="profile.Category">
+                        @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                        {
+                                <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                        <label for="ed-order-@profile.Id">Display Order</label>
+                        <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay">
+                            @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                            {
+                                <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                            }
+                        </select>
+                    </div>
+            </div>
+        </div>
+        }
+        <button class="il-button" @onclick="Send">Save</button>
+        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+
+</il-section>
+}

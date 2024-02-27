@@ -8,14 +8,23 @@ namespace uofi_itp_directory_data.DataModels {
         public string Building { get; set; } = "";
         public string CVUrl { get; set; } = "";
         public virtual ICollection<EmployeeActivity> EmployeeActivities { get; set; } = default!;
+        public virtual ICollection<EmployeeHour> EmployeeHours { get; set; } = default!;
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
 
-        public bool IsInExperts { get; set; } = false;
+        [NotMapped]
+        public bool IsCurrentUser { get; set; } = false; // used by the code to determine if this user is this person
+
+        [NotMapped]
+        public bool IsEntryDisabled { get; set; } = true; // used by the code to determine if the user can edit this object
+
         public bool IsPhoneHidden { get; set; } = false;
+
         public virtual ICollection<JobProfile> JobProfiles { get; set; } = default!;
+
+        public DateTime? LastRefreshed { get; set; }
 
         [NotMapped]
         public string ListedName => string.IsNullOrEmpty(ListedNameLast) || string.IsNullOrEmpty(ListedNameFirst) ? "" : ListedNameLast + ", " + ListedNameFirst;
@@ -25,13 +34,30 @@ namespace uofi_itp_directory_data.DataModels {
         public string ListedNameLast { get; set; } = "";
 
         public string NetId { get; set; } = "";
+
+        [NotMapped]
+        public string NetIdTruncated => NetId?.ToLowerInvariant().Replace("@illinois.edu", "") ?? "";
+
         public string OfficeInformation { get; set; } = "";
+
         public string Phone { get; set; } = "";
+
         public string PhotoUrl { get; set; } = "";
+
         public string PreferredNameFirst { get; set; } = "";
+
         public string PreferredNameLast { get; set; } = "";
+
         public string PreferredPronouns { get; set; } = "";
+
+        [NotMapped]
+        public JobProfile PrimaryJobProfile => JobProfiles.First(jp => PrimaryProfile == null || jp.OfficeId == PrimaryProfile);
+
         public int? PrimaryProfile { get; set; }
+
+        [NotMapped]
+        public string ProfileName => IsCurrentUser ? "My Profile" : ListedName;
+
         public string Room { get; set; } = "";
 
         public string GenerateSignatureName() {

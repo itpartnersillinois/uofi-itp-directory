@@ -1,0 +1,51 @@
+﻿@page "/office/directory/{officeid:int?}"
+
+<PageTitle>Office General | UIUC</PageTitle>
+
+<il-section>
+    <h1>@OfficeTitle Links</h1>
+    <p>Your office information is accessible through an Application Programming Interface (API). This allows applications from other systems on campus to access this information.</p>
+    <p>You have two options to access this information</p>
+    <ul>
+        <li><em>By ID</em>: When you created an office, an ID was assigned to your office. This number can be used to access your information.</li>
+        <li><em>By Code</em>: You can create a unique code that you can use. Often, this code is more memorable than your ID.</li>
+    </ul>
+    <p>@Error</p>
+
+</il-section>
+@if (!OfficeId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Office" AreaOfficeThinObjects="_officeThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (Office != null)
+{
+    <div class="iled-section-split">
+        <div>
+            <a href="https://supportcontactapp.illinois.edu/Api/Contact/Office/@Office.Id" target="_blank" class="il-button">Link to get information by ID</a>
+        </div>
+        <div>
+            @if (string.IsNullOrWhiteSpace(OfficeSettings.InternalCode))
+            {
+                <p>Because you do not have an internal code set, you do not have a link to get information by code</p>
+            }
+            else
+            {
+                <a href="https://supportcontactapp.illinois.edu/Api/Contact/OfficeCode/@OfficeSettings.InternalCode" target="_blank" class="il-button">Link to get information by Code</a>
+            }
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-internalcode">Internal Code</label>
+                <input id="ed-internalcode" type="text" @bind="OfficeSettings.InternalCode">
+            </div>
+            <div class="iled-instructions">
+                The internal code is used to send to the API as opposed to the ID of the office.
+            </div>
+        </div>
+    </div>
+
+    <button class="il-button" @onclick="Send">Save</button>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+}

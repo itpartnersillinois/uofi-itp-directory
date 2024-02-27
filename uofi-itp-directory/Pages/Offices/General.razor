@@ -1,0 +1,150 @@
+﻿@page "/office/general/{officeid:int?}"
+
+<PageTitle>Office General | UIUC</PageTitle>
+
+<il-section>
+    <h1>@OfficeTitle</h1>
+    <p>Edit your office’s general information below.</p>
+</il-section>
+@if (!OfficeId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Office" AreaOfficeThinObjects="_officeThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (Office != null)
+{
+    <Instructions ChildContent="@Instructions"></Instructions>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unitname" class="iled-label-required">Office Name</label>
+                <input id="ed-unitname" type="text" required @bind="Office.Title">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unittype">Office Type</label>
+                <select id="ed-unittype" @bind="Office.OfficeType">
+                    @foreach (var enumtype in Enum.GetValues<OfficeTypeEnum>())
+                    {
+                        <option value="@enumtype">@enumtype</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-audience">Audience</label>
+                <input id="ed-audience" type="text" @bind="Office.Audience">
+            </div>
+            <div class="iled-instructions">
+                Who does this office serve? Students in general, staff, students of a particular college, etc.?
+            </div>
+        </div>
+    </div>
+    <h2>Contact Information</h2>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-email">Email</label>
+                <input id="ed-email" type="text" @bind="Office.Email">
+            </div>
+            <div class="iled-instructions">
+                Department or unit email. Please do not use an individual's email address.
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-phone">Phone</label>
+                <input id="ed-phone" type="text" @bind="Office.Phone">
+            </div>
+            <div class="iled-instructions">
+                Department or unit phone number, including area code. Please do not use an individual's phone number.
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-externalurl">External Url</label>
+                <input id="ed-externalurl" type="text" @bind="Office.ExternalUrl">
+            </div>
+            <div class="iled-instructions">
+                This is the link that outside users will use to access your site.<br />
+                <a href="@Office.ExternalUrl" target="_blank">Test External Link</a>
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-internalurl">Internal Url</label>
+                <input id="ed-internalurl" type="text" @bind="Office.InternalUrl">
+            </div>
+            <div class="iled-instructions">
+                This is the link that users inside your organization will use to access your site. <br />
+                <a href="@Office.InternalUrl" target="_blank">Test Internal Link</a>
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ticketurl">Url for Tickets</label>
+                <input id="ed-ticketurl" type="text" @bind="Office.TicketUrl">
+            </div>
+            <div class="iled-instructions">
+                This is the link to submit help tickets to your office. If you do not have a ticket intake form, please leave blank. <br />
+                <a href="@Office.TicketUrl" target="_blank">Test Ticket Link</a>
+            </div>
+        </div>
+    </div>
+    <h2>Building Information</h2>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-room">Room #</label>
+                <input id="ed-room" type="text" @bind="Office.Room">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-building">Building</label>
+                <input id="ed-building" type="text" @bind="Office.Building">
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-bcode">Building Code</label>
+                <input id="ed-bcode" type="text" @bind="Office.BuildingCode">
+            </div>
+            <div class="iled-instructions">
+                The four-digit building code can be found on the <a href="https://fs.illinois.edu/building-list-by-building-number" target="_blank">F & S Website</a>
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-address">Mailing Address</label>
+                <input id="ed-address" type="text" @bind="Office.Address">
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-city">City</label>
+                <input id="ed-city" type="text" @bind="Office.City">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-zip">Zip Code</label>
+                <input id="ed-zip" type="text" @bind="Office.ZipCode">
+            </div>
+        </div>
+    </div>
+
+    <button class="il-button" @onclick="Send">Save</button>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+}

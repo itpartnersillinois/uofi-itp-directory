@@ -23,6 +23,8 @@ namespace uofi_itp_directory_data.Data {
 
         public DbSet<AreaTag> AreaTags { get; set; }
 
+        public DbSet<DirectoryEntry> DirectoryEntries { get; set; }
+
         public DbSet<EmployeeActivity> EmployeeActivities { get; set; }
         public DbSet<EmployeeHour> EmployeeHours { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -53,8 +55,8 @@ namespace uofi_itp_directory_data.Data {
             Debug.WriteLine($"{id} context starting initial setup.");
             modelBuilder.Entity<SecurityEntry>().HasData(new List<SecurityEntry>
             {
-                new("jonker") { Id = -1 },
-                new("rbwatson") { Id = -2 }
+                new("jonker", "Bryan", "Jonker") { Id = -1 },
+                new("rbwatson", "Rob", "Watson") { Id = -2 }
             });
             Debug.WriteLine($"{id} context finishing initial setup.");
         }

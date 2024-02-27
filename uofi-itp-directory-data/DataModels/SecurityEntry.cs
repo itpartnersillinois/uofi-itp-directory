@@ -8,12 +8,14 @@ namespace uofi_itp_directory_data.DataModels {
         public SecurityEntry() {
         }
 
-        public SecurityEntry(string name, int? areaId = null, int? officeId = null, bool canEditPeople = false) {
-            name = name.ToLowerInvariant();
+        public SecurityEntry(string netId, string firstName, string lastName, int? areaId = null, int? officeId = null, bool canEditPeople = false) {
             var isFullAdmin = areaId == null && officeId == null;
-            NetId = TransformName(name);
+            ListedNameFirst = firstName;
+            ListedNameLast = lastName;
+            NetId = TransformName(netId);
             IsFullAdmin = isFullAdmin;
             IsActive = true;
+            IsPublic = false;
             AreaId = areaId;
             OfficeId = officeId;
             CanEditAllPeopleInUnit = isFullAdmin || canEditPeople;
@@ -29,7 +31,8 @@ namespace uofi_itp_directory_data.DataModels {
         public override int Id { get; set; }
 
         public bool IsFullAdmin { get; set; }
-        public string ListedName => string.IsNullOrEmpty(ListedNameLast) || string.IsNullOrEmpty(ListedNameFirst) ? "" : ListedNameLast + ", " + ListedNameFirst;
+        public bool IsPublic { get; set; }
+        public string ListedName => string.IsNullOrEmpty(ListedNameLast) || string.IsNullOrEmpty(ListedNameFirst) ? "" : ListedNameFirst + " " + ListedNameLast;
 
         public string ListedNameFirst { get; set; } = "";
 
@@ -37,6 +40,6 @@ namespace uofi_itp_directory_data.DataModels {
         public string NetId { get; set; } = "";
         public int? OfficeId { get; set; }
 
-        public static string TransformName(string netid) => netid.EndsWith("@illinois.edu") ? netid : netid + "@illinois.edu";
+        public static string TransformName(string netid) => (netid.EndsWith("@illinois.edu") ? netid : netid + "@illinois.edu").ToLowerInvariant();
     }
 }

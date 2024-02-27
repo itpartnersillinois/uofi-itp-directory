@@ -1,0 +1,83 @@
+﻿@page "/profile/activities"
+
+<PageTitle>Profile Activities | UIUC</PageTitle>
+@if (Employee != null)
+{
+    <il-section>
+        <h1>@Employee.ProfileName Activities</h1>
+        @if (ShouldUseExperts)
+        {
+            <p>This person should update their publications, presentations, history, etc. at <a href="https://go.illinois.edu/experts-login" target="_blank">Illinois Experts</a>.</p>
+        }
+        else
+        {
+
+        <p>Add a professional biography to this profile below. If there is an Illinois Experts profile, please update there. The Illinois Experts biography will always override this biography.</p>
+
+        @foreach (var activity in Employee.EmployeeActivities) {
+            <div class="iled-activity">
+                <p class="iled-activity-title">Activity</p>
+                <div class="iled-activity-content">
+                <div class="iled-input-box-parent">
+                    <div class="iled-input-box">
+                        <label for="ed-title-@activity.Id">Title</label>
+                        <input id="ed-title-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.Title">
+                    </div>
+                </div>
+                <div class="iled-input-box-parent">
+                    <div class="iled-input-box">
+                        <label for="ed-url-@activity.Id">Url</label>
+                                <input id="ed-url-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.Url">
+                    </div>
+                </div>
+                <div class="iled-section-split-25">
+                    <div class="iled-input-box-parent">
+                        <div class="iled-input-box">
+                            <label for="ed-yearstarted-@activity.Id">Year Started</label>
+                                    <input id="ed-yearstarted-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.YearStarted">
+                        </div>
+                    </div>
+                    <div class="iled-input-box-parent">
+                        <div class="iled-input-box">
+                            <label for="ed-yearended-@activity.Id">Year Ended</label>
+                                    <input id="ed-yearended-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.YearEnded">
+                        </div>
+                    </div>
+                    <div class="iled-input-box-parent">
+                        <div class="iled-input-box">
+                            <label for="ed-type-@activity.Id">Type</label>
+                            <select id="ed-type-@activity.Id" disabled="@Employee.IsEntryDisabled"
+                                @bind="activity.Type">
+                                @foreach (var enumtype in Enum.GetValues<ActivityTypeEnum>())
+                                {
+                                    <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="iled-input-box-parent">
+                        <div class="iled-input-box">
+                            <label for="ed-priority-@activity.Id">Priority</label>
+                            <select id="ed-priority-@activity.Id" disabled="@Employee.IsEntryDisabled"
+                                    @bind="activity.InternalOrder">
+                                <option value="1">High</option>
+                                <option value="2">Medium</option>
+                                <option value="3">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="iled-buttons-left">
+                    <button class="il-button" @onclick="() => Save(activity)">Save</button>
+                    <button class="il-button" @onclick="() => Delete(activity)">Delete</button>
+                </div>
+                    </div>
+            </div>
+        }
+
+        <button class="il-button" @onclick="New">New</button>
+        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    }
+    </il-section>
+}

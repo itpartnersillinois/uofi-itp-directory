@@ -3,14 +3,22 @@ using uofi_itp_directory_data.DataModels;
 
 namespace uofi_itp_directory_data.Security {
 
-    internal static class LogHelper {
+    public class LogHelper(DirectoryRepository directoryRepository) {
+        private readonly DirectoryRepository _directoryRepository = directoryRepository;
 
-        public static async Task<int> CreateLog(DirectoryRepository directoryRepository, LogTypeEnum type, int id, string subject, string name, string oldData = "", string newData = "", string netId = "") => await directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = type, SubjectId = id, SubjectText = subject, Name = name, ChangeType = ChangeType(oldData, newData), OldData = oldData, NewData = newData, ChangedByNetId = netId });
+        public async Task<int> CreateAreaLog(string changedByNetId, string changeType, string data, int areaId, string areaName) =>
+            await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.Area, SubjectId = areaId, SubjectText = areaName, ChangedByNetId = changedByNetId, ChangeType = changeType, Data = data });
 
-        private static string ChangeType(string oldData, string newData) {
-            if (string.IsNullOrWhiteSpace(oldData)) { return "Added"; }
-            if (string.IsNullOrWhiteSpace(newData)) { return "Deleted"; }
-            return "Changed";
-        }
+        public async Task<int> CreateEmployeeLog(string changedByNetId, string changeType, string data, int employeeId, string employeeNetId) =>
+            await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.Employee, SubjectId = employeeId, SubjectText = employeeNetId, ChangedByNetId = changedByNetId, ChangeType = changeType, Data = data });
+
+        public async Task<int> CreateOfficeLog(string changedByNetId, string changeType, string data, int officeId, string officeName) =>
+            await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.Area, SubjectId = officeId, SubjectText = officeName, ChangedByNetId = changedByNetId, ChangeType = changeType, Data = data });
+
+        public async Task<int> CreateProfileLog(string changedByNetId, string changeType, string data, int employeeId, string employeeNetId) =>
+            await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.JobProfile, SubjectId = employeeId, SubjectText = employeeNetId, ChangedByNetId = changedByNetId, ChangeType = changeType, Data = data });
+
+        public async Task<int> CreateSecurityLog(string changedByNetId, string changeType, string data, int securityEntryId, string employeeNetId) =>
+            await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.SecuritySetting, SubjectId = securityEntryId, SubjectText = employeeNetId, ChangedByNetId = changedByNetId, ChangeType = changeType, Data = data });
     }
 }

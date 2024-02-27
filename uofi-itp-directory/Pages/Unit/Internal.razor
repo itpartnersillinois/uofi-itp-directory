@@ -1,0 +1,190 @@
+﻿@page "/unit/internal/{unitid:int?}"
+
+<PageTitle>Unit Internal | UIUC</PageTitle>
+
+<il-section>
+    <h1>@UnitTitle Internal Information</h1>
+    <p>Edit your unit’s internal information below.</p>
+    <p>@Error</p>
+</il-section>
+@if (!UnitId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Area" AreaOfficeThinObjects="_areaThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (Area != null && AreaSettings != null)
+{
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-internalnotes">Internal Notes</label>
+            <textarea id="ed-internalnotes" @bind="AreaSettings.InternalNotes"></textarea>
+        </div>
+        <div class="iled-instructions">
+            Internal notes are used to keep track of information about this area and are not exposed to the end user. 
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-beta">Allow Beta Access</label>
+                <input id="ed-beta" type="checkbox" required @bind="AreaSettings.AllowBeta">
+            </div>
+            <div class="iled-instructions">
+                Check this box if you want access to beta features of the directory. 
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-editprofile">Profile Information</label>
+                <select id="ed-editprofile" @bind="ProfileInformation">
+                    <option value="0">Do not allow profile information</option>
+                    <option value="1">Allow people to edit profile information</option>
+                    <option value="2">Allow office administrators to edit profile</option>
+                    <option value="3">Full Access (Illinois Experts / office administrators)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <h2>Publishing Information</h2>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-location">Publishing Location</label>
+                <select id="ed-location" @bind="PublishingLocation">
+                    <option value="0">Do not show</option>
+                    <option value="1">Publish to site</option>
+                    <option value="2">Publish to site and helpdesk</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    @if (ProfileInformation > 0)
+    {
+        <h2>Profile Url Information</h2>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-profileurl">Profile Url</label>
+                    <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile">
+                </div>
+                <div class="iled-instructions">
+                    URL the system should use to view a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://education.illinois.edu/faculty/{netid}
+                </div>
+            </div>
+        </div>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-refreshurl">Profile Refresh Url</label>
+                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
+                </div>
+                <div class="iled-instructions">
+                    URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://facultyapi.itparnters.illinois.edu/refresh/{netid}
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-auto">Auto-load profiles to directory hook</label>
+                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles">
+                </div>
+                <div class="iled-instructions">
+                    Check this box if you want a regular refresh of your information the the Profile Refresh Url.
+                </div>
+            </div>
+        </div>
+        <h2>Image Information</h2>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-imagewidth">Profile Image Width</label>
+                    <input id="ed-imagewidth" type="text" @bind="AreaSettings.PictureWidth">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-imageheight">Profile Image Height</label>
+                    <input id="ed-imageheight" type="text" @bind="AreaSettings.PictureHeight">
+                </div>
+            </div>
+        </div>
+        <h2>Email Signature Instructions</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-signatureaddition">Email Signature Additions</label>
+                <input id="ed-signatureaddition" type="text" @bind="AreaSettings.SignatureExtension">
+            </div>
+            <div class="iled-instructions">
+                You can add additional links to your employees' email signature by sending a custom querystring. See <a href="https://webservices.illinois.edu/webservices/js/ds/signature.js" target="_blank">this javascript file that generates the signature</a> to determine what needs to be sent. Popular querystring additions are <em>facebook</em>, <em>twitter</em>, <em>instagram</em>, <em>linkedin</em>, <em>youtube</em>, and <em>disclaimer</em>. Pass them in the pattern <em>&amp;facebook=https://www.facebook.com/speciallink</em>.
+                </div>
+        </div>
+
+        <h2>User Instructions</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins1">Office Instructions</label>
+                <input id="ed-ins1" type="text" required @bind="AreaSettings.InstructionsOffice">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is editing an office? 
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins2">Employee Instructions</label>
+                <input id="ed-ins2" type="text" @bind="AreaSettings.InstructionsEmployee">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is editing a job profile or employee information?
+            </div>
+        </div>    <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins3">Employee Activities Instructions</label>
+                <input id="ed-ins3" type="text" @bind="AreaSettings.InstructionsEmployeeActivities">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is editing an employee activity?
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins4">Employee Signature Instructions</label>
+                <input id="ed-ins4" type="text" @bind="AreaSettings.InstructionsEmployeeSignature">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is generating an employee signature?
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins5">Employee Headshot Instructions</label>
+                <input id="ed-ins5" type="text" @bind="AreaSettings.InstructionsEmployeeHeadshot">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is uploading an employee headshot? This does not include dimensions.
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins6">Employee CV Instructions</label>
+                <input id="ed-ins6" type="text" @bind="AreaSettings.InstructionsEmployeeCv">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is uploading an employee CV?
+            </div>
+        </div>
+    } else
+    {
+        <h2>User Instructions</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-ins7">Office Instructions</label>
+                <input id="ed-ins7" type="text" @bind="AreaSettings.InstructionsOffice">
+            </div>
+            <div class="iled-instructions">
+                Do you want specific instructions to show up when a user is editing an office?
+            </div>
+        </div>
+    }
+
+    <button class="il-button" @onclick="Send">Save</button>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+}

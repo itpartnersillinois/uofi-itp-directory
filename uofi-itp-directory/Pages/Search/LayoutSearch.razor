@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+@layout SidebarLayout
+
+<il-section-with-sidebar>
+    <div slot="sidebar">
+        <il-section-nav>
+            <h3><a href="/search/people">Search</a></h3>
+            <ul>
+                <li>
+                    <a title="Search for People" href="/search/people">Search for People</a>
+                </li>
+                <li>
+                    <a title="Search for Offices" href="/search/offices">Search for Offices</a>
+                </li>
+                <li>
+                    <a title="Search for Units" href="/search/units">Search for Units</a>
+                </li>
+            </ul>
+        </il-section-nav>
+        <LoginInformation></LoginInformation>
+    </div>
+    @Body
+</il-section-with-sidebar>

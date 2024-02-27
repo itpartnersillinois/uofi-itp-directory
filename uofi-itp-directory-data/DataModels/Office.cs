@@ -23,7 +23,6 @@ namespace uofi_itp_directory_data.DataModels {
         public string Email { get; set; } = "";
 
         public string ExternalUrl { get; set; } = "";
-
         public bool HoursIncludeHolidayMessage { get; set; }
 
         [Key]
@@ -31,10 +30,12 @@ namespace uofi_itp_directory_data.DataModels {
         public override int Id { get; set; }
 
         public string InternalUrl { get; set; } = "";
+
         public bool IsInternalOnly { get; set; }
         public virtual IEnumerable<JobProfile> JobProfiles { get; set; } = default!;
 
         public string Notes { get; set; } = "";
+        public virtual IEnumerable<OfficeHour> OfficeHours { get; set; } = default!;
         public virtual OfficeSettings OfficeSettings { get; set; } = default!;
         public OfficeTypeEnum OfficeType { get; set; }
         public string Phone { get; set; } = "";
