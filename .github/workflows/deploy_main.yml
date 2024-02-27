@@ -14,12 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
   
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '8.x'
+          include-prerelease: true
 
     - name: Install dependencies
       run: dotnet restore
@@ -28,12 +29,12 @@ jobs:
       run: |
         cd uofi-itp-directory
         dotnet build --configuration Release --no-restore
-        dotnet publish -c Release -o ../dotnet-webapp -r linux-x64 --self-contained true /p:UserAppHost=true
+        dotnet publish -c Release -o ../dotnet-webapp 
 
     - name: 'Deploy Azure Web'
       uses: Azure/webapps-deploy@v2
       with:
         app-name: itp-app-directory
-        package: '${{ env.AZURE_PACKAGE_PATH }}/dotnet-webapp'
+        package: './dotnet-webapp'
         publish-profile: ${{ secrets.AZURE_WEB_PUBLISH_PROFILE }}
         slot-name: 'deploy'
