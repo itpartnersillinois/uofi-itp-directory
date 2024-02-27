@@ -15,6 +15,7 @@ namespace uofi_itp_directory_data.DataModels {
             NetId = TransformName(netId);
             IsFullAdmin = isFullAdmin;
             IsActive = true;
+            IsPublic = false;
             AreaId = areaId;
             OfficeId = officeId;
             CanEditAllPeopleInUnit = isFullAdmin || canEditPeople;
@@ -30,6 +31,7 @@ namespace uofi_itp_directory_data.DataModels {
         public override int Id { get; set; }
 
         public bool IsFullAdmin { get; set; }
+        public bool IsPublic { get; set; }
         public string ListedName => string.IsNullOrEmpty(ListedNameLast) || string.IsNullOrEmpty(ListedNameFirst) ? "" : ListedNameFirst + " " + ListedNameLast;
 
         public string ListedNameFirst { get; set; } = "";

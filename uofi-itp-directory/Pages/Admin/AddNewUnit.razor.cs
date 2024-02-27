@@ -3,20 +3,19 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
-using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.CampusService;
-using uofi_itp_directory_data.Helpers;
+using uofi_itp_directory_data.DataAccess;
+using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Admin {
 
     public partial class AddNewUnit {
-        private List<LabelAndText>? TextFields;
-
-        public string Error { get; set; } = "";
+        public List<Area> Areas { get; set; } = default!;
 
         public string Name { get; set; } = "";
         public string NetId { get; set; } = "";
+        public string UnitName { get; set; } = "";
 
         [Inject]
         protected AreaHelper AreaHelper { get; set; } = default!;
@@ -34,22 +33,27 @@ namespace uofi_itp_directory.Pages.Admin {
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
 
         public async Task LookupId() {
-            if (TextFields != null) {
-                var name = await DataWarehouseManager.GetDataWarehouseItem(TextFields.GetValue("netid"));
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
+            var name = await DataWarehouseManager.GetDataWarehouseItem(NetId);
+            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
+        }
+
+        public async Task RemoveEntry(int id) {
+            var numberItemsDeleted = await AreaHelper.RemoveArea(Areas.Single(a => a.Id == id), await AuthenticationStateProvider.GetUser());
+            if (numberItemsDeleted != 0) {
+                Areas.RemoveAll(a => a.Id == id);
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Area deleted");
+            } else {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Offices were in the list");
             }
         }
 
         public async Task Send() {
-            if (TextFields != null) {
-                var errors = TextFields.GetErrors();
-                if (errors.Count != 0) {
-                    Error = string.Join(", ", errors);
-                } else {
-                    var message = await AreaHelper.GenerateArea(TextFields.GetValue("name"), TextFields.GetValue("netid"));
-                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
-                }
+            if (!string.IsNullOrWhiteSpace(NetId) && !string.IsNullOrWhiteSpace(UnitName)) {
+                var message = await AreaHelper.GenerateArea(UnitName, NetId, await AuthenticationStateProvider.GetUser());
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
                 StateHasChanged();
+            } else {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Name and ID are required");
             }
         }
 
@@ -59,7 +63,7 @@ namespace uofi_itp_directory.Pages.Admin {
             if (!await PersonOptionHelper.IsFullAdmin(name)) {
                 throw new AuthenticationFailedException("Full Admin access required");
             }
-            TextFields = [new(), new()];
+            Areas = await AreaHelper.GetAreas();
         }
     }
 }

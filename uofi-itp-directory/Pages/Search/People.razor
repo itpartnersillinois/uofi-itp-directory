@@ -1,0 +1,28 @@
+﻿@page "/search/people"
+
+<PageTitle>Lookup Profile | UIUC</PageTitle>
+
+<il-section>
+    <h1>Lookup Profile</h1>
+    <p>Look up a profile below. You must enter a netID to find and edit the profile.</p>
+
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-filter">Lookup / Filter Net ID</label>
+            <input id="ed-filter" type="text" @onchange="(ChangeEventArgs e) => FilterChange(e)">
+        </div>
+    </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-choose">Choose a profile below</label>
+            <select id="ed-choose" class="iled-select-lookup" size="10" @onchange="(ChangeEventArgs e) => ChangeLookupId(e)">
+                @foreach (var item in LookupThinObjects)
+                {
+                    <option value="@item.Id">@item.Text</option>
+                }
+            </select>
+        </div>
+    </div>
+    <button class="il-button" disabled="@IsEditDisabled" @onclick="EditProfile">View / Edit Profile</button>
+
+</il-section>

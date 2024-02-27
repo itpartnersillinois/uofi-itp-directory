@@ -1,15 +1,13 @@
 ﻿<AuthorizeView>
     <Authorized>
         <div class="iled-buttons">
-        <a class="il-button" href="/">Home</a>
-        @if (HasProfile)
-        {
-            <a class="il-button" href="#">My Profile</a>
-        }
+        <MainPageButton></MainPageButton>
+        <ViewProfile></ViewProfile>
         <a class="il-button" href="MicrosoftIdentity/Account/SignOut">Sign Out</a>
         </div>
     </Authorized>
     <NotAuthorized>
-        <a class="il-button" href="/">Home</a> <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+        <MainPageButton></MainPageButton>
+        <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
     </NotAuthorized>
 </AuthorizeView>

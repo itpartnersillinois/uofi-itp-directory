@@ -8,7 +8,7 @@
         public string FirstName { get; set; } = "";
         public bool IsValid => !string.IsNullOrWhiteSpace(FirstName) || !string.IsNullOrWhiteSpace(LastName);
         public string LastName { get; set; } = "";
-        public string Name => $"{FirstName} {LastName} ({Title})";
+        public string Name => IsValid ? $"{FirstName} {LastName} ({Title})" : "";
         public string Phone { get; set; } = "";
         public string PhoneAreaCode { get; set; } = "";
         public string PhoneFull => (!string.IsNullOrWhiteSpace(PhoneAreaCode) ? PhoneAreaCode + "-" : "") + (Phone?.Length == 7 ? Phone[0..3] + "-" + Phone[3..7] : Phone);

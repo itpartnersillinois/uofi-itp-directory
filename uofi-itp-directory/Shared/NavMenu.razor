@@ -1,56 +1,64 @@
 ﻿<il-nav slot="navigation">
-    @if (IsFullAdmin)
+    @if (FullSecurityItem?.IsFullAdmin ?? false)
     {
         <il-nav-section>
-            <a href="#" slot="label">Administrators</a>
+            <a href="/admin/units" slot="label">Administrators</a>
             <ul class="il-subnav">
-                <li><a href="/admin/newunit">Add a New Unit</a></li>
+                <li><a href="/admin/units">Add and Remove Units</a></li>
                 <li><a href="/admin/users">Global Administrators</a></li>
             </ul>
         </il-nav-section>
     }
-    @if (IsUnitAdmin)
+    @if (FullSecurityItem?.IsUnitAdmin ?? false)
     {
         <il-nav-section>
-            <a href="#" slot="label">Unit Information</a>
+            <a href="/unit/general" slot="label">Unit Information</a>
         <ul class="il-subnav">
-            <li><a href="#">General Information</a></li>
-            <li><a href="#">Unit Administrators</a></li>
-            <li><a href="#">Internal Information</a></li>
-            <li><a href="#">Links to Pull Information</a></li>
+                <li><a href="/unit/general">General Information</a></li>
+                <li><a href="/unit/offices">Add and Remove Offices</a></li>
+                <li><a href="/unit/users">Unit Administrators</a></li>
+                <li><a href="/unit/internal">Internal Information</a></li>
+                <li><a href="/unit/directory">Links to Pull Information</a></li>
         </ul>
     </il-nav-section>
     }
-    @if (IsOfficeAdmin)
+    @if (FullSecurityItem?.IsOfficeAdmin ?? false)
     {
         <il-nav-section>
-            <a href="#" slot="label">Office Information</a>
+            <a href="/office/general" slot="label">Office Information</a>
         <ul class="il-subnav">
-            <li><a href="#">General Information</a></li>
-            <li><a href="#">Office Hours</a></li>
-            <li><a href="#">People</a></li>
-            <li><a href="#">Unit Administrators</a></li>
-            <li><a href="#">Internal Information</a></li>
-            <li><a href="#">Links to Pull Information</a></li>
+                <li><a href="/office/general">General Information</a></li>
+                <li><a href="/office/hours">Office Hours</a></li>
+                <li><a href="/office/people">People</a></li>
+                <li><a href="/office/users">Unit Administrators</a></li>
+                <li><a href="/office/internal">Internal Information</a></li>
+                <li><a href="/office/directory">Links to Pull Information</a></li>
         </ul>
     </il-nav-section>
     }
-    @if (HasProfile)
+    @if (FullSecurityItem?.HasProfile ?? false)
     {
         <il-nav-section>
-            <a href="#" slot="label">My Profile</a>
-        <ul class="il-subnav">
-            <li><a href="#">Look up Profile</a></li>
-            <li><a href="#">Preferred Name</a></li>
-            <li><a href="#">Preferred Pronouns</a></li>
-            <li><a href="#">Headshot</a></li>
-            <li><a href="#">CV/Resume</a></li>
-            <li><a href="#">Biography</a></li>
-            <li><a href="#">Activites</a></li>
-            <li><a href="#">Generate Email Signature</a></li>
+            <a href="/profile/general" slot="label">My Profile</a>
+            <ul class="il-subnav">
+                <li><a href="/profile/general">General Information</a></li>
+                <li><a href="/profile/headshot">Headshot</a></li>
+                <li><a href="/profile/cv">CV/Resume</a></li>
+                <li><a href="/profile/biography">Biography</a></li>
+                <li><a href="/profile/hours">Office Hours</a></li>
+                <li><a href="/profile/activities">Activites</a></li>
+                <li><a href="/profile/signature">Generate Email Signature</a></li>
         </ul>
     </il-nav-section>
     }
+    <il-nav-section>
+        <a href="/search/people" slot="label">View Information</a>
+        <ul class="il-subnav">
+            <li><a href="/search/people">Search for People</a></li>
+            <li><a href="/search/offices">Search for Offices</a></li>
+            <li><a href="/search/units">Search for Units</a></li>
+        </ul>
+    </il-nav-section>
     <il-nav-section>
         <a href="#" slot="label">Contact Us</a>
     </il-nav-section>

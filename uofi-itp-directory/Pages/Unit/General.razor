@@ -1,0 +1,72 @@
+﻿@page "/unit/general/{unitid:int?}"
+
+<PageTitle>Unit General | UIUC</PageTitle>
+
+<il-section>
+    <h1>@UnitTitle</h1>
+    <p>Edit your unit’s general information below.</p>
+    <p>@Error</p>
+</il-section>
+@if (!UnitId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Area" AreaOfficeThinObjects="_areaThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (Area != null)
+{
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unitname" class="iled-label-required">Unit Name</label>
+                <input id="ed-unitname" type="text" required @bind="Area.Title">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unittype" class="iled-label-required">Unit Type</label>
+                <select id="ed-unittype" required @bind="Area.AreaType">
+                        @foreach (var enumtype in Enum.GetValues<AreaTypeEnum>())
+                        {
+                        <option value="@enumtype">@enumtype</option>
+                        }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unitname" class="iled-label-required">Audience</label>
+                <input id="ed-unitname" type="text" required @bind="Area.Audience">
+            </div>
+            <div class="iled-instructions">
+                Who does this unit serve? Students in general, staff, students of a particular college, etc.?
+            </div>
+        </div>
+    </div>
+    <h2>Contact Information</h2>
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unitname" class="iled-label-required">External Url</label>
+                <input id="ed-unitname" type="text" required @bind="Area.ExternalUrl">
+            </div>
+            <div class="iled-instructions">
+                This is the link that outside users will use to access your site.<br />
+                <a href="@Area.ExternalUrl" target="_blank">Test External Link</a>
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-unitname" class="iled-label-required">Internal Url</label>
+                <input id="ed-unitname" type="text" required @bind="Area.InternalUrl">
+            </div>
+            <div class="iled-instructions">
+                This is the link that users inside your organization will use to access your site. <br />
+                <a href="@Area.InternalUrl" target="_blank">Test Internal Link</a>
+            </div>
+        </div>
+     </div>
+    <button class="il-button"  @onclick="Send">Save</button>
+    <MainPageButton></MainPageButton>
+    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+}

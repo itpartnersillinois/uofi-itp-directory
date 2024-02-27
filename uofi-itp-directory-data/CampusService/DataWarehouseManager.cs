@@ -2,17 +2,9 @@
 
 namespace uofi_itp_directory_data.CampusService {
 
-    public class DataWarehouseManager {
-        private readonly string _baseUrl = "";
-        private readonly string _key = "";
-
-        public DataWarehouseManager() {
-        }
-
-        public DataWarehouseManager(string? baseUrl, string? key) {
-            _baseUrl = baseUrl ?? "";
-            _key = key ?? "";
-        }
+    public class DataWarehouseManager(string? baseUrl, string? key) {
+        private readonly string _baseUrl = baseUrl ?? "";
+        private readonly string _key = key ?? "";
 
         public async Task<DataWarehouseItem> GetDataWarehouseItem(string netid) {
             if (string.IsNullOrEmpty(netid)) {

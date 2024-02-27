@@ -9,10 +9,15 @@ namespace uofi_itp_directory.Controls {
     public partial class UsernameItem {
 
         [Parameter]
-        public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+        public bool Disabled { get; set; }
 
         [Parameter]
-        public SecurityEntry? SecurityEntry { get; set; }
+        public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+        public string PrivateText => SecurityEntry != null && SecurityEntry.IsPublic ? "Public View" : "Private View";
+
+        [Parameter]
+        public SecurityEntry SecurityEntry { get; set; } = default!;
 
         public string Text => SecurityEntry?.ListedName ?? "";
 
@@ -30,6 +35,12 @@ namespace uofi_itp_directory.Controls {
                 return returnValue;
             }
             return 0;
+        }
+
+        public async Task<int> TogglePrivate() {
+            SecurityEntry.IsPublic = !SecurityEntry.IsPublic;
+            var returnValue = await DirectoryRepository.UpdateAsync(SecurityEntry);
+            return returnValue;
         }
     }
 }

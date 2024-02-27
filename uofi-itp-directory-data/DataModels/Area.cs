@@ -20,6 +20,7 @@ namespace uofi_itp_directory_data.DataModels {
         public override int Id { get; set; }
 
         public string InternalUrl { get; set; } = "";
+
         public bool IsInternalOnly { get; set; }
         public string Notes { get; set; } = "";
         public virtual ICollection<Office> Offices { get; set; } = default!;

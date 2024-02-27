@@ -1,0 +1,16 @@
+﻿@page "/profile/cv"
+
+<PageTitle>Profile CV | UIUC</PageTitle>
+@if (Employee != null)
+{
+    <il-section>
+        <h1>@Employee.ProfileName CV</h1>
+        <p>Add a professional resume or CV to this profile by uploading a file below. Make sure you save any changes.</p>
+        <Instructions ChildContent="@Instructions"></Instructions>
+        <DocumentUploader @ref="@DocumentUploader" FileUrl="@Employee.CVUrl" ItemId="@Employee.NetIdTruncated" Delete="DeleteDocument" Save="SaveDocument"></DocumentUploader>
+        <button class="il-button" @onclick="Send">Save Document</button>
+        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+
+    </il-section>
+}

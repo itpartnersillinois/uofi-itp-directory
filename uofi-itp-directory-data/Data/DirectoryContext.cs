@@ -23,6 +23,8 @@ namespace uofi_itp_directory_data.Data {
 
         public DbSet<AreaTag> AreaTags { get; set; }
 
+        public DbSet<DirectoryEntry> DirectoryEntries { get; set; }
+
         public DbSet<EmployeeActivity> EmployeeActivities { get; set; }
         public DbSet<EmployeeHour> EmployeeHours { get; set; }
         public DbSet<Employee> Employees { get; set; }
