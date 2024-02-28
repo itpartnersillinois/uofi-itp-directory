@@ -30,13 +30,19 @@ namespace uofi_itp_directory_data.DataAccess {
             return $"Unit '{unitname}' created with {name.Name} ({netid}) as an administrator";
         }
 
-        public async Task<Area> GetAreaById(int? id) => await _directoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == id));
+        public async Task<Area> GetAreaById(int? id, string netId) {
+            var area = await _directoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == id));
+            area.IsFullAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.IsFullAdmin && se.NetId == netId));
+            return area;
+        }
 
-        public async Task<List<Area>> GetAreas() => (await _directoryRepository.ReadAsync(d => d.Areas.OrderBy(a => a.Title))).ToList();
+        public async Task<List<Area>> GetAreas() => [.. (await _directoryRepository.ReadAsync(d => d.Areas.OrderBy(a => a.Title)))];
+
+        public async Task<AreaSettings> GetAreaSettingsByAreaId(int? areaId) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == areaId));
 
         public async Task<int> RemoveArea(Area area, string changedByNetId) {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.AreaId == area.Id))) {
-                _directoryRepository.Delete(securityEntry);
+                _ = _directoryRepository.Delete(securityEntry);
             }
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", "", area.Id, area.Title);
             return await _directoryRepository.DeleteAsync(area);
@@ -44,6 +50,11 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<int> UpdateArea(Area area, string changedByNetId) {
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area", "", area.Id, area.Title);
+            return await _directoryRepository.UpdateAsync(area);
+        }
+
+        public async Task<int> UpdateAreaSettings(AreaSettings area, string areaName, string changedByNetId) {
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area settings", "", area.AreaId, areaName);
             return await _directoryRepository.UpdateAsync(area);
         }
     }

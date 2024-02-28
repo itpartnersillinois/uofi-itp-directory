@@ -22,8 +22,8 @@ else if (Area != null)
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unittype" class="iled-label-required">Unit Type</label>
-                <select id="ed-unittype" required @bind="Area.AreaType">
+                <label for="ed-unittype">Unit Type</label>
+                <select id="ed-unittype" @bind="Area.AreaType">
                         @foreach (var enumtype in Enum.GetValues<AreaTypeEnum>())
                         {
                         <option value="@enumtype">@enumtype</option>
@@ -35,8 +35,8 @@ else if (Area != null)
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname" class="iled-label-required">Audience</label>
-                <input id="ed-unitname" type="text" required @bind="Area.Audience">
+                <label for="ed-unitname">Audience</label>
+                <input id="ed-unitname" type="text" @bind="Area.Audience">
             </div>
             <div class="iled-instructions">
                 Who does this unit serve? Students in general, staff, students of a particular college, etc.?
@@ -47,8 +47,8 @@ else if (Area != null)
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname" class="iled-label-required">External Url</label>
-                <input id="ed-unitname" type="text" required @bind="Area.ExternalUrl">
+                <label for="ed-unitname" >External Url</label>
+                <input id="ed-unitname" type="text" @bind="Area.ExternalUrl">
             </div>
             <div class="iled-instructions">
                 This is the link that outside users will use to access your site.<br />
@@ -57,8 +57,8 @@ else if (Area != null)
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname" class="iled-label-required">Internal Url</label>
-                <input id="ed-unitname" type="text" required @bind="Area.InternalUrl">
+                <label for="ed-unitname">Internal Url</label>
+                <input id="ed-unitname" type="text" @bind="Area.InternalUrl">
             </div>
             <div class="iled-instructions">
                 This is the link that users inside your organization will use to access your site. <br />

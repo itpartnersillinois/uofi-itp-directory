@@ -11,7 +11,6 @@ namespace uofi_itp_directory_data.DataModels {
 
         public string InternalCode { get; set; } = "";
         public string InternalNotes { get; set; } = "";
-        public int InternalOrder { get; set; }
 
         public virtual Office Office { get; set; } = default!;
 

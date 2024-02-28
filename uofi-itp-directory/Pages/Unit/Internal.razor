@@ -184,6 +184,23 @@ else if (Area != null && AreaSettings != null)
             </div>
         </div>
     }
+    @if (Area.IsFullAdmin)
+    {
+        <h2>Order Information</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-internalorder">Order</label>
+                <select id="ed-internalorder" @bind="Area.InternalOrder">
+                    <option value="1">Top</option>
+                    <option value="2">Normal</option>
+                    <option value="3">Low</option>
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Areas will be listed in alphabetical order unless changed here.
+            </div>
+        </div>
+    }
 
     <button class="il-button" @onclick="Send">Save</button>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>

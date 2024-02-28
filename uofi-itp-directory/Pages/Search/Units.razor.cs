@@ -40,7 +40,7 @@ namespace uofi_itp_directory.Pages.Search {
 
         public async Task EditUnit() {
             if (LookupId != null) {
-                Area = await AreaHelper.GetAreaById(LookupId.Value);
+                Area = await AreaHelper.GetAreaById(LookupId.Value, await AuthenticationStateProvider.GetUser());
                 if (await PersonOptionHelper.IsAreaAdmin(await AuthenticationStateProvider.GetUser(), Area.Id)) {
                     var title = LookupThinObjects.First(lto => lto.Id == LookupId.Value).Text;
                     CacheHelper.SetCachedArea(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, new AreaOfficeThinObject(LookupId.Value, title));

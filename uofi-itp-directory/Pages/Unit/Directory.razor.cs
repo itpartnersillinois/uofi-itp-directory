@@ -4,12 +4,12 @@ using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Unit {
+
     public partial class Directory {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
@@ -27,13 +27,13 @@ namespace uofi_itp_directory.Pages.Unit {
         public string UnitTitle { get; set; } = "Unit";
 
         [Inject]
+        protected AreaHelper AreaHelper { get; set; } = default!;
+
+        [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
         [Inject]
         protected CacheHolder CacheHolder { get; set; } = default!;
-
-        [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
@@ -51,7 +51,7 @@ namespace uofi_itp_directory.Pages.Unit {
         }
 
         public async Task Send() {
-            _ = await DirectoryRepository.UpdateAsync(AreaSettings);
+            _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Directory settings updated");
             StateHasChanged();
         }
@@ -72,8 +72,8 @@ namespace uofi_itp_directory.Pages.Unit {
         }
 
         private async Task AssignTextFields() {
-            Area = await DirectoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == UnitId));
-            AreaSettings = await DirectoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == UnitId));
+            Area = await AreaHelper.GetAreaById(UnitId, await AuthenticationStateProvider.GetUser());
+            AreaSettings = await AreaHelper.GetAreaSettingsByAreaId(UnitId);
         }
     }
 }

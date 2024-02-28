@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -30,10 +29,10 @@ namespace uofi_itp_directory.Pages.Offices {
         protected CacheHolder CacheHolder { get; set; } = default!;
 
         [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
+        protected IJSRuntime JsRuntime { get; set; } = default!;
 
         [Inject]
-        protected IJSRuntime JsRuntime { get; set; } = default!;
+        protected OfficeHelper OfficeHelper { get; set; } = default!;
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
@@ -50,8 +49,8 @@ namespace uofi_itp_directory.Pages.Offices {
         public async Task Send() {
             Office.IsActive = PublishingLocation > 0;
             Office.IsInternalOnly = PublishingLocation == 1;
-            _ = DirectoryRepository.UpdateAsync(Office);
-            _ = DirectoryRepository.UpdateAsync(OfficeSettings);
+            _ = OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
+            _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
             StateHasChanged();
         }
@@ -82,9 +81,11 @@ namespace uofi_itp_directory.Pages.Offices {
         }
 
         private async Task AssignTextFields() {
-            Office = await DirectoryRepository.ReadAsync(d => d.Offices.Single(a => a.Id == OfficeId));
-            OfficeSettings = await DirectoryRepository.ReadAsync(d => d.OfficeSettings.Single(os => os.OfficeId == OfficeId));
-            _ = SetPublishingLocation(Office);
+            if (OfficeId.HasValue) {
+                Office = await OfficeHelper.GetOfficeById(OfficeId.Value, await AuthenticationStateProvider.GetUser());
+                OfficeSettings = await OfficeHelper.GetOfficeSettingsById(OfficeId.Value);
+                PublishingLocation = SetPublishingLocation(Office);
+            }
         }
     }
 }

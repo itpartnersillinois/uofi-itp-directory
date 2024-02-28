@@ -5,7 +5,6 @@ using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
 using uofi_itp_directory_data.CampusService;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -36,9 +35,6 @@ namespace uofi_itp_directory.Pages.Offices {
         protected DataWarehouseManager DataWarehouseManager { get; set; } = default!;
 
         [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
-
-        [Inject]
         protected JobProfileHelper JobProfileHelper { get; set; } = default!;
 
         [Inject]
@@ -46,6 +42,9 @@ namespace uofi_itp_directory.Pages.Offices {
 
         [Inject]
         protected NavigationManager NavManager { get; set; } = default!;
+
+        [Inject]
+        protected OfficeHelper OfficeHelper { get; set; } = default!;
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
@@ -113,7 +112,7 @@ namespace uofi_itp_directory.Pages.Offices {
 
         private async Task AssignTextFields() {
             if (OfficeId.HasValue) {
-                Office = DirectoryRepository.Read(d => d.Offices.Single(a => a.Id == OfficeId));
+                Office = await OfficeHelper.GetOfficeById(OfficeId.Value, await AuthenticationStateProvider.GetUser());
                 JobProfiles = (await JobProfileHelper.GetJobProfileThinObjects(OfficeId.Value)) ?? new List<JobProfileThinObject>();
             }
         }

@@ -5,7 +5,6 @@ using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
 using uofi_itp_directory_data.CampusService;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -36,9 +35,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected DataWarehouseManager DataWarehouseManager { get; set; } = default!;
-
-        [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
@@ -99,7 +95,9 @@ namespace uofi_itp_directory.Pages.Unit {
         }
 
         private async Task AssignTextFields() {
-            Offices = [.. (await DirectoryRepository.ReadAsync(d => d.Offices.Where(a => a.AreaId == UnitId)))];
+            if (UnitId.HasValue) {
+                Offices = await OfficeHelper.GetOffices(UnitId.Value);
+            }
         }
     }
 }
