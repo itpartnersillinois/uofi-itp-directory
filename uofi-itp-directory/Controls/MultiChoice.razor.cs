@@ -15,6 +15,8 @@ namespace uofi_itp_directory.Controls {
         [Parameter]
         public IEnumerable<AreaOfficeThinObject> AreaOfficeThinObjects { get; set; } = default!;
 
+        public IEnumerable<AreaOfficeThinObject> AreaOfficeThinObjectsSorted => AreaOfficeThinObjects.OrderBy(a => a.Title);
+
         [Parameter]
         public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
 
