@@ -8,28 +8,33 @@ using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Search {
+
     public partial class Units {
         public Area? Area { get; set; }
-        public AreaHelper AreaHelper { get; set; } = default!;
+
         public bool IsEditDisabled => LookupId == null;
 
-        [Inject]
-        public LookupHelper LookupHelper { get; set; } = default!;
-
         public int? LookupId { get; set; }
+
         public List<LookupThinObject> LookupThinObjects { get; set; } = [];
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
-        public PersonOptionHelper PersonOptionHelper { get; set; } = default!;
+        protected AreaHelper AreaHelper { get; set; } = default!;
 
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
         [Inject]
         protected CacheHolder CacheHolder { get; set; } = default!;
+
+        [Inject]
+        protected LookupHelper LookupHelper { get; set; } = default!;
+
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
+
+        [Inject]
+        protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
 
         public void ClearArea() => Area = null;
 
