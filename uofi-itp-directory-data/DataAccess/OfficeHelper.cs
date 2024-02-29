@@ -48,6 +48,7 @@ namespace uofi_itp_directory_data.DataAccess {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.OfficeId == office.Id))) {
                 _directoryRepository.Delete(securityEntry);
             }
+            office.Admins = Array.Empty<SecurityEntry>();
             _ = await _logHelper.CreateOfficeLog(changedByNetId, "Removed office", "", office.Id, office.Title);
             return await _directoryRepository.DeleteAsync(office);
         }

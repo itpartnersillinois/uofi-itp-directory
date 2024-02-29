@@ -12,11 +12,18 @@ namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Headshot {
         public Employee? Employee { get; set; } = default!;
+
         public int Height { get; set; }
+
         public ImageUploader? ImageUploader { get; set; } = default!;
 
         public string Instructions { get; set; } = "";
+
+        [Parameter]
+        public string Refresh { get; set; } = "";
+
         public string Size { get; set; } = "";
+
         public int Width { get; set; }
 
         [Inject]
@@ -59,7 +66,7 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnInitializedAsync() {
-            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder);
+            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);
             Employee = await AccessHelper.GetEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), EmployeeSecurityHelper, employeeId);
             var areaSettings = await EmployeeSecurityHelper.GetEmployeeSettings(Employee);
             Height = areaSettings.PictureHeight;
@@ -71,5 +78,7 @@ namespace uofi_itp_directory.Pages.Profile {
                 Instructions = await EmployeeAreaHelper.HeadshotInstructions(Employee.NetId);
             }
         }
+
+        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
     }
 }

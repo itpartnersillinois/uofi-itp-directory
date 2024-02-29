@@ -11,6 +11,9 @@ namespace uofi_itp_directory.Pages.Profile {
     public partial class Hours {
         public Employee? Employee { get; set; } = default!;
 
+        [Parameter]
+        public string Refresh { get; set; } = "";
+
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
@@ -31,11 +34,13 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnInitializedAsync() {
-            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder);
+            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);
             Employee = await AccessHelper.GetEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), EmployeeSecurityHelper, employeeId);
             if (Employee == null) {
                 throw new Exception("No employee");
             }
         }
+
+        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
     }
 }

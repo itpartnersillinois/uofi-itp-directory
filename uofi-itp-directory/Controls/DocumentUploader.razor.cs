@@ -22,6 +22,9 @@ namespace uofi_itp_directory.Controls {
         [Parameter]
         public string FileUrl { get; set; } = "";
 
+        [Parameter]
+        public bool IsDisabled { get; set; } = false;
+
         public bool IsTextBoxDisabled => UploaderStatus == UploaderStatusEnum.Uploaded;
 
         [Parameter]

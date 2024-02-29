@@ -11,10 +11,12 @@ namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Signature {
         public Employee? Employee { get; set; } = default!;
-
         public string GenerateSignature { get; set; } = "";
 
         public string Instructions { get; set; } = "";
+
+        [Parameter]
+        public string Refresh { get; set; } = "";
 
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
@@ -38,7 +40,7 @@ namespace uofi_itp_directory.Pages.Profile {
         protected SignatureGenerator SignatureGenerator { get; set; } = default!;
 
         protected override async Task OnInitializedAsync() {
-            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder);
+            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);
             Employee = await EmployeeSecurityHelper.GetEmployeeForSignature(employeeId, await AuthenticationStateProvider.GetUser());
             var settings = await EmployeeSecurityHelper.GetEmployeeSettings(Employee);
             if (Employee == null) {
@@ -47,5 +49,7 @@ namespace uofi_itp_directory.Pages.Profile {
             GenerateSignature = SignatureGenerator.GenerateSignatureUrl(Employee, settings.SignatureExtension);
             Instructions = await EmployeeAreaHelper.ActivitiesInstructions(Employee.NetId);
         }
+
+        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
     }
 }

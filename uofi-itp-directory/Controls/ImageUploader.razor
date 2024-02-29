@@ -1,17 +1,20 @@
 ﻿<div class="iled-section-vertical">
-    <div class="iled-input-box-parent">
-        <div class="iled-input-box">
-            <label for="@UploaderId">Upload Photo @Size</label>
-            <InputFile OnChange="@SaveFileToTemp" id="@UploaderId" />
+    @if (!IsDisabled)
+    {
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="@UploaderId">Upload Photo @Size</label>
+                <InputFile OnChange="@SaveFileToTemp" id="@UploaderId" />
+            </div>
         </div>
-    </div>
+    }
     <div class="iled-input-box-parent">
         <div class="iled-photocv">
         @if (!string.IsNullOrWhiteSpace(FileUrl))
         {
             <p>@PhotoText</p>
             <a target="_blank" href="@FileUrl"><img class="thumbnail" src="@FileUrl?@Cache" alt="Image for item" /></a>
-            <button @onclick="@DeleteFile" class="il-button">Delete</button>
+            <button @onclick="@DeleteFile" disabled="@IsDisabled" class="il-button">Delete</button>
         }
         </div>
     </div>

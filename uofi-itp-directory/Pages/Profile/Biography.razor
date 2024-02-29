@@ -1,4 +1,4 @@
-﻿@page "/profile/biography"
+﻿@page "/profile/biography/{refresh?}"
 
 <PageTitle>Profile Biography | UIUC</PageTitle>
 @if (Employee != null)
@@ -16,11 +16,28 @@
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-biography">Add Biography</label>
-                    <textarea id="ed-biography" class="iled-textbox-large" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.Biography"></textarea>
+                    <BlazoredTextEditor @ref="@QuillBiography" Placeholder="Professional Biography">
+                        <ToolbarContent>
+                            <span class="ql-formats">
+                                <button class="ql-bold" aria-label="Apply Bold"></button>
+                                <button class="ql-italic" aria-label="Apply Italics"></button>
+                                <button class="ql-underline" aria-label="Apply Underline"></button>
+                                <button class="ql-strike" aria-label="Apply Strikethrough"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link" aria-label="Apply Link"></button>
+                            </span>
+                        </ToolbarContent>
+                        <EditorContent>
+                            @((MarkupString)@Employee.Biography)
+                        </EditorContent>
+                    </BlazoredTextEditor>
                 </div>
             </div>
-            <button class="il-button" @onclick="Send">Save</button>
-            <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+            <div class="iled-buttons-left">
+                <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
+                <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+            </div>
             <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
         }
     </il-section>

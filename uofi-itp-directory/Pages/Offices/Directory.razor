@@ -1,6 +1,6 @@
 ﻿@page "/office/directory/{officeid:int?}"
 
-<PageTitle>Office General | UIUC</PageTitle>
+<PageTitle>Office Links | UIUC</PageTitle>
 
 <il-section>
     <h1>@OfficeTitle Links</h1>
@@ -45,7 +45,9 @@ else if (Office != null)
             </div>
         </div>
     </div>
-
+    <div class="iled-buttons-left">
     <button class="il-button" @onclick="Send">Save</button>
+    <ClearCacheButton></ClearCacheButton>
+    </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 }

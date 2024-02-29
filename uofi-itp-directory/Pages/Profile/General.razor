@@ -1,4 +1,4 @@
-﻿@page "/profile/general"
+﻿@page "/profile/general/{refresh?}"
 
 <PageTitle>Profile | UIUC</PageTitle>
 @if (Employee != null)
@@ -90,8 +90,10 @@
             </div>
         </div>
         }
-        <button class="il-button" @onclick="Send">Save</button>
-        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <div class="iled-buttons-left">
+            <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
+            <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        </div>
         <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 
 </il-section>
