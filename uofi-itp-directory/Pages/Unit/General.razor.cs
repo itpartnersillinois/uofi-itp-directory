@@ -68,6 +68,6 @@ namespace uofi_itp_directory.Pages.Unit {
             }
         }
 
-        private async Task AssignTextFields() => Area = await AreaHelper.GetAreaById(UnitId);
+        private async Task AssignTextFields() => Area = await AreaHelper.GetAreaById(UnitId, await AuthenticationStateProvider.GetUser());
     }
 }

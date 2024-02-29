@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using uofi_itp_directory_data.Data;
+using uofi_itp_directory.ControlHelper;
+using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 
 namespace uofi_itp_directory.Controls {
@@ -22,14 +24,28 @@ namespace uofi_itp_directory.Controls {
         public string Text => SecurityEntry?.ListedName ?? "";
 
         [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
+
+        [Inject]
+        protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
+
         public async Task<int> Remove() {
-            if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will remove the user {SecurityEntry?.ListedName} from the access list. Are you sure?")) {
-                var returnValue = await DirectoryRepository.DeleteAsync(SecurityEntry);
+            var currentUser = await AuthenticationStateProvider.GetUser();
+            if (SecurityEntry?.NetId == currentUser) {
+                if (await JsRuntime.InvokeAsync<bool>("confirm", $"You are removing yourself from the access list! If you continue, you will lose rights to this application and will be redirected to the homepage. If you want access back, you will need to contact another office administrator, your area administrator, or a global administrator. Are you really sure you want to do this?")) {
+                    var returnValue = await SecurityEntryHelper.Delete(SecurityEntry, currentUser);
+                    if (returnValue != 0) {
+                        NavigationManager.NavigateTo("/");
+                    }
+                }
+            } else if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will remove the user {SecurityEntry?.ListedName} from the access list. Are you sure?")) {
+                var returnValue = await SecurityEntryHelper.Delete(SecurityEntry, currentUser);
                 _ = OnClickCallback.InvokeAsync();
                 StateHasChanged();
                 return returnValue;
@@ -39,8 +55,7 @@ namespace uofi_itp_directory.Controls {
 
         public async Task<int> TogglePrivate() {
             SecurityEntry.IsPublic = !SecurityEntry.IsPublic;
-            var returnValue = await DirectoryRepository.UpdateAsync(SecurityEntry);
-            return returnValue;
+            return await SecurityEntryHelper.Update(SecurityEntry, await AuthenticationStateProvider.GetUser());
         }
     }
 }

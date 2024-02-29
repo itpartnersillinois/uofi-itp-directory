@@ -5,7 +5,6 @@ using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
 using uofi_itp_directory_data.CampusService;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -36,9 +35,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected DataWarehouseManager DataWarehouseManager { get; set; } = default!;
-
-        [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
@@ -75,8 +71,11 @@ namespace uofi_itp_directory.Pages.Unit {
 
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId) && !string.IsNullOrWhiteSpace(OfficeName) && UnitId.HasValue) {
-                var message = await OfficeHelper.GenerateOffice(OfficeName, UnitId.Value, NetId, await AuthenticationStateProvider.GetUser());
+                var (message, newOffice) = await OfficeHelper.GenerateOffice(OfficeName, UnitId.Value, NetId, await AuthenticationStateProvider.GetUser());
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
+                if (newOffice != null) {
+                    Offices.Add(newOffice);
+                }
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "NetID and Office Name are required");
@@ -99,7 +98,9 @@ namespace uofi_itp_directory.Pages.Unit {
         }
 
         private async Task AssignTextFields() {
-            Offices = [.. (await DirectoryRepository.ReadAsync(d => d.Offices.Where(a => a.AreaId == UnitId)))];
+            if (UnitId.HasValue) {
+                Offices = await OfficeHelper.GetOffices(UnitId.Value);
+            }
         }
     }
 }

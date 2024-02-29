@@ -37,6 +37,24 @@ else if (Office != null)
             </div>
         </div>
     </div>
+    @if (Office.IsAreaAdmin)
+    {
+        <h2>Order Information</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-internalorder">Order</label>
+                <select id="ed-internalorder" @bind="Office.InternalOrder">
+                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                    {
+                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Offices will be listed in alphabetical order unless changed here.
+            </div>
+        </div>
+    }
 
     <button class="il-button" @onclick="Send">Save</button>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>

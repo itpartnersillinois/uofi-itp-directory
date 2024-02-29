@@ -49,8 +49,11 @@ namespace uofi_itp_directory.Pages.Admin {
 
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId) && !string.IsNullOrWhiteSpace(UnitName)) {
-                var message = await AreaHelper.GenerateArea(UnitName, NetId, await AuthenticationStateProvider.GetUser());
+                var (message, newArea) = await AreaHelper.GenerateArea(UnitName, NetId, await AuthenticationStateProvider.GetUser());
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
+                if (newArea != null) {
+                    Areas.Add(newArea);
+                }
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Name and ID are required");

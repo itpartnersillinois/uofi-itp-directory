@@ -8,6 +8,7 @@ using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Search {
+
     public partial class Offices {
         public bool IsEditDisabled => LookupId == null;
 
@@ -40,7 +41,7 @@ namespace uofi_itp_directory.Pages.Search {
 
         public async Task EditOffice() {
             if (LookupId != null) {
-                Office = await OfficeHelper.GetOfficeById(LookupId.Value);
+                Office = await OfficeHelper.GetOfficeById(LookupId.Value, await AuthenticationStateProvider.GetUser());
                 if (await PersonOptionHelper.IsOfficeAdmin(await AuthenticationStateProvider.GetUser(), Office.Id)) {
                     var title = LookupThinObjects.First(lto => lto.Id == LookupId.Value).Text;
                     CacheHelper.SetCachedOffice(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, new AreaOfficeThinObject(LookupId.Value, title));

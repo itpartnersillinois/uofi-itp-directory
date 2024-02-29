@@ -14,22 +14,43 @@
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-firstname">First Name</label>
-                    <input id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
+                    <input autocomplete="given-name" id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
+            </div>
+            <div class="iled-instructions">
+                 Note that for a preferred name, you may edit this in the HR Profile and it will update your directory information as well.
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-lastname">Last Name</label>
-                    <input id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
+                    <input autocomplete="family-name" id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
             </div>
-        </div>
+                <div class="iled-instructions">
+                    Note that for a preferred name, you may edit this in the HR Profile and it will update your directory information as well.
+                </div>
+            </div>
     </div>
     <h3>Preferred Pronouns</h3>
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-pronouns">Preferred Pronouns</label>
-                    <input id="ed-pronouns" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredPronouns">
+                <label for="ed-pronoun-template">Pronoun Templates</label>
+                    <select id="ed-pronoun-template" @bind="Employee.PreferredPronouns" disabled="@Employee.IsEntryDisabled">
+                        <option value="">(blank)</option>
+                        <option value="he/him">he/him</option>
+                        <option value="she/her">she/her</option>
+                        <option value="they/them">they/them</option>
+                        <option value="">other</option>
+                    </select>
+                </div>
+                <div class="iled-instructions">
+                    Pronoun disclosure is an individual choice and not a mandate.
+                </div>
+            </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-pronouns">Pronouns</label>
+                <input id="ed-pronouns" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredPronouns">
             </div>
         </div>
     </div>
@@ -45,12 +66,12 @@
             </div>
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
-                        <label for="ed-type-@profile.Id">Job Type</label>
-                        <select id="ed-type-@profile.Id" @bind="profile.Category">
-                        @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
-                        {
-                                <option value="@enumtype">@enumtype.ToPrettyString()</option>
-                        }
+                    <label for="ed-type-@profile.Id">Job Type</label>
+                    <select id="ed-type-@profile.Id" @bind="profile.Category" disabled="@profile.IsEntryDisabled">
+                    @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                    {
+                            <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                    }
                     </select>
                 </div>
             </div>
@@ -59,7 +80,7 @@
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                         <label for="ed-order-@profile.Id">Display Order</label>
-                        <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay">
+                        <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
                             @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
                             {
                                 <option value="@enumtype">@enumtype.ToPrettyString()</option>

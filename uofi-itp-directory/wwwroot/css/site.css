@@ -89,12 +89,14 @@ il-card .iled-buttons {
     display: flex;
     column-gap: 10px;
     justify-content: center;
+    list-style: none;
 }
 
 .iled-buttons-left {
     display: flex;
     column-gap: 10px;
     justify-content: left;
+    list-style: none;
 }
 
 button[disabled].il-button, button[disabled].il-button:focus, button[disabled].il-button:hover {
@@ -210,6 +212,7 @@ div.iled-section-split-25 {
         background-color: white !important;
         color: black;
         background-image: none;
+        opacity: 1;
     }
 
         .iled-input-box select[disabled] option {

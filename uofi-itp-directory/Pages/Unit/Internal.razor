@@ -78,7 +78,7 @@ else if (Area != null && AreaSettings != null)
                     <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
                 </div>
                 <div class="iled-instructions">
-                    URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://facultyapi.itparnters.illinois.edu/refresh/{netid}
+                    URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://facultyapi.itpartners.illinois.edu/api/LoadPerson?name={netid}
                 </div>
             </div>
             <div class="iled-input-box-parent">
@@ -181,6 +181,24 @@ else if (Area != null && AreaSettings != null)
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is editing an office?
+            </div>
+        </div>
+    }
+    @if (Area.IsFullAdmin)
+    {
+        <h2>Order Information</h2>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-internalorder">Order</label>
+                <select id="ed-internalorder" @bind="Area.InternalOrder">
+                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                    {
+                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Areas will be listed in alphabetical order unless changed here.
             </div>
         </div>
     }
