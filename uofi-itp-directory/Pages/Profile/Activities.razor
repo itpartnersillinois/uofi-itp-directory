@@ -12,7 +12,7 @@
         else
         {
 
-        <p>Add a professional biography to this profile below. If there is an Illinois Experts profile, please update there. The Illinois Experts biography will always override this biography.</p>
+            <p>Add publications, presentations, history, etc. to this profile below. If there is an Illinois Experts profile, please update there. The Illinois Experts biography will always override this biography.</p>
 
         @foreach (var activity in Employee.EmployeeActivities) {
             <div class="iled-activity">
@@ -20,14 +20,14 @@
                 <div class="iled-activity-content">
                 <div class="iled-input-box-parent">
                     <div class="iled-input-box">
-                        <label for="ed-title-@activity.Id">Title</label>
-                        <input id="ed-title-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.Title">
+                        <label for="ed-title-@activity.Id" class="iled-label-required">Title</label>
+                        <input id="ed-title-@activity.Id" type="text" required disabled="@Employee.IsEntryDisabled" @bind="activity.Title">
                     </div>
                 </div>
                 <div class="iled-input-box-parent">
                     <div class="iled-input-box">
                         <label for="ed-url-@activity.Id">Url</label>
-                                <input id="ed-url-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.Url">
+                                <input id="ed-url-@activity.Id" type="url" disabled="@Employee.IsEntryDisabled" @bind="activity.Url">
                     </div>
                 </div>
                 <div class="iled-section-split-25">
@@ -58,11 +58,11 @@
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
                             <label for="ed-priority-@activity.Id">Priority</label>
-                            <select id="ed-priority-@activity.Id" disabled="@Employee.IsEntryDisabled"
-                                    @bind="activity.InternalOrder">
-                                <option value="1">High</option>
-                                <option value="2">Medium</option>
-                                <option value="3">Low</option>
+                            <select id="ed-priority-@activity.Id" disabled="@Employee.IsEntryDisabled" @bind="activity.InternalOrder">
+                                @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                                {
+                                    <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                                }
                             </select>
                         </div>
                     </div>

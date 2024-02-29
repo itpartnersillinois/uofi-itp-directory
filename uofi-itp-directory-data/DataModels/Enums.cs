@@ -17,7 +17,7 @@
     }
 
     public enum OfficeTypeEnum {
-        Unlisted, General, IT, HR, Business, Facilities, Communications, Marketing, Academic, Research, StudentSupport, Advancement, Other = 99
+        Unlisted, General, IT, HR, Finance, Facilities, Academic, StudentSupport, Research, Communications, Marketing, Advancement, Other = 99
     }
 
     public enum ProfileCategoryTypeEnum {
@@ -25,6 +25,6 @@
     }
 
     public enum ProfileDisplayEnum {
-        Medium = 3, High = 5, Low = 1, Not_Listed = 0
+        Medium = 3, Top = 5, Bottom = 1, Not_Listed = 0
     }
 }

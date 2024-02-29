@@ -71,8 +71,11 @@ namespace uofi_itp_directory.Pages.Unit {
 
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId) && !string.IsNullOrWhiteSpace(OfficeName) && UnitId.HasValue) {
-                var message = await OfficeHelper.GenerateOffice(OfficeName, UnitId.Value, NetId, await AuthenticationStateProvider.GetUser());
+                var (message, newOffice) = await OfficeHelper.GenerateOffice(OfficeName, UnitId.Value, NetId, await AuthenticationStateProvider.GetUser());
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
+                if (newOffice != null) {
+                    Offices.Add(newOffice);
+                }
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "NetID and Office Name are required");

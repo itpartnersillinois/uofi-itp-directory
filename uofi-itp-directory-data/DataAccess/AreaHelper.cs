@@ -10,13 +10,13 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
-        public async Task<string> GenerateArea(string unitname, string netid, string changedByNetId) {
+        public async Task<(string, Area?)> GenerateArea(string unitname, string netid, string changedByNetId) {
             var checkExistingArea = await _directoryRepository.ReadAsync(a => a.Areas.FirstOrDefault(a => a.Title == unitname));
             if (checkExistingArea != null)
-                return $"Name '{unitname}' already exists";
+                return ($"Name '{unitname}' already exists", null);
             var name = await _dataWarehouseManager.GetDataWarehouseItem(netid);
             if (!name.IsValid)
-                return $"Net ID '{netid}' not found";
+                return ($"Net ID '{netid}' not found", null);
             var area = new Area {
                 Title = unitname,
                 IsActive = false,
@@ -27,7 +27,7 @@ namespace uofi_itp_directory_data.DataAccess {
             _ = await _directoryRepository.CreateAsync(area);
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Added area", "", area.Id, area.Title);
 
-            return $"Unit '{unitname}' created with {name.Name} ({netid}) as an administrator";
+            return ($"Unit '{unitname}' created with {name.Name} ({netid}) as an administrator", area);
         }
 
         public async Task<Area> GetAreaById(int? id, string netId) {

@@ -10,13 +10,13 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
-        public async Task<string> GenerateOffice(string officename, int areaId, string netid, string changedByNetId) {
+        public async Task<(string, Office?)> GenerateOffice(string officename, int areaId, string netid, string changedByNetId) {
             var checkExistingArea = await _directoryRepository.ReadAsync(a => a.Offices.FirstOrDefault(a => a.Title == officename && a.AreaId == areaId));
             if (checkExistingArea != null)
-                return $"Name '{officename}' already exists";
+                return ($"Name '{officename}' already exists", null);
             var name = await _dataWarehouseManager.GetDataWarehouseItem(netid);
             if (!name.IsValid) {
-                return $"Net ID '{netid}' not found";
+                return ($"Net ID '{netid}' not found", null);
             }
             var office = new Office {
                 Title = officename,
@@ -29,7 +29,7 @@ namespace uofi_itp_directory_data.DataAccess {
             };
             _ = await _directoryRepository.CreateAsync(office);
             _ = await _logHelper.CreateOfficeLog(changedByNetId, "Added office", "", office.Id, office.Title);
-            return $"Office '{officename}' created with {name.Name} ({netid}) as an administrator";
+            return ($"Office '{officename}' created with {name.Name} ({netid}) as an administrator", office);
         }
 
         public async Task<Office> GetOfficeById(int id, string netId) {
