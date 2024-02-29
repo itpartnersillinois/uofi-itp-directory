@@ -1,9 +1,9 @@
 ﻿@page "/office/hours/{officeid:int?}"
 
-<PageTitle>Office General | UIUC</PageTitle>
+<PageTitle>Office Hours | UIUC</PageTitle>
 
 <il-section>
-    <h1>@OfficeTitle</h1>
+    <h1>@OfficeTitle Hours</h1>
     <p>Edit your office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM".</p>
 </il-section>
 @if (!OfficeId.HasValue)
@@ -42,7 +42,9 @@ else if (OfficeHours != null)
             </div>
         </div>
     }
-
+    <div class="iled-buttons-left">
     <button class="il-button" @onclick="Send">Save</button>
+    <ClearCacheButton></ClearCacheButton>
+    </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 }

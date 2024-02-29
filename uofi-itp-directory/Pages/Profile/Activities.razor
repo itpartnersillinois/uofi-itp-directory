@@ -1,4 +1,4 @@
-﻿@page "/profile/activities"
+﻿@page "/profile/activities/{refresh?}"
 
 <PageTitle>Profile Activities | UIUC</PageTitle>
 @if (Employee != null)
@@ -57,8 +57,8 @@
                     </div>
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
-                            <label for="ed-priority-@activity.Id">Priority</label>
-                            <select id="ed-priority-@activity.Id" disabled="@Employee.IsEntryDisabled" @bind="activity.InternalOrder">
+                            <label for="ed-display-order-@activity.Id">Display Order</label>
+                                    <select id="ed-display-order-@activity.Id" disabled="@Employee.IsEntryDisabled" @bind="activity.InternalOrder">
                                 @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
                                 {
                                     <option value="@enumtype">@enumtype.ToPrettyString()</option>
@@ -74,9 +74,10 @@
                     </div>
             </div>
         }
-
-        <button class="il-button" @onclick="New">New</button>
-        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <div class="iled-buttons-left">
+            <button class="il-button" @onclick="New" disabled="@Employee.IsEntryDisabled">New</button>
+            <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        </div>
         <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
     }
     </il-section>

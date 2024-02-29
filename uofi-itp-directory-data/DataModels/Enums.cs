@@ -1,7 +1,7 @@
 ﻿namespace uofi_itp_directory_data.DataModels {
 
     public enum ActivityTypeEnum {
-        Publication, Presentation, Education, Award, Link
+        Publication, Presentation, Education, Award, Link, Committee
     }
 
     public enum AreaTypeEnum {
@@ -25,6 +25,6 @@
     }
 
     public enum ProfileDisplayEnum {
-        Medium = 3, Top = 5, Bottom = 1, Not_Listed = 0
+        Middle = 3, Top = 5, Bottom = 1, Not_Listed = 0
     }
 }

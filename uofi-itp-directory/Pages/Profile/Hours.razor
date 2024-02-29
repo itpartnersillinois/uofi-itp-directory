@@ -1,25 +1,25 @@
-﻿@page "/profile/hours"
+﻿@page "/profile/hours/{refresh?}"
 
-<PageTitle>Office Hours | UIUC</PageTitle>
+<PageTitle>Profile Hours | UIUC</PageTitle>
 
-<il-section>
-    <h1>Office Hours</h1>
-    <p>Edit your office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM". If working in more than one office, please select ‘other’ and clarify which office for the day.</p>
-</il-section>
 @if (Employee != null)
 {
+    <il-section>
+        <h1>@Employee.ProfileName Hours</h1>
+        <p>Edit office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM". If working in more than one office, please select ‘other’ and clarify which office for the day.</p>
+    </il-section>
     <h2>Office Location</h2>
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-room">Room and Building</label>
-                <input id="ed-room" type="text" @bind="Employee.OfficeInformation">
+                <input id="ed-room" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.OfficeInformation">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-hidephone">Hide Phone Number</label>
-                <input id="ed-hidephone" type="checkbox" @bind="Employee.IsPhoneHidden">
+                <input id="ed-hidephone" type="checkbox" disabled="@Employee.IsEntryDisabled" @bind="Employee.IsPhoneHidden">
             </div>
         </div>
     </div>
@@ -31,32 +31,33 @@
             <h3>@officeHour.Day</h3>
             <div class="iled-hours-time">
                 <label for="ed-date-from-@officeHour.DayNumeric" class="iled-sr-only">From </label>
-                <input id="ed-date-from-@officeHour.DayNumeric" type="time" @bind="@officeHour.Start">
+                <input id="ed-date-from-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.Start">
                 <label for="ed-date-to-@officeHour.DayNumeric">to </label>
-                <input id="ed-date-to-@officeHour.DayNumeric" type="time" @bind="@officeHour.End">
+                <input id="ed-date-to-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.End">
             </div>
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
-                <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
+                <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
                 <label for="ed-date-location-blank-@officeHour.DayNumeric">N/A</label>
-                <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
+                <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
                 <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
-                <input type="radio" id="ed-date-location-remote-@officeHour.DayNumeric" checked="@(officeHour.NotesEnum == LocationTypeEnum.Remote)"
+                <input type="radio" id="ed-date-location-remote-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Remote)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Remote))" />
                 <label for="ed-date-location-remote-@officeHour.DayNumeric">Remote</label>
-                <input type="radio" id="ed-date-location-other-@officeHour.DayNumeric" checked="@(officeHour.NotesEnum == LocationTypeEnum.Other)"
+                <input type="radio" id="ed-date-location-other-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Other)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Other))" />
                 <label for="ed-date-location-other-@officeHour.DayNumeric">Other</label>
 
                 <label for="ed-date-notes-@officeHour.DayNumeric" class="iled-sr-only">Other Notes</label>
-                <input id="ed-date-notes-@officeHour.DayNumeric" type="text" @bind="@officeHour.Notes" hidden="@(officeHour.NotesEnum != LocationTypeEnum.Other)">
+                <input id="ed-date-notes-@officeHour.DayNumeric" type="text" @bind="@officeHour.Notes" disabled="@Employee.IsEntryDisabled" hidden="@(officeHour.NotesEnum != LocationTypeEnum.Other)">
 
             </div>
         </div>
     }
-
-    <button class="il-button" @onclick="Send">Save</button>
-    <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+    <div class="iled-buttons-left">
+        <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
+        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+    </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 }

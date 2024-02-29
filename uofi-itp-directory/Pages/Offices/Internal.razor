@@ -1,9 +1,9 @@
 ﻿@page "/office/internal/{officeid:int?}"
 
-<PageTitle>Office General | UIUC</PageTitle>
+<PageTitle>Office Internal | UIUC</PageTitle>
 
 <il-section>
-    <h1>@OfficeTitle</h1>
+    <h1>@OfficeTitle Internal</h1>
     <p>Edit your office’s general information below.</p>
 </il-section>
 @if (!OfficeId.HasValue)
@@ -55,7 +55,9 @@ else if (Office != null)
             </div>
         </div>
     }
-
+    <div class="iled-buttons-left">
     <button class="il-button" @onclick="Send">Save</button>
+    <ClearCacheButton></ClearCacheButton>
+    </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 }

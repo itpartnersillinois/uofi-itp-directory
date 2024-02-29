@@ -7,10 +7,10 @@ using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Controls {
 
-    public enum MultiChoiceTypeEnum { Area, Office, Person }
+    public enum MultiChoiceTypeEnum { Area, Office }
 
     public partial class MultiChoice {
-        public readonly Dictionary<MultiChoiceTypeEnum, string> Label = new() { { MultiChoiceTypeEnum.Area, "Choose a unit" }, { MultiChoiceTypeEnum.Office, "Choose an office" }, { MultiChoiceTypeEnum.Person, "Choose a person" } };
+        public readonly Dictionary<MultiChoiceTypeEnum, string> Label = new() { { MultiChoiceTypeEnum.Area, "Choose a unit" }, { MultiChoiceTypeEnum.Office, "Choose an office" } };
 
         [Parameter]
         public IEnumerable<AreaOfficeThinObject> AreaOfficeThinObjects { get; set; } = default!;
@@ -36,14 +36,16 @@ namespace uofi_itp_directory.Controls {
         protected CacheHolder CacheHolder { get; set; } = default!;
 
         public async Task Click() {
-            var selectedItem = AreaOfficeThinObjects.First(aot => aot.Id == SelectedId);
-            SelectedTitle = selectedItem.Title;
-            if (Type == MultiChoiceTypeEnum.Area) {
-                CacheHelper.SetCachedArea(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, selectedItem);
-            } else if (Type == MultiChoiceTypeEnum.Office) {
-                CacheHelper.SetCachedOffice(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, selectedItem);
+            if (SelectedId != 0) {
+                var selectedItem = AreaOfficeThinObjects.First(aot => aot.Id == SelectedId);
+                SelectedTitle = selectedItem.Title;
+                if (Type == MultiChoiceTypeEnum.Area) {
+                    CacheHelper.SetCachedArea(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, selectedItem);
+                } else if (Type == MultiChoiceTypeEnum.Office) {
+                    CacheHelper.SetCachedOffice(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, selectedItem);
+                }
+                await OnClickCallback.InvokeAsync();
             }
-            await OnClickCallback.InvokeAsync();
         }
     }
 }

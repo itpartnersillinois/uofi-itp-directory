@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.TextEditor;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
@@ -11,7 +12,12 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Biography {
+        private BlazoredTextEditor? QuillBiography = default!;
+
         public Employee? Employee { get; set; } = default!;
+
+        [Parameter]
+        public string Refresh { get; set; } = "";
 
         public bool ShouldUseExperts { get; set; }
 
@@ -34,14 +40,15 @@ namespace uofi_itp_directory.Pages.Profile {
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
         public async Task Send() {
-            if (Employee != null) {
+            if (Employee != null && QuillBiography != null) {
+                Employee.Biography = await QuillBiography.GetHTML();
                 _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Biography: " + Employee.Biography);
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
             }
         }
 
         protected override async Task OnInitializedAsync() {
-            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder);
+            var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);
             Employee = await AccessHelper.GetEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), EmployeeSecurityHelper, employeeId);
             if (Employee == null) {
                 throw new Exception("No employee");
@@ -49,5 +56,7 @@ namespace uofi_itp_directory.Pages.Profile {
                 ShouldUseExperts = await EmployeeAreaHelper.ShouldUseExperts(Employee.NetId) && await IllinoisExpertsManager.IsInExperts(Employee.NetIdTruncated);
             }
         }
+
+        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
     }
 }

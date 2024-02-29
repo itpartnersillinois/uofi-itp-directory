@@ -8,7 +8,7 @@ Back-end and APIs to pull information. This is replacing the old people function
 
 There will be two locations, one for each project:
 * https://directoryapi.itpartners.illinois.edu. This has a database connection and is only used to populate the faculty API. 
-* https://directory.itpartners.illinois.edu. This also has a database connection and is a Blazor application. Because of the data warehouse, we need to restrict access to campus VPN.
+* https://directory.itpartners.illinois.edu. This also has a database connection and is a Blazor application. 
 
 ## Development location: 
 

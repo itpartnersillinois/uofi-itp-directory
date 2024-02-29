@@ -65,6 +65,7 @@ namespace uofi_itp_directory.Pages.Unit {
                 if (securityEntry != null) {
                     SecurityEntries.Add(securityEntry);
                 }
+                NetId = "";
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "NetID is required");

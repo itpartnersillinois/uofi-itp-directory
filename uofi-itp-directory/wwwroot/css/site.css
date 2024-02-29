@@ -377,6 +377,13 @@ div.iled-section-vertical {
     background: none;
 }
 
+/* Quill tweaks */
+.ql-editor p {
+    font-family: var(--il-font-sans);
+    font-size: 1rem;
+    min-height: 250px;
+}
+
 /* Blazor warnings */
 #blazor-error-ui {
     background: lightyellow;

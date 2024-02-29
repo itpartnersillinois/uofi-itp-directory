@@ -13,6 +13,8 @@ namespace uofi_itp_directory_data.Cache {
 
         public AreaOfficeThinObject? GetOffice(string name) => GetItem(name)?.Office;
 
+        public bool HasCachedItem(string name) => _dictionary.ContainsKey(name);
+
         public void SetArea(string name, AreaOfficeThinObject area) {
             if (!_dictionary.ContainsKey(name)) {
                 _dictionary.Add(name, new CacheThinObject(name) { Area = area });
