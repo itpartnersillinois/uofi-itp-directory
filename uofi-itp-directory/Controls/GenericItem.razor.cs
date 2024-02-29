@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataModels;
 
 namespace uofi_itp_directory.Controls {
@@ -19,9 +18,6 @@ namespace uofi_itp_directory.Controls {
 
         [Parameter]
         public string Text { get; set; } = default!;
-
-        [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;

@@ -1,13 +1,15 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <div class="iled-buttons">
-        <MainPageButton></MainPageButton>
-        <ViewProfile></ViewProfile>
-        <a class="il-button" href="MicrosoftIdentity/Account/SignOut">Sign Out</a>
-        </div>
+        <ul class="iled-buttons">
+            <li><MainPageButton></MainPageButton></li>
+            <li><ViewProfile></ViewProfile></li>
+            <li><a class="il-button" href="MicrosoftIdentity/Account/SignOut">Sign Out</a></li>
+        </ul>
     </Authorized>
     <NotAuthorized>
-        <MainPageButton></MainPageButton>
-        <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+        <ul class="iled-buttons">
+        <li><MainPageButton></MainPageButton></li>
+        <li><a href="MicrosoftIdentity/Account/SignIn">Log in</a></li>
+        </ul>
     </NotAuthorized>
 </AuthorizeView>

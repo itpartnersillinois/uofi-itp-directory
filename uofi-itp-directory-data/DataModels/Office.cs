@@ -29,7 +29,12 @@ namespace uofi_itp_directory_data.DataModels {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
 
+        public int InternalOrder { get; set; } = 2;
+
         public string InternalUrl { get; set; } = "";
+
+        [NotMapped]
+        public bool IsAreaAdmin { get; set; } // used by the code to determine if the user can edit order information
 
         public bool IsInternalOnly { get; set; }
         public virtual IEnumerable<JobProfile> JobProfiles { get; set; } = default!;

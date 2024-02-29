@@ -8,22 +8,18 @@ using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Search {
+
     public partial class Units {
         public Area? Area { get; set; }
-        public AreaHelper AreaHelper { get; set; } = default!;
+
         public bool IsEditDisabled => LookupId == null;
 
-        [Inject]
-        public LookupHelper LookupHelper { get; set; } = default!;
-
         public int? LookupId { get; set; }
+
         public List<LookupThinObject> LookupThinObjects { get; set; } = [];
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
-        public PersonOptionHelper PersonOptionHelper { get; set; } = default!;
+        protected AreaHelper AreaHelper { get; set; } = default!;
 
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
@@ -31,11 +27,20 @@ namespace uofi_itp_directory.Pages.Search {
         [Inject]
         protected CacheHolder CacheHolder { get; set; } = default!;
 
+        [Inject]
+        protected LookupHelper LookupHelper { get; set; } = default!;
+
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
+
+        [Inject]
+        protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
+
         public void ClearArea() => Area = null;
 
         public async Task EditUnit() {
             if (LookupId != null) {
-                Area = await AreaHelper.GetAreaById(LookupId.Value);
+                Area = await AreaHelper.GetAreaById(LookupId.Value, await AuthenticationStateProvider.GetUser());
                 if (await PersonOptionHelper.IsAreaAdmin(await AuthenticationStateProvider.GetUser(), Area.Id)) {
                     var title = LookupThinObjects.First(lto => lto.Id == LookupId.Value).Text;
                     CacheHelper.SetCachedArea(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, new AreaOfficeThinObject(LookupId.Value, title));

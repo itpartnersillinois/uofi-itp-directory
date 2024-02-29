@@ -4,12 +4,12 @@ using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Unit {
+
     public partial class Internal {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
@@ -27,13 +27,13 @@ namespace uofi_itp_directory.Pages.Unit {
         public string UnitTitle { get; set; } = "Unit";
 
         [Inject]
+        protected AreaHelper AreaHelper { get; set; } = default!;
+
+        [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
         [Inject]
         protected CacheHolder CacheHolder { get; set; } = default!;
-
-        [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
@@ -58,8 +58,8 @@ namespace uofi_itp_directory.Pages.Unit {
             AreaSettings.AllowPeople = ProfileInformation > 0;
             AreaSettings.AllowAdministratorsAccessToPeople = ProfileInformation > 1;
             AreaSettings.AllowInformationForIllinoisExpertsMembers = ProfileInformation > 2;
-            _ = await DirectoryRepository.UpdateAsync(Area);
-            _ = await DirectoryRepository.UpdateAsync(AreaSettings);
+            _ = await AreaHelper.UpdateArea(Area, await AuthenticationStateProvider.GetUser());
+            _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
             if (_originalAllowAccess != AreaSettings.AllowAdministratorsAccessToPeople) {
                 _ = await SecurityEntryHelper.SetAccessToOtherPeople(Area.Id, AreaSettings.AllowAdministratorsAccessToPeople);
                 _originalAllowAccess = AreaSettings.AllowAdministratorsAccessToPeople;
@@ -84,6 +84,19 @@ namespace uofi_itp_directory.Pages.Unit {
             }
         }
 
+        private static int SetProfileInformation(AreaSettings areaSettings) {
+            if (!areaSettings.AllowPeople) {
+                return 0;
+            }
+            if (!areaSettings.AllowAdministratorsAccessToPeople) {
+                return 1;
+            }
+            if (!areaSettings.AllowInformationForIllinoisExpertsMembers) {
+                return 2;
+            }
+            return 3;
+        }
+
         private static int SetPublishingLocation(Area area) {
             if (!area.IsActive) {
                 return 0;
@@ -95,24 +108,11 @@ namespace uofi_itp_directory.Pages.Unit {
         }
 
         private async Task AssignTextFields() {
-            Area = await DirectoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == UnitId));
-            AreaSettings = await DirectoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == UnitId));
+            Area = await AreaHelper.GetAreaById(UnitId, await AuthenticationStateProvider.GetUser());
+            AreaSettings = await AreaHelper.GetAreaSettingsByAreaId(UnitId);
             PublishingLocation = SetPublishingLocation(Area);
             ProfileInformation = SetProfileInformation(AreaSettings);
             _originalAllowAccess = AreaSettings.AllowAdministratorsAccessToPeople;
-        }
-
-        private int SetProfileInformation(AreaSettings areaSettings) {
-            if (!areaSettings.AllowPeople) {
-                return 0;
-            }
-            if (!areaSettings.AllowAdministratorsAccessToPeople) {
-                return 1;
-            }
-            if (!areaSettings.AllowInformationForIllinoisExpertsMembers) {
-                return 2;
-            }
-            return 3;
         }
     }
 }

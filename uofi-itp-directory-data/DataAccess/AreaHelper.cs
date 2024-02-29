@@ -10,13 +10,13 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
-        public async Task<string> GenerateArea(string unitname, string netid, string changedByNetId) {
+        public async Task<(string, Area?)> GenerateArea(string unitname, string netid, string changedByNetId) {
             var checkExistingArea = await _directoryRepository.ReadAsync(a => a.Areas.FirstOrDefault(a => a.Title == unitname));
             if (checkExistingArea != null)
-                return $"Name '{unitname}' already exists";
+                return ($"Name '{unitname}' already exists", null);
             var name = await _dataWarehouseManager.GetDataWarehouseItem(netid);
             if (!name.IsValid)
-                return $"Net ID '{netid}' not found";
+                return ($"Net ID '{netid}' not found", null);
             var area = new Area {
                 Title = unitname,
                 IsActive = false,
@@ -27,16 +27,22 @@ namespace uofi_itp_directory_data.DataAccess {
             _ = await _directoryRepository.CreateAsync(area);
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Added area", "", area.Id, area.Title);
 
-            return $"Unit '{unitname}' created with {name.Name} ({netid}) as an administrator";
+            return ($"Unit '{unitname}' created with {name.Name} ({netid}) as an administrator", area);
         }
 
-        public async Task<Area> GetAreaById(int? id) => await _directoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == id));
+        public async Task<Area> GetAreaById(int? id, string netId) {
+            var area = await _directoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == id));
+            area.IsFullAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.IsFullAdmin && se.NetId == netId));
+            return area;
+        }
 
-        public async Task<List<Area>> GetAreas() => (await _directoryRepository.ReadAsync(d => d.Areas.OrderBy(a => a.Title))).ToList();
+        public async Task<List<Area>> GetAreas() => [.. (await _directoryRepository.ReadAsync(d => d.Areas.OrderBy(a => a.Title)))];
+
+        public async Task<AreaSettings> GetAreaSettingsByAreaId(int? areaId) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == areaId));
 
         public async Task<int> RemoveArea(Area area, string changedByNetId) {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.AreaId == area.Id))) {
-                _directoryRepository.Delete(securityEntry);
+                _ = _directoryRepository.Delete(securityEntry);
             }
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", "", area.Id, area.Title);
             return await _directoryRepository.DeleteAsync(area);
@@ -44,6 +50,11 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<int> UpdateArea(Area area, string changedByNetId) {
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area", "", area.Id, area.Title);
+            return await _directoryRepository.UpdateAsync(area);
+        }
+
+        public async Task<int> UpdateAreaSettings(AreaSettings area, string areaName, string changedByNetId) {
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area settings", "", area.AreaId, areaName);
             return await _directoryRepository.UpdateAsync(area);
         }
     }

@@ -26,6 +26,11 @@ namespace uofi_itp_directory_data.DataAccess {
             return (securityEntry, $"Net ID '{netid}' created");
         }
 
+        public async Task<int> Delete(SecurityEntry? securityEntry, string changedByNetId) {
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Deleted security item", "", securityEntry?.Id ?? 0, securityEntry?.NetId ?? "");
+            return await _directoryRepository.DeleteAsync(securityEntry);
+        }
+
         public async Task<List<SecurityEntry>> Get(int? areaId, int? officeId) {
             if (officeId != null)
                 return [.. (await _directoryRepository.ReadAsync(c => c.SecurityEntries.Where(se => se.OfficeId == officeId).OrderBy(c => c.ListedNameLast)))];
@@ -42,6 +47,11 @@ namespace uofi_itp_directory_data.DataAccess {
                 returnValue += await _directoryRepository.UpdateAsync(securityAccess);
             }
             return returnValue;
+        }
+
+        public async Task<int> Update(SecurityEntry securityEntry, string changedByNetId) {
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Updated security item", "", securityEntry.Id, securityEntry.NetId);
+            return await _directoryRepository.UpdateAsync(securityEntry);
         }
     }
 }

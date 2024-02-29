@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -30,10 +29,10 @@ namespace uofi_itp_directory.Pages.Offices {
         protected CacheHolder CacheHolder { get; set; } = default!;
 
         [Inject]
-        protected DirectoryRepository DirectoryRepository { get; set; } = default!;
+        protected IJSRuntime JsRuntime { get; set; } = default!;
 
         [Inject]
-        protected IJSRuntime JsRuntime { get; set; } = default!;
+        protected OfficeHelper OfficeHelper { get; set; } = default!;
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
@@ -49,7 +48,7 @@ namespace uofi_itp_directory.Pages.Offices {
 
         public async Task Send() {
             foreach (var officeHour in OfficeHours) {
-                _ = await DirectoryRepository.UpdateAsync(officeHour);
+                _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
             }
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
             StateHasChanged();
@@ -71,7 +70,9 @@ namespace uofi_itp_directory.Pages.Offices {
         }
 
         private async Task AssignTextFields() {
-            OfficeHours = [.. await DirectoryRepository.ReadAsync(d => d.OfficeHours.Where(oh => oh.OfficeId == OfficeId).OrderBy(oh => oh.Day))];
+            if (OfficeId.HasValue) {
+                OfficeHours = await OfficeHelper.GetOfficeHoursById(OfficeId.Value);
+            }
         }
     }
 }

@@ -25,7 +25,6 @@ namespace uofi_itp_directory_data.DataModels {
         public string InstructionsOffice { get; set; } = "";
         public string InternalCode { get; set; } = "";
         public string InternalNotes { get; set; } = "";
-        public int InternalOrder { get; set; }
         public int PictureHeight { get; set; }
         public int PictureWidth { get; set; }
         public string SignatureExtension { get; set; } = "";
