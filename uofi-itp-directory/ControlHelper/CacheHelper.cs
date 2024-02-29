@@ -14,9 +14,16 @@ namespace uofi_itp_directory.ControlHelper {
                 ? null
                 : cacheHolder.GetArea(authenticationState.User?.Identity?.Name ?? "");
 
-        public static int? GetCachedEmployee(AuthenticationState? authenticationState, CacheHolder? cacheHolder) => authenticationState == null || cacheHolder == null
-        ? null
-        : cacheHolder.GetEmployee(authenticationState.User?.Identity?.Name ?? "");
+        public static int? GetCachedEmployee(AuthenticationState? authenticationState, CacheHolder? cacheHolder, string param) {
+            if (authenticationState != null && cacheHolder != null) {
+                if (!string.IsNullOrEmpty(param)) {
+                    _ = cacheHolder.ClearCache(authenticationState.User?.Identity?.Name ?? "");
+                    return null;
+                }
+                return cacheHolder.GetEmployee(authenticationState.User?.Identity?.Name ?? "");
+            }
+            return null;
+        }
 
         public static AreaOfficeThinObject? GetCachedOffice(AuthenticationState? authenticationState, CacheHolder? cacheHolder) => authenticationState == null || cacheHolder == null
         ? null

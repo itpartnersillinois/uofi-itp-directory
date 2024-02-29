@@ -44,6 +44,7 @@ namespace uofi_itp_directory_data.DataAccess {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.AreaId == area.Id))) {
                 _ = _directoryRepository.Delete(securityEntry);
             }
+            area.Admins = Array.Empty<SecurityEntry>();
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", "", area.Id, area.Title);
             return await _directoryRepository.DeleteAsync(area);
         }

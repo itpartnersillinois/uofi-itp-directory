@@ -76,6 +76,8 @@ namespace uofi_itp_directory.Pages.Unit {
                 if (newOffice != null) {
                     Offices.Add(newOffice);
                 }
+                NetId = "";
+                OfficeName = "";
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "NetID and Office Name are required");

@@ -1,10 +1,10 @@
 ﻿@page "/office/users/{officeid:int?}"
 
-<PageTitle>Office General | UIUC</PageTitle>
+<PageTitle>Office Administrators | UIUC</PageTitle>
 
 <il-section>
-    <h1>@OfficeTitle</h1>
-    <p>These people will be able to edit office information, create other office administrators for their unit, and edit people that are in their office. Public entries are displayed as administrators to the outside world, while private entries have the same permissions but are not displayed. For example, if you have a primary person responsible for tasks and a backup person, you would make the primary person public and the backup person private.</p>
+    <h1>@OfficeTitle Administrators</h1>
+    <p>These people will be able to edit office information, create other office administrators for their unit, and edit people that are in their office.</p><p>Public entries are displayed as administrators to the outside world, while private entries have the same permissions but are not displayed. For example, if you have a primary person responsible for tasks and a backup person, you would make the primary person public and the backup person private.</p>
 </il-section>
 @if (!OfficeId.HasValue)
 {
@@ -29,9 +29,10 @@ else
             </div>
         </div>
     </div>
-    <button class="il-button" @onclick="LookupId">Look up NetID</button>
+    <div class="iled-buttons-left">
     <button class="il-button" @onclick="Send">Save</button>
-    <MainPageButton></MainPageButton>
+    <button class="il-button" @onclick="LookupId">Check NetID</button>
+    <ClearCacheButton></ClearCacheButton>
+    </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
-
 }

@@ -54,6 +54,8 @@ namespace uofi_itp_directory.Pages.Admin {
                 if (newArea != null) {
                     Areas.Add(newArea);
                 }
+                NetId = "";
+                UnitName = "";
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Name and ID are required");
