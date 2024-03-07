@@ -25,7 +25,7 @@ namespace uofi_itp_directory_data.DataAccess {
                 IsInternalOnly = true,
                 OfficeSettings = new OfficeSettings(),
                 OfficeHours = new List<OfficeHour> { new() { Day = DayOfWeek.Sunday }, new() { Day = DayOfWeek.Monday }, new() { Day = DayOfWeek.Tuesday }, new() { Day = DayOfWeek.Wednesday }, new() { Day = DayOfWeek.Thursday }, new() { Day = DayOfWeek.Friday }, new() { Day = DayOfWeek.Saturday } },
-                Admins = new List<SecurityEntry> { new() { ListedNameLast = name.LastName, ListedNameFirst = name.FirstName, NetId = SecurityEntry.TransformName(netid), LastUpdated = DateTime.Now, IsFullAdmin = false, IsActive = true } }
+                Admins = new List<SecurityEntry> { new() { ListedNameLast = name.LastName, ListedNameFirst = name.FirstName, Email = SecurityEntry.TransformName(netid), LastUpdated = DateTime.Now, IsFullAdmin = false, IsActive = true } }
             };
             _ = await _directoryRepository.CreateAsync(office);
             _ = await _logHelper.CreateOfficeLog(changedByNetId, "Added office", "", office.Id, office.Title);
@@ -34,7 +34,7 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<Office> GetOfficeById(int id, string netId) {
             var office = await _directoryRepository.ReadAsync(d => d.Offices.Single(a => a.Id == id));
-            office.IsAreaAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.NetId == netId && (se.IsFullAdmin || se.AreaId == office.AreaId)));
+            office.IsAreaAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.Email == netId && (se.IsFullAdmin || se.AreaId == office.AreaId)));
             return office;
         }
 

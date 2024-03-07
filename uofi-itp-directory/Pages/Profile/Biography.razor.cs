@@ -39,6 +39,8 @@ namespace uofi_itp_directory.Pages.Profile {
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             if (Employee != null && QuillBiography != null) {
                 Employee.Biography = await QuillBiography.GetHTML();

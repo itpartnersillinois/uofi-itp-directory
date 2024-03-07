@@ -34,8 +34,8 @@ else if (Area != null)
     </div>
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
-            <label for="ed-unitname">Audience</label>
-            <input id="ed-unitname" type="text" @bind="Area.Audience">
+            <label for="ed-audience">Audience</label>
+            <input id="ed-audience" type="text" @bind="Area.Audience">
         </div>
         <div class="iled-instructions">
             Who does this unit serve? Students in general, staff, students of a particular college, etc.?
@@ -45,8 +45,8 @@ else if (Area != null)
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname" >External Url</label>
-                <input id="ed-unitname" type="text" @bind="Area.ExternalUrl">
+                <label for="ed-externalurl">External Url</label>
+                <input id="ed-externalurl" type="text" @bind="Area.ExternalUrl">
             </div>
             <div class="iled-instructions">
                 This is the link that outside users will use to access your site.<br />
@@ -55,8 +55,8 @@ else if (Area != null)
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname">Internal Url</label>
-                <input id="ed-unitname" type="text" @bind="Area.InternalUrl">
+                <label for="ed-internalurl">Internal Url</label>
+                <input id="ed-internalurl" type="text" @bind="Area.InternalUrl">
             </div>
             <div class="iled-instructions">
                 This is the link that users inside your organization will use to access your site. <br />
@@ -65,8 +65,8 @@ else if (Area != null)
         </div>
      </div>
     <div class="iled-buttons-left">
-    <button class="il-button"  @onclick="Send">Save</button>
+        <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
     <ClearCacheButton></ClearCacheButton>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }

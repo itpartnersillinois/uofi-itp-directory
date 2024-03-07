@@ -52,6 +52,8 @@ namespace uofi_itp_directory.Pages.Unit {
             await AssignTextFields();
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             Area.IsActive = PublishingLocation > 0;
             Area.IsInternalOnly = PublishingLocation == 1;

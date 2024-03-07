@@ -5,6 +5,7 @@ using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory_data.Cache;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
+using uofi_itp_directory_data.Helpers;
 
 namespace uofi_itp_directory.Pages.Profile {
 
@@ -25,6 +26,16 @@ namespace uofi_itp_directory.Pages.Profile {
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
+
+        public async Task Generate() {
+            if (Employee != null) {
+                Employee.EmployeeHourText = HourParser.GetEmployeeHourString([.. Employee.EmployeeHours]);
+                _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
+            }
+        }
+
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Send() {
             if (Employee != null) {

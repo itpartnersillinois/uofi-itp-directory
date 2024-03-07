@@ -49,6 +49,8 @@ namespace uofi_itp_directory.Pages.Profile {
             }
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Save(EmployeeActivity activity) => _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
 
         protected override async Task OnInitializedAsync() {

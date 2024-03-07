@@ -46,6 +46,8 @@ namespace uofi_itp_directory.Pages.Offices {
             await AssignTextFields();
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");

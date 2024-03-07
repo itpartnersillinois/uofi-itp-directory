@@ -41,8 +41,8 @@
     </div>
 </div>
 <div class="iled-buttons-left">
-    <button class="il-button" @onclick="Send">Save</button>
-    <button class="il-button" @onclick="LookupId">Check NetID</button>
+    <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
+    <button class="il-button" @onclick="LookupId" @onblur="RemoveMessage">Check NetID</button>
     <ClearCacheButton></ClearCacheButton>
 </div>
-<div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+<ToastPopup></ToastPopup>

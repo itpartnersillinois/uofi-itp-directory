@@ -59,6 +59,8 @@ namespace uofi_itp_directory.Pages.Offices {
             return Task.CompletedTask;
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId) && OfficeId.HasValue) {
                 var message = await SecurityEntryHelper.CreateSecurityEntry(NetId, null, OfficeId.Value, await AuthenticationStateProvider.GetUser());

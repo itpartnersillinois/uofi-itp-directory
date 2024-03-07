@@ -29,11 +29,12 @@ else if (JobProfiles != null)
             </div>
         </div>
     </div>
+    <div class="iled-buttons-left">
     <button class="il-button" @onclick="Edit">Edit Employee</button>
     <button class="il-button il-orange" @onclick="Remove">Remove Profile</button>
+    </div>
 
-
-    <div class="iled-section-split">
+    <div class="iled-section-split iled-margin-top">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-person" class="iled-label-required">Add a New Person</label>
@@ -45,9 +46,9 @@ else if (JobProfiles != null)
         </div>
     </div>
     <div class="iled-buttons-left">
-        <button class="il-button" @onclick="Send">Save</button>
-        <button class="il-button" @onclick="LookupId">Check NetID</button>
+        <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Add Employee</button>
+        <button class="il-button" @onclick="LookupId" @onblur="RemoveMessage">Check NetID</button>
         <ClearCacheButton></ClearCacheButton>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }

@@ -42,6 +42,8 @@ namespace uofi_itp_directory.Pages.Profile {
             }
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public void SaveDocument() {
             if (Employee != null && DocumentUploader != null) {
                 Employee.CVUrl = DocumentUploader.FileUrl;

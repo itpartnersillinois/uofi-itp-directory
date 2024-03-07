@@ -46,6 +46,8 @@ namespace uofi_itp_directory.Pages.Offices {
             await AssignTextFields();
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             Office.IsActive = PublishingLocation > 0;
             Office.IsInternalOnly = PublishingLocation == 1;

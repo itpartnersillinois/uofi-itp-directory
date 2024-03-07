@@ -42,6 +42,8 @@ namespace uofi_itp_directory.Pages.Admin {
             return Task.CompletedTask;
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId)) {
                 var (securityEntry, message) = await SecurityEntryHelper.CreateSecurityEntry(NetId, null, null, await AuthenticationStateProvider.GetUser());
