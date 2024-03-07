@@ -79,6 +79,18 @@ div[slot="sidebar"] {
     font-size: 1rem;
     padding: 0 0 0 20px;
 }
+
+.iled-margin-top {
+    margin-top: 40px;
+}
+
+/* Toolbox tweaks */
+
+il-section {
+    padding-bottom: 25px;
+    display: block;
+}
+
 /* Button tweaks */
 
 il-card .iled-buttons {
@@ -90,6 +102,7 @@ il-card .iled-buttons {
     column-gap: 10px;
     justify-content: center;
     list-style: none;
+    margin-top: 25px;
 }
 
 .iled-buttons-left {
@@ -97,6 +110,7 @@ il-card .iled-buttons {
     column-gap: 10px;
     justify-content: left;
     list-style: none;
+    margin-top: 25px;
 }
 
 button[disabled].il-button, button[disabled].il-button:focus, button[disabled].il-button:hover {
@@ -143,7 +157,7 @@ div.iled-section-split-25 {
 }
 
 .iled-input-box-parent {
-    margin: 5px 0 20px 0;
+    margin: 20px 0 5px 0;
 }
 
 /* Form Information to replace ils- code */

@@ -55,9 +55,17 @@
             </div>
         </div>
     }
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-officehours">Hours Text</label>
+            <input id="ed-officehours" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.EmployeeHourText">
+        </div>
+    </div>
+
     <div class="iled-buttons-left">
         <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
         <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+        <button class="il-button" @onclick="Generate" disabled="@Employee.IsEntryDisabled">Rebuild Employee Hour Text and Save</button>
     </div>
     <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
 }

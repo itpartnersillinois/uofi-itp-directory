@@ -48,7 +48,7 @@ namespace uofi_itp_directory.Pages.Profile {
                 throw new Exception("No employee");
             }
             Instructions = await EmployeeAreaHelper.EmployeeInstructions(Employee.NetId);
-            PersonName = Employee.IsCurrentUser ? "My Profile" : Employee?.ListedName ?? "";
+            PersonName = Employee.ProfileName;
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();

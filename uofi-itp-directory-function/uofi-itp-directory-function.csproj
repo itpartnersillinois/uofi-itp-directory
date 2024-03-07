@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>uofi_itp_directory_function</RootNamespace>
+    <UserSecretsId>67f6ead6-d3fd-4d00-ad40-f70d85b4b7e9</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -15,6 +16,10 @@
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\uofi-itp-directory-data\uofi-itp-directory-data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -41,6 +41,7 @@ namespace uofi_itp_directory_data.DataModels {
 
         public string Notes { get; set; } = "";
         public virtual IEnumerable<OfficeHour> OfficeHours { get; set; } = default!;
+        public string OfficeHourText { get; set; } = "";
         public virtual OfficeSettings OfficeSettings { get; set; } = default!;
         public OfficeTypeEnum OfficeType { get; set; }
         public string Phone { get; set; } = "";

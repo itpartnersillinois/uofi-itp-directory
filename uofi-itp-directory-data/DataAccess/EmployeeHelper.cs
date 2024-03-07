@@ -21,7 +21,7 @@ namespace uofi_itp_directory_data.DataAccess {
                 employee.IsCurrentUser = true;
             }
             var officesEmployeeIsIn = employee.JobProfiles.Select(jp => jp.OfficeId).ToList();
-            var securityEntriesUserIsIn = (await _directoryRepository.ReadAsync(d => d.SecurityEntries.Where(se => se.NetId == name && se.IsActive))).ToList();
+            var securityEntriesUserIsIn = (await _directoryRepository.ReadAsync(d => d.SecurityEntries.Where(se => se.Email == name && se.IsActive))).ToList();
             // TODO Should area owners be able to edit people in all offices they manage? Currently, they do not
 
             if (securityEntriesUserIsIn.Any(se => se.IsFullAdmin || officesEmployeeIsIn.Contains(se.OfficeId ?? -1) && se.CanEditAllPeopleInUnit))

@@ -18,7 +18,7 @@ namespace uofi_itp_directory_data.Helpers {
 
             foreach (var officeInformation in information) {
                 officeInformation.OfficeName = offices.Single(o => o.Id == officeInformation.OfficeId).Title;
-                officeInformation.OfficeManagers = people.Where(p => p.OfficeId == officeInformation.OfficeId).Select(p => new OfficeManager { Email = p.NetId, Name = p.ListedName }).ToList();
+                officeInformation.OfficeManagers = people.Where(p => p.OfficeId == officeInformation.OfficeId).Select(p => new OfficeManager { Email = p.Email, Name = p.ListedName }).ToList();
             }
             return information;
         }

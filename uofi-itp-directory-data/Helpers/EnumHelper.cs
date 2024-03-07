@@ -1,4 +1,4 @@
-﻿namespace uofi_itp_directory.ControlHelper {
+﻿namespace uofi_itp_directory_data.Helpers {
 
     public static class EnumHelper {
 

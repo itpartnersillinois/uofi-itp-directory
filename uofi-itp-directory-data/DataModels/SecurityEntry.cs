@@ -12,7 +12,7 @@ namespace uofi_itp_directory_data.DataModels {
             var isFullAdmin = areaId == null && officeId == null;
             ListedNameFirst = firstName;
             ListedNameLast = lastName;
-            NetId = TransformName(netId);
+            Email = TransformName(netId);
             IsFullAdmin = isFullAdmin;
             IsActive = true;
             IsPublic = false;
@@ -26,6 +26,8 @@ namespace uofi_itp_directory_data.DataModels {
         // Connect this to a person because it is easier to maintain this way
         public bool CanEditAllPeopleInUnit { get; set; }
 
+        public string Email { get; set; } = "";
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -37,7 +39,6 @@ namespace uofi_itp_directory_data.DataModels {
         public string ListedNameFirst { get; set; } = "";
 
         public string ListedNameLast { get; set; } = "";
-        public string NetId { get; set; } = "";
         public int? OfficeId { get; set; }
 
         public static string TransformName(string netid) => (netid.EndsWith("@illinois.edu") ? netid : netid + "@illinois.edu").ToLowerInvariant();
