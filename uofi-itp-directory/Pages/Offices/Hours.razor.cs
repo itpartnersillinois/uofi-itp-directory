@@ -59,6 +59,8 @@ namespace uofi_itp_directory.Pages.Offices {
             }
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             foreach (var officeHour in OfficeHours) {
                 _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());

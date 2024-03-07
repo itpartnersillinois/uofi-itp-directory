@@ -1,8 +1,14 @@
 function alertOnScreen(msg) {
     var alertItem = document.querySelector('#update-alert');
-    alertItem.innerHTML = msg;
-    alertItem.classList.remove('hide');
-    alertItem.classList.remove('fadeout');
-    setInterval(function () { alertItem.classList.add('fadeout'); }, 2000);
+    var alertItemMessage = document.querySelector('#update-alert-message');
+    alertItemMessage.innerHTML = msg;
+    alertItem.className = 'fadein';
+    return true;
+}
+
+function removeAlertOnScreen() {
+    var alertItem = document.querySelector('#update-alert');
+    alertItem.className = 'fadeout';
+    setTimeout(function () { alertItem.className = ''; }, 1000);
     return true;
 }

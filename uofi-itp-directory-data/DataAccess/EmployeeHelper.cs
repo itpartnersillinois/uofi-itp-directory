@@ -37,7 +37,7 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<AreaSettings> GetEmployeeSettings(Employee? employee) => employee == null ?
             new AreaSettings() :
-            await _directoryRepository.ReadAsync(d => d.Offices.Include(o => o.Area).ThenInclude(a => a.AreaSettings).Single(o => o.Id == employee.PrimaryJobProfile.OfficeId).Area.AreaSettings);
+            await _directoryRepository.ReadAsync(d => d.Offices.Include(o => o.Area).ThenInclude(a => a.AreaSettings).SingleOrDefault(o => o.Id == employee.PrimaryJobProfile.OfficeId)?.Area?.AreaSettings) ?? new AreaSettings();
 
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
             var returnValue = await _directoryRepository.UpdateAsync(employee);

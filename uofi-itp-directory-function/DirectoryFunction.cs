@@ -34,7 +34,7 @@ namespace uofi_itp_directory_function {
                 .OrderBy(j => j.EmployeeProfile.NetId).Select(j => new EmployeeInformation(j)).ToList()));
 
         [Function("DirectoryAllUsernamesByArea")]
-        public async Task<IActionResult> GetAllUsernamesByArea([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Directory/AreaUsername/{id}")] HttpRequest req, int id)
+        public async Task<IActionResult> GetAllUsernamesByArea([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Directory/UsernameByArea/{id}")] HttpRequest req, int id)
             => new OkObjectResult(await _directoryRepository.ReadAsync(c => c.JobProfiles
                 .Include(j => j.EmployeeProfile).Include(j => j.EmployeeProfile.EmployeeHours).Include(j => j.EmployeeProfile.EmployeeActivities)
                 .Include(j => j.Office).ThenInclude(o => o.OfficeSettings)

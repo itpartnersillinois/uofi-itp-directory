@@ -57,9 +57,9 @@ else if (OfficeHours != null)
     </div>
 
     <div class="iled-buttons-left">
-    <button class="il-button" @onclick="Send">Save</button>
+    <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
     <ClearCacheButton></ClearCacheButton>
-    <button class="il-button" @onclick="Generate">Rebuild Office Hour Text and Save</button>
+    <button class="il-button" @onclick="Generate" @onblur="RemoveMessage">Rebuild Office Hour Text and Save</button>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }
