@@ -10,6 +10,8 @@ namespace uofi_itp_directory_data.DataModels {
         public virtual ICollection<EmployeeActivity> EmployeeActivities { get; set; } = default!;
         public virtual ICollection<EmployeeHour> EmployeeHours { get; set; } = default!;
 
+        public string EmployeeHourText { get; set; } = "";
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -26,12 +28,21 @@ namespace uofi_itp_directory_data.DataModels {
 
         public DateTime? LastRefreshed { get; set; }
 
-        [NotMapped]
-        public string ListedName => string.IsNullOrEmpty(ListedNameLast) || string.IsNullOrEmpty(ListedNameFirst) ? "" : ListedNameLast + ", " + ListedNameFirst;
-
         public string ListedNameFirst { get; set; } = "";
 
         public string ListedNameLast { get; set; } = "";
+
+        [NotMapped]
+        public string Name => string.IsNullOrWhiteSpace(NameFirst) || string.IsNullOrWhiteSpace(NameLast) ? "" : $"{NameFirst} {NameLast}";
+
+        [NotMapped]
+        public string NameFirst => string.IsNullOrWhiteSpace(PreferredNameFirst) ? ListedNameFirst : PreferredNameFirst;
+
+        [NotMapped]
+        public string NameLast => string.IsNullOrWhiteSpace(PreferredNameLast) ? ListedNameLast : PreferredNameLast;
+
+        [NotMapped]
+        public string NameReversed => string.IsNullOrWhiteSpace(NameFirst) || string.IsNullOrWhiteSpace(NameLast) ? "" : $"{NameLast}, {NameFirst}";
 
         public string NetId { get; set; } = "";
 
@@ -51,12 +62,12 @@ namespace uofi_itp_directory_data.DataModels {
         public string PreferredPronouns { get; set; } = "";
 
         [NotMapped]
-        public JobProfile PrimaryJobProfile => JobProfiles.First(jp => PrimaryProfile == null || jp.OfficeId == PrimaryProfile);
+        public JobProfile PrimaryJobProfile => JobProfiles.FirstOrDefault(jp => PrimaryProfile == null || jp.OfficeId == PrimaryProfile) ?? new JobProfile();
 
         public int? PrimaryProfile { get; set; }
 
         [NotMapped]
-        public string ProfileName => IsCurrentUser ? "My Profile" : ListedName;
+        public string ProfileName => IsCurrentUser ? "My Profile" : Name;
 
         public string Room { get; set; } = "";
 

@@ -6,7 +6,7 @@ namespace uofi_itp_directory_data.DataModels {
     public class OfficeHour : BaseDataItem {
 
         public static readonly Dictionary<string, LocationTypeEnum> LocationMapping = new() {
-            { "Office", LocationTypeEnum.Office},
+            { "In Office", LocationTypeEnum.Office},
             { "", LocationTypeEnum.None },
             { "Remote", LocationTypeEnum.Remote }
         };
@@ -39,6 +39,9 @@ namespace uofi_itp_directory_data.DataModels {
         public virtual Office Office { get; set; } = default!;
 
         public int OfficeId { get; set; }
+
+        [NotMapped]
+        public string OutputText => HideNotes ? "" : $"{StartTime}-{EndTime}{(string.IsNullOrWhiteSpace(Notes) ? "" : " " + Notes)}";
 
         [NotMapped]
         public DateTime? Start {

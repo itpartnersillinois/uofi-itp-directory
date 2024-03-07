@@ -22,7 +22,7 @@ namespace uofi_itp_directory_data.DataAccess {
                 IsActive = false,
                 IsInternalOnly = true,
                 AreaSettings = new AreaSettings(),
-                Admins = new List<SecurityEntry> { new() { ListedNameLast = name.LastName, ListedNameFirst = name.FirstName, NetId = SecurityEntry.TransformName(netid), LastUpdated = DateTime.Now, IsFullAdmin = false, IsActive = true } }
+                Admins = new List<SecurityEntry> { new() { ListedNameLast = name.LastName, ListedNameFirst = name.FirstName, Email = SecurityEntry.TransformName(netid), LastUpdated = DateTime.Now, IsFullAdmin = false, IsActive = true } }
             };
             _ = await _directoryRepository.CreateAsync(area);
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Added area", "", area.Id, area.Title);
@@ -32,7 +32,7 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<Area> GetAreaById(int? id, string netId) {
             var area = await _directoryRepository.ReadAsync(d => d.Areas.Single(a => a.Id == id));
-            area.IsFullAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.IsFullAdmin && se.NetId == netId));
+            area.IsFullAdmin = await _directoryRepository.ReadAsync(d => d.SecurityEntries.Any(se => se.IsActive && se.IsFullAdmin && se.Email == netId));
             return area;
         }
 

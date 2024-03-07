@@ -6,6 +6,7 @@ using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
+using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Offices {
@@ -14,6 +15,7 @@ namespace uofi_itp_directory.Pages.Offices {
         private MultiChoice? _multiChoice = default!;
         private List<AreaOfficeThinObject> _officeThinObjects = default!;
         public List<DateTime?> EndTime { get; set; } = default!;
+        public Office Office { get; set; } = default!;
         public List<OfficeHour> OfficeHours { get; set; } = default!;
 
         [Parameter]
@@ -46,10 +48,24 @@ namespace uofi_itp_directory.Pages.Offices {
             await AssignTextFields();
         }
 
+        public async Task Generate() {
+            if (Office != null) {
+                Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursIncludeHolidayMessage);
+                foreach (var officeHour in OfficeHours) {
+                    _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
+                }
+                _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
+            }
+        }
+
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             foreach (var officeHour in OfficeHours) {
                 _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
             }
+            _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
             StateHasChanged();
         }
@@ -71,6 +87,7 @@ namespace uofi_itp_directory.Pages.Offices {
 
         private async Task AssignTextFields() {
             if (OfficeId.HasValue) {
+                Office = await OfficeHelper.GetOfficeById(OfficeId.Value, await AuthenticationStateProvider.GetUser());
                 OfficeHours = await OfficeHelper.GetOfficeHoursById(OfficeId.Value);
             }
         }

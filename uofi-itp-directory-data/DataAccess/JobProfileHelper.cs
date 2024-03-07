@@ -49,12 +49,14 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<List<JobProfileThinObject>> GetJobProfileThinObjects(int officeId) =>
-            [.. await _directoryRepository.ReadAsync(d => d.JobProfiles.Include(jp => jp.EmployeeProfile).Where(jp => jp.OfficeId == officeId).Select(jp => new JobProfileThinObject { Display = jp.EmployeeProfile.ListedName + " (" + jp.EmployeeProfile.NetId + ")", EmployeeId = jp.EmployeeProfileId, EmployeeNetId = jp.EmployeeProfile.NetId, JobProfileId = jp.Id }).ToList().OrderBy(to => to.Display))];
+            [.. await _directoryRepository.ReadAsync(d => d.JobProfiles.Include(jp => jp.EmployeeProfile).Where(jp => jp.OfficeId == officeId).Select(jp => new JobProfileThinObject { Display = jp.EmployeeProfile.Name + " (" + jp.EmployeeProfile.NetId + ")", EmployeeId = jp.EmployeeProfileId, EmployeeNetId = jp.EmployeeProfile.NetId, JobProfileId = jp.Id }).ToList().OrderBy(to => to.Display))];
 
         public async Task<int> RemoveJobProfile(int jobProfileId, int employeeId, string employeeNetId, string changedByNetId) {
-            var returnValue = await _directoryRepository.DeleteAsync(_directoryRepository.Read(d => d.JobProfiles.Single(jp => jp.Id == jobProfileId)));
+            var job = _directoryRepository.Read(d => d.JobProfiles.Single(jp => jp.Id == jobProfileId));
+            var officeId = job.OfficeId;
+            var returnValue = await _directoryRepository.DeleteAsync(job);
             _ = await _logHelper.CreateProfileLog(changedByNetId, "Removed Profile", "", employeeId, employeeNetId);
-            _ = await _directoryHookHelper.SendHook(employeeId);
+            _ = await _directoryHookHelper.SendHook(employeeId, officeId);
             return returnValue;
         }
     }

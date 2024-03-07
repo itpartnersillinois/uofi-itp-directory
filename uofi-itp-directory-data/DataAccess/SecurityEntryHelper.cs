@@ -19,15 +19,17 @@ namespace uofi_itp_directory_data.DataAccess {
                 editOtherPeople = await _directoryRepository.ReadAsync(a => a.Offices.Include(o => o.Area).ThenInclude(a => a.AreaSettings).First(o => o.Id == officeId).Area.AreaSettings.AllowAdministratorsAccessToPeople);
 
             var name = await _dataWarehouseManager.GetDataWarehouseItem(netid);
-            if (!name.IsValid)
+            if (!name.IsValid) {
                 return (null, $"Net ID '{netid}' not found");
+            }
             var securityEntry = new SecurityEntry(netid, name.FirstName, name.LastName, areaId, officeId, editOtherPeople);
             _ = await _directoryRepository.CreateAsync(securityEntry);
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Created security item", "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
             return (securityEntry, $"Net ID '{netid}' created");
         }
 
         public async Task<int> Delete(SecurityEntry? securityEntry, string changedByNetId) {
-            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Deleted security item", "", securityEntry?.Id ?? 0, securityEntry?.NetId ?? "");
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Deleted security item", "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
             return await _directoryRepository.DeleteAsync(securityEntry);
         }
 
@@ -50,7 +52,7 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<int> Update(SecurityEntry securityEntry, string changedByNetId) {
-            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Updated security item", "", securityEntry.Id, securityEntry.NetId);
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Updated security item", "", securityEntry.Id, securityEntry.Email);
             return await _directoryRepository.UpdateAsync(securityEntry);
         }
     }

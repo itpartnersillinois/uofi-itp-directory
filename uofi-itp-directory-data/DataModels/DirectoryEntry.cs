@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace uofi_itp_directory_data.DataModels {
 
-    public class DirectoryEntry : BaseDataItem {
+    public class DirectoryEntry(int employeeId) : BaseDataItem {
         public DateTime? DateRun { get; set; }
 
         public DateTime DateSubmitted { get; set; } = DateTime.Now;
 
-        public int EmployeeId { get; set; }
+        public int EmployeeId { get; set; } = employeeId;
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,5 +18,8 @@ namespace uofi_itp_directory_data.DataModels {
         public string Message { get; set; } = "";
 
         public string NetId { get; set; } = "";
+
+        [NotMapped]
+        public string Summary => $"{NetId}{(IsSuccessful ? "" : " Failed")}";
     }
 }

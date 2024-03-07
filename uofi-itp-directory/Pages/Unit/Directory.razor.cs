@@ -50,6 +50,8 @@ namespace uofi_itp_directory.Pages.Unit {
             await AssignTextFields();
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task Send() {
             _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Directory settings updated");

@@ -37,7 +37,7 @@ namespace uofi_itp_directory.Controls {
 
         public async Task<int> Remove() {
             var currentUser = await AuthenticationStateProvider.GetUser();
-            if (SecurityEntry?.NetId == currentUser) {
+            if (SecurityEntry?.Email == currentUser) {
                 if (await JsRuntime.InvokeAsync<bool>("confirm", $"You are removing yourself from the access list! If you continue, you will lose rights to this application and will be redirected to the homepage. If you want access back, you will need to contact another office administrator, your area administrator, or a global administrator. Are you really sure you want to do this?")) {
                     var returnValue = await SecurityEntryHelper.Delete(SecurityEntry, currentUser);
                     if (returnValue != 0) {

@@ -12,11 +12,11 @@ namespace uofi_itp_directory.Pages.Search {
     public partial class Units {
         public Area? Area { get; set; }
 
+        public List<OfficeManager> AreaManagers { get; set; } = default!;
         public bool IsEditDisabled => LookupId == null;
-
         public int? LookupId { get; set; }
-
         public List<LookupThinObject> LookupThinObjects { get; set; } = [];
+        public List<string> Offices { get; set; } = default!;
 
         [Inject]
         protected AreaHelper AreaHelper { get; set; } = default!;
@@ -34,6 +34,12 @@ namespace uofi_itp_directory.Pages.Search {
         protected NavigationManager NavigationManager { get; set; } = default!;
 
         [Inject]
+        protected OfficeHelper OfficeHelper { get; set; } = default!;
+
+        [Inject]
+        protected OfficeManagerHelper OfficeManagerHelper { get; set; } = default!;
+
+        [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
 
         public void ClearArea() => Area = null;
@@ -44,7 +50,12 @@ namespace uofi_itp_directory.Pages.Search {
                 if (await PersonOptionHelper.IsAreaAdmin(await AuthenticationStateProvider.GetUser(), Area.Id)) {
                     var title = LookupThinObjects.First(lto => lto.Id == LookupId.Value).Text;
                     CacheHelper.SetCachedArea(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, new AreaOfficeThinObject(LookupId.Value, title));
+                    ClearArea();
                     NavigationManager.NavigateTo("/unit/general");
+                } else {
+                    Area.AreaSettings = await AreaHelper.GetAreaSettingsByAreaId(LookupId.Value);
+                    AreaManagers = await OfficeManagerHelper.GetAreaManagersById(Area.Id);
+                    Offices = (await OfficeHelper.GetOffices(Area.Id)).Where(o => o.IsActive).Select(o => o.Title).ToList();
                 }
             }
         }

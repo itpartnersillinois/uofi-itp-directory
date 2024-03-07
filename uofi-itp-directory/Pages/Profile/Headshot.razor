@@ -11,10 +11,10 @@
         <ImageUploader IsDisabled=@Employee.IsEntryDisabled @ref="@ImageUploader" Size="@Size" Height="@Height" Width="@Width" FileUrl="@Employee.PhotoUrl" ItemId="@Employee.NetIdTruncated" Delete="DeleteImage" Save="SaveImage"></ImageUploader>
 
         <div class="iled-buttons-left">
-            <button class="il-button" disabled="@Employee.IsEntryDisabled" @onclick="Send">Save</button>
+            <button class="il-button" disabled="@Employee.IsEntryDisabled" @onclick="Send" @onblur="RemoveMessage">Save</button>
             <ViewProfile NetId="@Employee.NetId"></ViewProfile>
         </div>
-        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+        <ToastPopup></ToastPopup>
 
     </il-section>
 }

@@ -280,6 +280,10 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmployeeHourText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -591,6 +595,10 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OfficeHourText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OfficeType")
                         .HasColumnType("int");
 
@@ -707,6 +715,10 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<bool>("CanEditAllPeopleInUnit")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -727,10 +739,6 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NetId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("OfficeId")
                         .HasColumnType("int");
 
@@ -747,25 +755,25 @@ namespace uofi_itp_directory_data.Migrations
                         {
                             Id = -1,
                             CanEditAllPeopleInUnit = true,
+                            Email = "jonker@illinois.edu",
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
                             LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ListedNameFirst = "Bryan",
-                            ListedNameLast = "Jonker",
-                            NetId = "jonker@illinois.edu"
+                            ListedNameLast = "Jonker"
                         },
                         new
                         {
                             Id = -2,
                             CanEditAllPeopleInUnit = true,
+                            Email = "rbwatson@illinois.edu",
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
                             LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ListedNameFirst = "Rob",
-                            ListedNameLast = "Watson",
-                            NetId = "rbwatson@illinois.edu"
+                            ListedNameLast = "Watson"
                         });
                 });
 

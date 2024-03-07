@@ -6,7 +6,7 @@ namespace uofi_itp_directory_data.DataModels {
     public class EmployeeHour : BaseDataItem {
 
         public static readonly Dictionary<string, LocationTypeEnum> LocationMapping = new() {
-            { "Office", LocationTypeEnum.Office},
+            { "In Office", LocationTypeEnum.Office},
             { "", LocationTypeEnum.None },
             { "Remote", LocationTypeEnum.Remote }
         };
@@ -38,6 +38,9 @@ namespace uofi_itp_directory_data.DataModels {
 
         [NotMapped]
         public LocationTypeEnum NotesEnum => LocationMapping.ContainsKey(Notes) ? LocationMapping[Notes] : LocationTypeEnum.Other;
+
+        [NotMapped]
+        public string OutputText => HideNotes ? "" : $"{StartTime}-{EndTime}{(string.IsNullOrWhiteSpace(Notes) ? "" : " " + Notes)}";
 
         [NotMapped]
         public DateTime? Start {
