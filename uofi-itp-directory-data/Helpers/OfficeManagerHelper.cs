@@ -6,6 +6,10 @@ namespace uofi_itp_directory_data.Helpers {
     public class OfficeManagerHelper(DirectoryRepository directoryRepository) {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
 
+        public async Task<List<OfficeManager>> GetAreaManagersById(int areaId) =>
+            await _directoryRepository.ReadAsync(d => d.SecurityEntries.Where(s => s.AreaId != null && s.IsPublic && s.AreaId == areaId)
+                .Select(p => new OfficeManager { Email = p.Email, Name = p.ListedName }).ToList());
+
         public async Task<List<OfficeInformation>> GetOfficeManagers(string netId) {
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).SingleOrDefault(e => e.NetId == netId));
             if (employee == null || !employee.JobProfiles.Any()) {
@@ -22,5 +26,9 @@ namespace uofi_itp_directory_data.Helpers {
             }
             return information;
         }
+
+        public async Task<List<OfficeManager>> GetOfficeManagersById(int officeId) =>
+            await _directoryRepository.ReadAsync(d => d.SecurityEntries.Where(s => s.OfficeId != null && s.IsPublic && s.OfficeId == officeId)
+                .Select(p => new OfficeManager { Email = p.Email, Name = p.ListedName }).ToList());
     }
 }

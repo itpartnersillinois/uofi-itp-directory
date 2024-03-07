@@ -14,7 +14,7 @@ namespace uofi_itp_directory_function.ViewModels {
 
         public string Building { get; set; } = office.Building;
 
-        public string BuildingUrl { get; set; } = string.IsNullOrWhiteSpace(office.BuildingCode) ? string.Empty : "https://map.illinois.edu/view?ACTION=MAP&buildingId=" + office.BuildingCode;
+        public string BuildingUrl { get; set; } = office.BuildingUrl;
 
         public string City { get; set; } = office.City;
 

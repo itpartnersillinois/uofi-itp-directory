@@ -4,7 +4,6 @@
 
 <il-section>
     <h1>Search Unit</h1>
-    <p>Look up an unit.</p>
 
     @if (Area == null)
     {
@@ -25,12 +24,52 @@
                 </select>
             </div>
         </div>
+        <div class="iled-buttons-left">
         <button class="il-button" disabled="@IsEditDisabled" @onclick="EditUnit">View / Edit Unit</button>
+        </div>
     }
     else
     {
-        <p>Unit: @Area.Title</p>
-        <div>
+        <h2>@Area.Title</h2>
+        <p>Type: @Area.AreaType.ToPrettyString()</p>
+        <p>Audience: @Area.Audience</p>
+        <p>External URL: @Area.ExternalUrl</p>
+        <p>Internal URL: @Area.InternalUrl</p>
+
+        <h3>Internal Information</h3>
+        <p>In Beta Access: @Area.AreaSettings.AllowBeta</p>
+        <p>Allow Profile Information: @Area.AreaSettings.AllowPeople</p>
+        <p>Can office administrators edit employee data: @Area.AreaSettings.AllowAdministratorsAccessToPeople</p>
+        <p>Blocks access if they have an Illinois Experts profile: @Area.AreaSettings.AllowInformationForIllinoisExpertsMembers</p>
+        <p>Publish only to internal locations (not TDX): @Area.IsInternalOnly</p>
+        <p>Profile Information: @Area.AreaSettings.UrlProfile</p>
+        <p>Profile Refresh Information: @Area.AreaSettings.UrlPeopleRefresh</p>
+        <p>Auto-load Information: @Area.AreaSettings.AutoloadProfiles</p>
+        @if (Area.InternalOrder == 1)
+        {
+            <p>High priority in listings</p>
+        }
+        else if (Area.InternalOrder == 3)
+        {
+            <p>Low priority in listings</p>
+        }
+
+        <h3>Unit Administrators</h3>
+        <ul>
+        @foreach (var admin in AreaManagers)
+        {
+            <li>@admin.Name, @admin.Email</li>
+        }
+        </ul>
+        <h3>Offices</h3>
+        <ul>
+            @foreach (var office in Offices)
+            {
+                <li>@office</li>
+            }
+        </ul>
+
+        <div class="iled-buttons-left">
             <button class="il-button" @onclick="ClearArea">Back to Search</button>
         </div>
     }
