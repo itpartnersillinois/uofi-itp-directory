@@ -54,6 +54,19 @@
             </div>
         </div>
     </div>
+        <h3>Phone Number</h3>
+        <div class="iled-section-split">
+            <div>
+                <p>Phone numbers <a href="https://go.uillinois.edu/myprofile">can be edited in the My UI Info</a></p>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-hidephone">Hide Phone Number</label>
+                    <input id="ed-hidephone" type="checkbox" disabled="@Employee.IsEntryDisabled" @bind="Employee.IsPhoneHidden">
+                </div>
+            </div>
+        </div>
+
     <h3>Job Title(s)</h3>
     @foreach (var profile in Employee.JobProfiles)
     {
