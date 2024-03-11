@@ -17,7 +17,7 @@
                     <input autocomplete="given-name" id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
             </div>
             <div class="iled-instructions">
-                 Note that for a preferred name, you may edit this in the HR Profile and it will update your directory information as well.
+                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well.
             </div>
         </div>
         <div class="iled-input-box-parent">
@@ -26,7 +26,7 @@
                     <input autocomplete="family-name" id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
             </div>
                 <div class="iled-instructions">
-                    Note that for a preferred name, you may edit this in the HR Profile and it will update your directory information as well.
+                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well.
                 </div>
             </div>
     </div>
@@ -79,14 +79,17 @@
         <div class="iled-section-split">
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
-                        <label for="ed-order-@profile.Id">Display Order</label>
-                        <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
-                            @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
-                            {
-                                <option value="@enumtype">@enumtype.ToPrettyString()</option>
-                            }
-                        </select>
-                    </div>
+                    <label for="ed-order-@profile.Id">Display Order</label>
+                    <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
+                        @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderByDescending(o => o))
+                        {
+                            <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="iled-instructions">
+                    Profiles are normally listed in alphabetical order. This allows an administrator to manually change the order of the profile. 
+                </div>
             </div>
         </div>
         }

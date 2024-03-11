@@ -38,7 +38,7 @@
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
                 <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
-                <label for="ed-date-location-blank-@officeHour.DayNumeric">N/A</label>
+                <label for="ed-date-location-blank-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
                 <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
@@ -56,16 +56,12 @@
         </div>
     }
     <div class="iled-input-box-parent">
-        <div class="iled-input-box">
-            <label for="ed-officehours">Hours Text</label>
-            <input id="ed-officehours" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.EmployeeHourText">
-        </div>
+        Preview: <strong>@Employee.EmployeeHourText</strong>
     </div>
 
     <div class="iled-buttons-left">
-        <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
+        <button class="il-button" @onclick="Generate" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
         <ViewProfile NetId="@Employee.NetId"></ViewProfile>
-        <button class="il-button" @onclick="Generate" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Rebuild Employee Hour Text and Save</button>
     </div>
     <ToastPopup></ToastPopup>
 }

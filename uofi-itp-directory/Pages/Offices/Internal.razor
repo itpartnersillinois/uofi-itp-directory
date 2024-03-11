@@ -44,14 +44,14 @@ else if (Office != null)
             <div class="iled-input-box">
                 <label for="ed-internalorder">Order</label>
                 <select id="ed-internalorder" @bind="Office.InternalOrder">
-                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderByDescending(o => o))
                     {
                         <option value="@enumtype">@enumtype.ToPrettyString()</option>
                     }
                 </select>
             </div>
             <div class="iled-instructions">
-                Offices will be listed in alphabetical order unless changed here.
+                Offices are normally listed in alphabetical order. This allows an administrator to manually change the order of the office.
             </div>
         </div>
     }

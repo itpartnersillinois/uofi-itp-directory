@@ -52,7 +52,7 @@ namespace uofi_itp_directory_data.Security {
             if (!CheckParameters(name)) {
                 return new List<AreaOfficeThinObject>();
             }
-            var items = await _directoryRepository.ReadAsync(c => c.SecurityEntries.Where(p => p.Email == name && p.IsActive));
+            var items = (await _directoryRepository.ReadAsync(c => c.SecurityEntries.Where(p => p.Email == name && p.IsActive))).ToList();
             if (items.Any(i => i.IsFullAdmin)) {
                 return (await _directoryRepository.ReadAsync(o => o.Offices.Include(o => o.Area).Select(o => new AreaOfficeThinObject(o)))).ToList();
             }

@@ -10,14 +10,12 @@
 
 <p>Some information can be updated at the campus level in the Illinois Directory. The IT Partners Directory will pull that information and most of it can also be updated in the IT Partners Directory.</p>
 
-<p>To request a change to your unit’s information, contact us. Our web team will get back to you within one business day. Please contact us if you have any questions or concerns.</p>
-
 <div class="iled-card-list">
     @if (FullSecurityItem?.HasProfile ?? false)
     {
         <il-card class="il-theme-gray">
             <h2>Edit My Profile</h2>
-            <p>Edit or preview your directory profile</p>
+            <p>You have a profile. Edit or preview your directory profile</p>
             <div class="iled-buttons">
                 <a href="/profile/general" class="il-button">Edit</a>
                 <ViewProfile></ViewProfile>
@@ -28,7 +26,7 @@
     {
         <il-card class="il-theme-gray">
             <h2>Office Administration</h2>
-            <p>Edit those in your office and office information, including office location, hours, and contact information.</p>
+            <p>You are an office administrator. Edit those in your office and office information, including office location, hours, and contact information.</p>
             <div class="iled-buttons">
                 <a href="/office/people" class="il-button">Edit People</a>
                 <a href="/office/hours" class="il-button">Edit Office Hours</a>
@@ -37,7 +35,7 @@
     }
     <il-card class="il-theme-gray">
         <h2>Find an Administrator</h2>
-        <p>View a list of administrators and their contact information.</p>
+        <p>If you find incorrect information about an office, you can view a list of office/unit administrators and their contact information.</p>
         <div class="iled-buttons">
             <a href="/search/offices" class="il-button">Office Admins</a>
             <a href="/search/units" class="il-button">Unit Admins</a>

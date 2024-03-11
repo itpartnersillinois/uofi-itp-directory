@@ -59,6 +59,7 @@ namespace uofi_itp_directory.Controls {
                 _originalImageUrl = FileUrl;
             }
             await Delete.InvokeAsync();
+            PhotoText = "Photo is deleted but this is not saved yet";
             UploaderStatus = UploaderStatusEnum.Deleted;
             return true;
         }
@@ -67,9 +68,11 @@ namespace uofi_itp_directory.Controls {
             if (UploaderStatus == UploaderStatusEnum.Uploaded) {
                 Filename = await UploadStorage.Move(Filename.Replace(_tempName, ""), FileUrl, true);
                 FileUrl = UploadStorage.GetFullPath(Filename, true);
+                PhotoText = "Photo is saved";
                 return true;
             } else if (UploaderStatus == UploaderStatusEnum.Deleted) {
                 _ = await UploadStorage.Delete(_originalImageUrl, true);
+                PhotoText = "Photo is deleted";
                 return true;
             }
             return false;
