@@ -14,7 +14,6 @@ namespace uofi_itp_directory.Pages.Unit {
     public partial class Users {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
-        public string Error { get; set; } = "";
         public string Name { get; set; } = "";
         public string NetId { get; set; } = "";
         public List<SecurityEntry> SecurityEntries { get; set; } = default!;
@@ -46,6 +45,11 @@ namespace uofi_itp_directory.Pages.Unit {
             UnitId = _multiChoice?.SelectedId;
             UnitTitle = _multiChoice?.SelectedTitle ?? "";
             await AssignTextFields();
+        }
+
+        public Task ChangeEntry() {
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         public async Task LookupId() {

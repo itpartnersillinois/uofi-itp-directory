@@ -13,7 +13,6 @@
             <button class="il-button" disabled="@Employee.IsEntryDisabled" @onclick="Send">Save Document</button>
             <ViewProfile NetId="@Employee.NetId"></ViewProfile>
         </div>
-        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
-
     </il-section>
+    <ToastPopup></ToastPopup>
 }

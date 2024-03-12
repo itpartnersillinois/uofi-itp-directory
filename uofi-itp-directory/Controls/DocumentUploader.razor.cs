@@ -15,7 +15,7 @@ namespace uofi_itp_directory.Controls {
         [Parameter]
         public EventCallback Delete { get; set; } = default!;
 
-        public string DocumentText { get; set; } = "Existing Document";
+        public string DocumentResultsText { get; set; } = "";
 
         public string Filename { get; set; } = "";
 
@@ -51,6 +51,7 @@ namespace uofi_itp_directory.Controls {
                 _originalDocumentUrl = FileUrl;
             }
             await Delete.InvokeAsync();
+            DocumentResultsText = "Document deleted, make sure to save";
             UploaderStatus = UploaderStatusEnum.Deleted;
             return true;
         }
@@ -59,9 +60,11 @@ namespace uofi_itp_directory.Controls {
             if (UploaderStatus == UploaderStatusEnum.Uploaded) {
                 Filename = await UploadStorage.Move(Filename.Replace(_tempName, ""), FileUrl, false);
                 FileUrl = UploadStorage.GetFullPath(Filename, false);
+                DocumentResultsText = "Document saved";
                 return true;
             } else if (UploaderStatus == UploaderStatusEnum.Deleted) {
                 _ = await UploadStorage.Delete(_originalDocumentUrl, false);
+                DocumentResultsText = "Document deleted";
                 return true;
             }
             return false;
@@ -78,7 +81,7 @@ namespace uofi_itp_directory.Controls {
             Filename = await UploadStorage.Upload(ItemId + _tempName + Path.GetExtension(e.File.Name), e.File.ContentType, e.File.OpenReadStream(maxAllowedSize: 1024 * _maxAllowedSize), false);
             FileUrl = UploadStorage.GetFullPath(Filename, false);
             Cache = DateTime.Now.Ticks.ToString();
-            DocumentText = "New document, make sure to save";
+            DocumentResultsText = "New document, make sure to save";
             UploaderStatus = UploaderStatusEnum.Uploaded;
             await Save.InvokeAsync();
             return !string.IsNullOrEmpty(FileUrl);

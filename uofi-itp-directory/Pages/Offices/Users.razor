@@ -4,7 +4,7 @@
 
 <il-section>
     <h1>@OfficeTitle Administrators</h1>
-    <p>These people will be able to edit office information, create other office administrators for their unit, and edit people that are in their office.</p><p>Public entries are displayed as administrators to the outside world, while private entries have the same permissions but are not displayed. For example, if you have a primary person responsible for tasks and a backup person, you would make the primary person public and the backup person private.</p>
+    <p>These people will be able to edit office information, create other office administrators for their unit, and edit people that are in their office.</p>
 </il-section>
 @if (!OfficeId.HasValue)
 {
@@ -12,16 +12,27 @@
 }
 else
 {
+    <h2>Primary Administrators</h2>
+    <p>Primary administrators are visible to the outside world.</p>
     <il-section class="iled-username-parent">
-        @foreach (var entity in SecurityEntries ?? new List<SecurityEntry>())
+        @foreach (var entity in SecurityEntries?.Where(se => se.IsPublic) ?? new List<SecurityEntry>())
         {
-            <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)"></UsernameItem>
+            <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
+        }
+    </il-section>
+    <h2>Backup Administrators</h2>
+    <p>Backup administrators are not visible to the outside world, but have the same permissions as a primary administrator.</p>
+    <il-section class="iled-username-parent">
+        @foreach (var entity in SecurityEntries?.Where(se => !se.IsPublic) ?? new List<SecurityEntry>())
+        {
+            <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
         }
     </il-section>
     <div>
+        <h2>Add a New Administrator</h2>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-netid" class="iled-label-required">Add a New Office Administrator</label>
+                <label for="ed-netid" class="iled-label-required">NetID</label>
                 <input id="ed-netid" required type="text" @bind="NetId">
             </div>
             <div class="iled-instructions">
