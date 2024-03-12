@@ -49,6 +49,11 @@ namespace uofi_itp_directory.Pages.Offices {
             await AssignTextFields();
         }
 
+        public Task ChangeEntry() {
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
+
         public async Task LookupId() {
             var name = await DataWarehouseManager.GetDataWarehouseItem(NetId);
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
@@ -68,6 +73,7 @@ namespace uofi_itp_directory.Pages.Offices {
                 if (message.Item1 != null) {
                     SecurityEntries.Add(message.Item1);
                 }
+                NetId = "";
                 StateHasChanged();
             } else {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Net ID needs to be filled out");

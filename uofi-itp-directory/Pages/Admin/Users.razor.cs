@@ -11,8 +11,6 @@ using uofi_itp_directory_data.Security;
 namespace uofi_itp_directory.Pages.Admin {
 
     public partial class Users {
-        public string Error { get; set; } = "";
-
         public string Name { get; set; } = "";
         public string NetId { get; set; } = "";
         public List<SecurityEntry> SecurityEntries { get; set; } = default!;
@@ -31,6 +29,11 @@ namespace uofi_itp_directory.Pages.Admin {
 
         [Inject]
         protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
+
+        public Task ChangeEntry() {
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
 
         public async Task LookupId() {
             var name = await DataWarehouseManager.GetDataWarehouseItem(NetId);

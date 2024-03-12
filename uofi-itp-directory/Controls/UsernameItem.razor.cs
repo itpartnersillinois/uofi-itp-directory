@@ -14,9 +14,12 @@ namespace uofi_itp_directory.Controls {
         public bool Disabled { get; set; }
 
         [Parameter]
+        public EventCallback<MouseEventArgs> OnChangeCallback { get; set; }
+
+        [Parameter]
         public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
 
-        public string PrivateText => SecurityEntry != null && SecurityEntry.IsPublic ? "Public View" : "Private View";
+        public string PrivateText => SecurityEntry != null && SecurityEntry.IsPublic ? "Change to Backup" : "Change to Primary";
 
         [Parameter]
         public SecurityEntry SecurityEntry { get; set; } = default!;
@@ -55,7 +58,10 @@ namespace uofi_itp_directory.Controls {
 
         public async Task<int> TogglePrivate() {
             SecurityEntry.IsPublic = !SecurityEntry.IsPublic;
-            return await SecurityEntryHelper.Update(SecurityEntry, await AuthenticationStateProvider.GetUser());
+            var returnValue = await SecurityEntryHelper.Update(SecurityEntry, await AuthenticationStateProvider.GetUser());
+            _ = OnChangeCallback.InvokeAsync();
+            StateHasChanged();
+            return returnValue;
         }
     }
 }
