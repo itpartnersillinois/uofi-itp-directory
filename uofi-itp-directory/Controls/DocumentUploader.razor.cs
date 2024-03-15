@@ -7,7 +7,9 @@ namespace uofi_itp_directory.Controls {
 
     public partial class DocumentUploader {
         private const string _tempName = "-temp";
+
         private readonly int _maxAllowedSize = 10000;
+
         private string _originalDocumentUrl = "";
 
         public string Cache { get; set; } = DateTime.Now.Ticks.ToString();
@@ -16,6 +18,8 @@ namespace uofi_itp_directory.Controls {
         public EventCallback Delete { get; set; } = default!;
 
         public string DocumentResultsText { get; set; } = "";
+
+        public string DocumentText { get; set; } = "Existing Document";
 
         public string Filename { get; set; } = "";
 
@@ -56,6 +60,8 @@ namespace uofi_itp_directory.Controls {
             return true;
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task<bool> SaveFile() {
             if (UploaderStatus == UploaderStatusEnum.Uploaded) {
                 Filename = await UploadStorage.Move(Filename.Replace(_tempName, ""), FileUrl, false);
@@ -78,12 +84,13 @@ namespace uofi_itp_directory.Controls {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"File is too large -- size of file is {float.Round(e.File.Size / (float) (1024 * 1000), 2)}MB and maximum size is {_maxAllowedSize / 1000}MB");
                 return false;
             }
+            await Save.InvokeAsync();
             Filename = await UploadStorage.Upload(ItemId + _tempName + Path.GetExtension(e.File.Name), e.File.ContentType, e.File.OpenReadStream(maxAllowedSize: 1024 * _maxAllowedSize), false);
             FileUrl = UploadStorage.GetFullPath(Filename, false);
             Cache = DateTime.Now.Ticks.ToString();
+            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Document uploaded - make sure to save");
             DocumentResultsText = "New document, make sure to save";
             UploaderStatus = UploaderStatusEnum.Uploaded;
-            await Save.InvokeAsync();
             return !string.IsNullOrEmpty(FileUrl);
         }
     }

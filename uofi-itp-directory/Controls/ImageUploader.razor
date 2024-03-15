@@ -4,17 +4,17 @@
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="@UploaderId">Upload Photo @Size</label>
-                <InputFile OnChange="@SaveFileToTemp" id="@UploaderId" />
+                <InputFile OnChange="@SaveFileToTemp" id="@UploaderId" @onblur="RemoveMessage" />
             </div>
         </div>
     }
     <div class="iled-input-box-parent">
         <div class="iled-photocv">
-            <p style="font-weight: 700;">@PhotoText</p>
+            <p class="iled-inline-alert">@PhotoText</p>
             @if (!string.IsNullOrWhiteSpace(FileUrl))
             {
                 <a target="_blank" href="@FileUrl"><img class="thumbnail" src="@FileUrl?@Cache" alt="Image for item" /></a>
-                <button @onclick="@DeleteFile" disabled="@IsDisabled" class="il-button">Delete</button>
+                <button @onclick="@DeleteFile" disabled="@IsDisabled" class="il-button" @onblur="RemoveMessage">Delete</button>
             }
         </div>
     </div>

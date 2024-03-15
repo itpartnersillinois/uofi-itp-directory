@@ -11,9 +11,7 @@
         }
         else
         {
-
-            <p>Add publications, presentations, history, etc. to this profile below. Please contact your office administrator on what type of information belongs here.</p>
-
+        <p>Add publications, presentations, history, etc. to this profile below. Please contact your office administrator on what type of information belongs here.</p>
         @foreach (var activity in Employee.EmployeeActivities) {
             <div class="iled-activity">
                 <p class="iled-activity-title">Activity</p>
@@ -61,9 +59,12 @@
                                     <select id="ed-display-order-@activity.Id" disabled="@Employee.IsEntryDisabled" @bind="activity.InternalOrder">
                                 @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
                                 {
-                                    <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                                    <option value="@((int)enumtype)">@enumtype.ToPrettyString()</option>
                                 }
                             </select>
+                        </div>
+                        <div class="iled-instructions">
+                            Note that the display order will only change in your main listing. 
                         </div>
                     </div>
                 </div>

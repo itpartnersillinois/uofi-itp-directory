@@ -14,7 +14,10 @@ namespace uofi_itp_directory.Pages.Profile {
     public partial class Biography {
         private BlazoredTextEditor? QuillBiography = default!;
 
+        public string BiographyText { get; set; } = "";
         public Employee? Employee { get; set; } = default!;
+
+        public bool HideQuillInformationForUpdates { get; set; } = false;
 
         [Parameter]
         public string Refresh { get; set; } = "";
@@ -55,6 +58,9 @@ namespace uofi_itp_directory.Pages.Profile {
             if (Employee == null) {
                 throw new Exception("No employee");
             } else {
+                HideQuillInformationForUpdates = true;
+                BiographyText = Employee.Biography;
+                HideQuillInformationForUpdates = false;
                 ShouldUseExperts = await EmployeeAreaHelper.ShouldUseExperts(Employee.NetId) && await IllinoisExpertsManager.IsInExperts(Employee.NetIdTruncated);
             }
         }

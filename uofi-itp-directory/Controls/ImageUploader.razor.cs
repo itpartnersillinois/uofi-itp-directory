@@ -64,6 +64,8 @@ namespace uofi_itp_directory.Controls {
             return true;
         }
 
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
         public async Task<bool> SaveFile() {
             if (UploaderStatus == UploaderStatusEnum.Uploaded) {
                 Filename = await UploadStorage.Move(Filename.Replace(_tempName, ""), FileUrl, true);
@@ -97,6 +99,7 @@ namespace uofi_itp_directory.Controls {
             } else {
                 Filename = await UploadStorage.Upload(ItemId + _tempName, e.File.ContentType, e.File.OpenReadStream(maxAllowedSize: 1024 * _maxAllowedSize), true);
                 FileUrl = UploadStorage.GetFullPath(Filename, true);
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Image uploaded - make sure to save");
             }
             PhotoText = "New Photo - not saved yet";
             Cache = DateTime.Now.Ticks.ToString();

@@ -63,13 +63,6 @@ namespace uofi_itp_directory.Pages.Offices {
             NavManager.NavigateTo($"/profile/general");
         }
 
-        public async Task LookupId() {
-            if (!string.IsNullOrWhiteSpace(NewNetId)) {
-                var name = await DataWarehouseManager.GetDataWarehouseItem(NewNetId);
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
-            }
-        }
-
         public async Task Remove() {
             var thinObject = GetThinObject();
             if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will remove the employee {thinObject.Display} from the profile list. Are you sure?")) {

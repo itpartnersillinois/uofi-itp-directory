@@ -26,13 +26,16 @@
     {
         <il-nav-section>
             <a href="/office/general" slot="label">Office Information</a>
-        <ul class="il-subnav">
+            <ul class="il-subnav">
                 <li><a href="/office/general">General Information</a></li>
                 <li><a href="/office/hours">Office Hours</a></li>
                 <li><a href="/office/people">People</a></li>
                 <li><a href="/office/users">Office Administrators</a></li>
-                <li><a href="/office/internal">Internal Information</a></li>
-                <li><a href="/office/directory">Links to Pull Information</a></li>
+                @if (FullSecurityItem?.IsUnitAdmin ?? false)
+                {
+                    <li><a href="/office/internal">Internal Information</a></li>
+                    <li><a href="/office/directory">Links to Pull Information</a></li>
+                }
         </ul>
     </il-nav-section>
     }
@@ -60,6 +63,10 @@
         </ul>
     </il-nav-section>
     <il-nav-section>
-        <a href="https://go.illinois.edu/itpartners-directory-help" slot="label">Contact Us</a>
+        <a href="/viewadmin" slot="label">Contact Us</a>
+        <ul class="il-subnav">
+            <li><a href="/viewadmin">Find your administrator</a></li>
+            <li><a href="https://go.illinois.edu/itpartners-directory-help">Report a problem</a></li>
+        </ul>
     </il-nav-section>
 </il-nav>

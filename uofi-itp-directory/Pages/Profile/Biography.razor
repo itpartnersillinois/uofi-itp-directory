@@ -9,13 +9,14 @@
         {
             <p>This person should update their biography at <a href="https://go.illinois.edu/experts-login" target="_blank">Illinois Experts</a></p>          
         }
-        else
+        else if (!HideQuillInformationForUpdates)
         {
             <p>Add a professional biography to this profile below. Please contact your office administrator on what type of information belongs here.</p>
 
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-biography">Add Biography</label>
+                    <div>
                     <BlazoredTextEditor @ref="@QuillBiography" Placeholder="Professional Biography">
                         <ToolbarContent>
                             <span class="ql-formats">
@@ -29,16 +30,17 @@
                             </span>
                         </ToolbarContent>
                         <EditorContent>
-                            @((MarkupString)@Employee.Biography)
+                            @((MarkupString)@BiographyText)
                         </EditorContent>
                     </BlazoredTextEditor>
+                    </div>
                 </div>
             </div>
             <div class="iled-buttons-left">
-                <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
+                <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
                 <ViewProfile NetId="@Employee.NetId"></ViewProfile>
             </div>
-            <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+            <ToastPopup></ToastPopup>
         }
     </il-section>
 }

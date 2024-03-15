@@ -12,22 +12,26 @@
 }
 else
 {
+    <div>
     <h2>Primary Administrators</h2>
-    <p>Primary administrators are visible to the outside world.</p>
+    <p style="padding-bottom: 10px;">Primary administrators are visible to the outside world.</p>
     <il-section class="iled-username-parent">
         @foreach (var entity in SecurityEntries?.Where(se => se.IsPublic) ?? new List<SecurityEntry>())
         {
             <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
         }
     </il-section>
+    </div>
+    <div>
     <h2>Backup Administrators</h2>
-    <p>Backup administrators are not visible to the outside world, but have the same permissions as a primary administrator.</p>
+        <p style="padding-bottom: 10px;">Backup administrators are not visible to the outside world, but have the same permissions as a primary administrator.</p>
     <il-section class="iled-username-parent">
         @foreach (var entity in SecurityEntries?.Where(se => !se.IsPublic) ?? new List<SecurityEntry>())
         {
             <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
         }
     </il-section>
+    </div>
     <div>
         <h2>Add a New Administrator</h2>
         <div class="iled-input-box-parent">
@@ -42,7 +46,6 @@ else
     </div>
     <div class="iled-buttons-left">
     <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
-    <button class="il-button" @onclick="LookupId" @onblur="RemoveMessage">Check NetID</button>
     <ClearCacheButton></ClearCacheButton>
     </div>
     <ToastPopup></ToastPopup>
