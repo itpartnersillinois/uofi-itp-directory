@@ -35,11 +35,6 @@ namespace uofi_itp_directory.Pages.Admin {
             return Task.CompletedTask;
         }
 
-        public async Task LookupId() {
-            var name = await DataWarehouseManager.GetDataWarehouseItem(NetId);
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
-        }
-
         public Task RemoveEntry(int id) {
             SecurityEntries.RemoveAll(se => se.Id == id);
             return Task.CompletedTask;
