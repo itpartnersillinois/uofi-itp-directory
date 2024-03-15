@@ -25,7 +25,7 @@ else if (OfficeHours != null)
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
                 <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
-                <label for="ed-date-location-blank-@officeHour.DayNumeric">N/A</label>
+                <label for="ed-date-location-blank-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
                 <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
@@ -42,9 +42,20 @@ else if (OfficeHours != null)
             </div>
         </div>
     }
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-holiday">Add the text "Closed for University Holidays" to the office hours.</label>
+            <input id="ed-holiday" type="checkbox" @bind="Office.HoursIncludeHolidayMessage">
+        </div>
+    </div>
+
+    <div class="iled-input-box-parent">
+        Preview: <strong>@Office.OfficeHourText</strong>
+    </div>
+
     <div class="iled-buttons-left">
-    <button class="il-button" @onclick="Send">Save</button>
+        <button class="il-button" @onclick="Generate" @onblur="RemoveMessage">Save</button>
     <ClearCacheButton></ClearCacheButton>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }

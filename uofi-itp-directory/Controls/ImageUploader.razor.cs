@@ -8,7 +8,7 @@ namespace uofi_itp_directory.Controls {
     public partial class ImageUploader {
         public string PhotoText = "Existing Photo";
         private const string _tempName = "-temp";
-
+        private readonly int _maxAllowedSize = 2000;
         private string _originalImageUrl = "";
 
         public string Cache { get; set; } = DateTime.Now.Ticks.ToString();
@@ -59,6 +59,7 @@ namespace uofi_itp_directory.Controls {
                 _originalImageUrl = FileUrl;
             }
             await Delete.InvokeAsync();
+            PhotoText = "Photo is deleted but this is not saved yet";
             UploaderStatus = UploaderStatusEnum.Deleted;
             return true;
         }
@@ -67,9 +68,11 @@ namespace uofi_itp_directory.Controls {
             if (UploaderStatus == UploaderStatusEnum.Uploaded) {
                 Filename = await UploadStorage.Move(Filename.Replace(_tempName, ""), FileUrl, true);
                 FileUrl = UploadStorage.GetFullPath(Filename, true);
+                PhotoText = "Photo is saved";
                 return true;
             } else if (UploaderStatus == UploaderStatusEnum.Deleted) {
                 _ = await UploadStorage.Delete(_originalImageUrl, true);
+                PhotoText = "Photo is deleted";
                 return true;
             }
             return false;
@@ -79,8 +82,12 @@ namespace uofi_itp_directory.Controls {
             if (string.IsNullOrEmpty(_originalImageUrl)) {
                 _originalImageUrl = FileUrl;
             }
+            if (e.File.Size > 1024 * _maxAllowedSize) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"File is too large -- size of file is {float.Round(e.File.Size / (float) (1024 * 1000), 2)}MB and maximum size is {_maxAllowedSize / 1000}MB");
+                return false;
+            }
             if (Width > 0 && Height > 0) {
-                var (newStream, message) = await ImageScaler.Scale(e.File.OpenReadStream(maxAllowedSize: 1024 * 2000), Height, Width, e.File.ContentType);
+                var (newStream, message) = await ImageScaler.Scale(e.File.OpenReadStream(maxAllowedSize: 1024 * _maxAllowedSize), Height, Width, e.File.ContentType);
                 if (newStream != null) {
                     newStream.Position = 0;
                     Filename = await UploadStorage.Upload(ItemId + _tempName, "image/webp", newStream, true);
@@ -88,7 +95,7 @@ namespace uofi_itp_directory.Controls {
                 }
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
             } else {
-                Filename = await UploadStorage.Upload(ItemId + _tempName, e.File.ContentType, e.File.OpenReadStream(maxAllowedSize: 1024 * 2000), true);
+                Filename = await UploadStorage.Upload(ItemId + _tempName, e.File.ContentType, e.File.OpenReadStream(maxAllowedSize: 1024 * _maxAllowedSize), true);
                 FileUrl = UploadStorage.GetFullPath(Filename, true);
             }
             PhotoText = "New Photo - not saved yet";

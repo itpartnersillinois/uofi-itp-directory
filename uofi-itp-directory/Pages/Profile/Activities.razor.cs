@@ -41,7 +41,10 @@ namespace uofi_itp_directory.Pages.Profile {
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
-        public async Task Delete(EmployeeActivity activity) => _ = await EmployeeActivityHelper.DeleteActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+        public async Task Delete(EmployeeActivity activity) {
+            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity deleted");
+            _ = await EmployeeActivityHelper.DeleteActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+        }
 
         public void New() {
             if (Employee != null) {
@@ -49,7 +52,12 @@ namespace uofi_itp_directory.Pages.Profile {
             }
         }
 
-        public async Task Save(EmployeeActivity activity) => _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
+
+        public async Task Save(EmployeeActivity activity) {
+            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity updated");
+            _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+        }
 
         protected override async Task OnInitializedAsync() {
             var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);

@@ -9,18 +9,10 @@
         <p>Edit office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM". If working in more than one office, please select ‘other’ and clarify which office for the day.</p>
     </il-section>
     <h2>Office Location</h2>
-    <div class="iled-section-split">
-        <div class="iled-input-box-parent">
-            <div class="iled-input-box">
-                <label for="ed-room">Room and Building</label>
-                <input id="ed-room" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.OfficeInformation">
-            </div>
-        </div>
-        <div class="iled-input-box-parent">
-            <div class="iled-input-box">
-                <label for="ed-hidephone">Hide Phone Number</label>
-                <input id="ed-hidephone" type="checkbox" disabled="@Employee.IsEntryDisabled" @bind="Employee.IsPhoneHidden">
-            </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-room">Room and Building</label>
+            <input id="ed-room" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.OfficeInformation">
         </div>
     </div>
 
@@ -38,7 +30,7 @@
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
                 <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
-                <label for="ed-date-location-blank-@officeHour.DayNumeric">N/A</label>
+                <label for="ed-date-location-blank-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
                 <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
@@ -55,9 +47,13 @@
             </div>
         </div>
     }
+    <div class="iled-input-box-parent">
+        Preview: <strong>@Employee.EmployeeHourText</strong>
+    </div>
+
     <div class="iled-buttons-left">
-        <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled">Save</button>
+        <button class="il-button" @onclick="Generate" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
         <ViewProfile NetId="@Employee.NetId"></ViewProfile>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }

@@ -26,7 +26,7 @@ else if (Office != null)
                 <select id="ed-unittype" @bind="Office.OfficeType">
                     @foreach (var enumtype in Enum.GetValues<OfficeTypeEnum>())
                     {
-                        <option value="@enumtype">@enumtype</option>
+                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
                     }
                 </select>
             </div>
@@ -38,7 +38,7 @@ else if (Office != null)
             <input id="ed-audience" type="text" @bind="Office.Audience">
         </div>
         <div class="iled-instructions">
-            Who does this office serve? Students in general, staff, students of a particular college, etc.?
+            Who does this office serve? Students in general, staff, students of a particular college, etc.? This will show up in Team Dynamix. 
         </div>
     </div>
     <h2>Contact Information</h2>
@@ -79,7 +79,7 @@ else if (Office != null)
                 <input id="ed-internalurl" type="text" @bind="Office.InternalUrl">
             </div>
             <div class="iled-instructions">
-                This is the link that users inside your organization will use to access your site. <br />
+                This is the link that users inside the University of Illinois should use to get information. If it is the same as your external link, you may leave this blank. <br />
                 <a href="@Office.InternalUrl" target="_blank">Test Internal Link</a>
             </div>
         </div>
@@ -118,7 +118,7 @@ else if (Office != null)
                 <input id="ed-bcode" type="text" @bind="Office.BuildingCode">
             </div>
             <div class="iled-instructions">
-                The four-digit building code can be found on the <a href="https://fs.illinois.edu/building-list-by-building-number" target="_blank">F & S Website</a>
+                The four-digit building code can be found on the <a href="https://fs.illinois.edu/building-list-by-building-number" target="_blank">F & S Website</a>. This link will open in a new tab.
             </div>
         </div>
         <div class="iled-input-box-parent">
@@ -143,8 +143,8 @@ else if (Office != null)
         </div>
     </div>
     <div class="iled-buttons-left">
-    <button class="il-button" @onclick="Send">Save</button>
+    <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
     <ClearCacheButton></ClearCacheButton>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }

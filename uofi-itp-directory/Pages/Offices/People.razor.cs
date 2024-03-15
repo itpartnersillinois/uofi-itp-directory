@@ -76,9 +76,12 @@ namespace uofi_itp_directory.Pages.Offices {
                 _ = await JobProfileHelper.RemoveJobProfile(thinObject.JobProfileId, thinObject.EmployeeId, thinObject.EmployeeNetId, await AuthenticationStateProvider.GetUser());
                 JobProfiles.RemoveAll(jp => jp.JobProfileId == thinObject.JobProfileId);
                 SelectedProfile = 0;
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"User {thinObject.Display} removed");
                 StateHasChanged();
             }
         }
+
+        public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Send() {
             if (OfficeId.HasValue && !string.IsNullOrWhiteSpace(NewNetId)) {

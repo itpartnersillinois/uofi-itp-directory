@@ -15,7 +15,7 @@ namespace uofi_itp_directory_data.Helpers {
                         .. (await _directoryRepository.ReadAsync(d => d.Employees.Where(e => e.NetId.Replace("@illinois.edu", "").Contains(filter) ||
                 (e.ListedNameFirst.Contains(filter) && e.PreferredNameFirst == "") || e.PreferredNameFirst.Contains(filter) ||
                 (e.ListedNameLast.Contains(filter) && e.PreferredNameLast == "") || e.PreferredNameLast.Contains(filter)).OrderBy(e => e.ListedNameLast).ThenBy(e => e.ListedNameFirst)
-                .Select(e => new LookupThinObject { Id = e.Id, Text = e.ListedName + " (" + e.NetId + ")" }))),
+                .Select(e => new LookupThinObject { Id = e.Id, Text = e.NameReversed + " (" + e.NetId + ")" }))),
         ];
 
         public async Task<List<LookupThinObject>> GetOffices(string filter) => [

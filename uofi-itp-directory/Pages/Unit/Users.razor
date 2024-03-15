@@ -4,15 +4,24 @@
 
 <il-section>
     <h1>@UnitTitle Administrators</h1>
-    <p>These people will be able to create new offices, create other unit administrators for their unit, and office administrators.</p><p> Public entries are displayed as administrators to the outside world, while private entries have the same permissions but are not displayed. For example, if you have a primary person responsible for tasks and a backup person, you would make the primary person public and the backup person private.</p>
-    <p>@Error</p>
+    <p>These people will be able to create new offices, create other unit administrators for their unit, and office administrators.</p>
 </il-section>
 @if (UnitId.HasValue)
 {
+    <h2>Primary Administrators</h2>
+    <p>Primary administrators are visible to the outside world.</p>
     <il-section class="iled-username-parent">
-        @foreach (var entity in SecurityEntries ?? new List<SecurityEntry>())
+        @foreach (var entity in SecurityEntries?.Where(se => se.IsPublic) ?? new List<SecurityEntry>())
         {
-            <UsernameItem Disabled="false" SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)"></UsernameItem>
+            <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
+        }
+    </il-section>
+    <h2>Backup Administrators</h2>
+    <p>Backup administrators are not visible to the outside world, but have the same permissions as a primary administrator.</p>
+    <il-section class="iled-username-parent">
+        @foreach (var entity in SecurityEntries?.Where(se => !se.IsPublic) ?? new List<SecurityEntry>())
+        {
+            <UsernameItem SecurityEntry="@entity" OnClickCallback="e => RemoveEntry(entity.Id)" OnChangeCallback="ChangeEntry"></UsernameItem>
         }
     </il-section>
     <div>
@@ -27,11 +36,11 @@
         </div>
     </div>
     <div class="iled-buttons-left">
-        <button class="il-button" @onclick="Send">Save</button>
-        <button class="il-button" @onclick="LookupId">Check NetID</button>
+        <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Save</button>
+        <button class="il-button" @onclick="LookupId" @onblur="RemoveMessage">Check NetID</button>
         <ClearCacheButton></ClearCacheButton>
     </div>
-    <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+    <ToastPopup></ToastPopup>
 }
 else
 {

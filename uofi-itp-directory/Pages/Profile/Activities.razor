@@ -12,7 +12,7 @@
         else
         {
 
-            <p>Add publications, presentations, history, etc. to this profile below. If there is an Illinois Experts profile, please update there. The Illinois Experts biography will always override this biography.</p>
+            <p>Add publications, presentations, history, etc. to this profile below. Please contact your office administrator on what type of information belongs here.</p>
 
         @foreach (var activity in Employee.EmployeeActivities) {
             <div class="iled-activity">
@@ -68,17 +68,17 @@
                     </div>
                 </div>
                 <div class="iled-buttons-left">
-                    <button class="il-button" @onclick="() => Save(activity)">Save</button>
-                    <button class="il-button" @onclick="() => Delete(activity)">Delete</button>
+                    <button class="il-button" @onclick="() => Save(activity)" @onblur="RemoveMessage">Save</button>
+                    <button class="il-button" @onclick="() => Delete(activity)" @onblur="RemoveMessage">Delete</button>
                 </div>
-                    </div>
+              </div>
             </div>
         }
         <div class="iled-buttons-left">
             <button class="il-button" @onclick="New" disabled="@Employee.IsEntryDisabled">New</button>
             <ViewProfile NetId="@Employee.NetId"></ViewProfile>
         </div>
-        <div id="update-alert-parent"><span class="hide" id="update-alert" role="alert"></span></div>
+        <ToastPopup></ToastPopup>
     }
     </il-section>
 }

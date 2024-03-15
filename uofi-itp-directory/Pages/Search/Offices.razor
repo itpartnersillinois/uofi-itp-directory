@@ -4,7 +4,6 @@
 
 <il-section>
     <h1>Search Offices</h1>
-    <p>Look up an office.</p>
 
     @if (Office == null)
     {
@@ -28,8 +27,62 @@
         <button class="il-button" disabled="@IsEditDisabled" @onclick="EditOffice">View / Edit Office</button>
     } else
     {
-        <p>Office: @Office.Title</p>
-        <div>
+        <h2>@Office.Title</h2>
+        <p>Type: @Office.OfficeType.ToPrettyString()</p>
+        <p>Audience: @Office.Audience</p>
+
+        <h3>Contact Information</h3>
+        <p>Email: @Office.Email</p>
+        <p>Phone: @Office.Phone</p>
+        <p>External URL: @Office.ExternalUrl</p>
+        <p>Internal URL: @Office.InternalUrl</p>
+        <p>Ticket URL: @Office.TicketUrl</p>
+
+        <h3>Building Information</h3>
+        <p>Room: @Office.Room</p>
+        <p>Building: @Office.Building</p>
+        <p>Building Map: @Office.BuildingUrl</p>
+        <p>Mailing Address: @Office.Address</p>
+        <p>City: @Office.City</p>
+        <p>Zip Code: @Office.ZipCode</p>
+
+        <h3>Office Hours</h3>
+        <ul>
+            @foreach (var hour in Office.OfficeHours)
+            {
+                <li>@hour.Day: @hour.OutputText</li>
+            }
+        </ul>
+
+
+        <h3>Internal Information</h3>
+        <p>Publish only to internal locations (not TDX): @Office.IsInternalOnly</p>
+        @if (Office.InternalOrder == 1)
+        {
+            <p>High priority in listings</p>
+        }
+        else if (Office.InternalOrder == 3)
+        {
+            <p>Low priority in listings</p>
+        }
+
+        <h3>Office Administrators</h3>
+        <ul>
+            @foreach (var admin in OfficeManagers)
+            {
+                <li>@admin.Name, @admin.Email</li>
+            }
+        </ul>
+        <h3>People</h3>
+        <ul>
+            @foreach (var profile in JobProfiles)
+            {
+                <li>@profile</li>
+            }
+        </ul>
+
+
+        <div class="iled-buttons-left">
             <button class="il-button" @onclick="ClearOffice">Back to Search</button>
         </div>
     }

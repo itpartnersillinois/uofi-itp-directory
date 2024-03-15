@@ -5,14 +5,23 @@
         <div>
             @foreach (var office in Information)
             {
-                <span>@office.OfficeName</span>
+                <span>For office <em>@office.OfficeName</em></span>
                 <br />
-                <span>@office.PersonTitle</span>
-                <br />
+                @if (office.OfficeManagers.Count() == 0)
+                {
+                    <span>No managers listed</span>
+                }
+                @if (office.OfficeManagers.Count() == 1)
+                {
+                    <span>Manager: </span>
+                }
+                @if (office.OfficeManagers.Count() > 1)
+                {
+                    <span>Managers: </span>
+                }
                 @foreach (var manager in office.OfficeManagers)
                 {
-                    <span>@manager.Name, @manager.Email</span>
-                    <br />
+                    <span>@manager.Name, @manager.Email</span> <br />
                 }
             }
 
