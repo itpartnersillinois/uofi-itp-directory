@@ -9,13 +9,16 @@ namespace uofi_itp_directory.Controls {
         private const string _tempName = "-temp";
 
         private readonly int _maxAllowedSize = 10000;
+
         private string _originalDocumentUrl = "";
+
         public string Cache { get; set; } = DateTime.Now.Ticks.ToString();
 
         [Parameter]
         public EventCallback Delete { get; set; } = default!;
 
         public string DocumentResultsText { get; set; } = "";
+
         public string DocumentText { get; set; } = "Existing Document";
 
         public string Filename { get; set; } = "";
