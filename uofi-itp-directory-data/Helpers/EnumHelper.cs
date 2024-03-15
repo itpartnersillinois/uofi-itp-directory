@@ -2,6 +2,6 @@
 
     public static class EnumHelper {
 
-        public static string ToPrettyString(this Enum value) => value.ToString().Replace("__", "-").Replace("_", " ");
+        public static string ToPrettyString(this Enum value) => value.ToString().Replace("_SLASH_", " / ").Replace("__", "-").Replace("_", " ");
     }
 }

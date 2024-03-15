@@ -25,6 +25,6 @@
     }
 
     public enum ProfileDisplayEnum {
-        Middle = 3, Top = 5, Bottom = 1, Not_Listed = 0
+        Middle_SLASH_Default = 3, Top_of_List = 5, Bottom_of_List = 1, Not_Displayed = 0
     }
 }

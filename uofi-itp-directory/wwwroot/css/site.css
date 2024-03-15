@@ -228,6 +228,14 @@ button[disabled].il-button, button[disabled].il-button:focus, button[disabled].i
     }
 }
 
+p.iled-inline-alert {
+    padding: 0 20px;
+    margin: 10px 0;
+    background: var(--il-blue);
+    color: white;
+    font-weight: 700;
+}
+
 /* Form general layout */
 
 div.iled-section-split {
@@ -427,14 +435,9 @@ div.iled-section-vertical {
 }
 
 .iled-input-box input[type="file"] {
-    height: 120px;
-    padding: 80px 0 0 150px;
+    height: initial;
+    padding: 20px 30px;
 }
-
-    .iled-input-box input[type="file"].iled-cv {
-        height: initial;
-        padding: 20px 30px;
-    }
 
 .iled-photocv {
     display: flex;

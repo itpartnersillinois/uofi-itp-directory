@@ -19,7 +19,7 @@ namespace uofi_itp_directory_data.Uploads {
             } else if (img.Width == width || img.Height == height) {
                 var memoryStreamWebPOriginal = new MemoryStream();
                 await img.SaveAsWebpAsync(memoryStreamWebPOriginal);
-                return (memoryStreamWebPOriginal, "Picture uploaded");
+                return (memoryStreamWebPOriginal, "Picture uploaded - make sure to save");
             }
             var originalHeight = img.Height;
             var originalWidth = img.Width;
@@ -34,7 +34,7 @@ namespace uofi_itp_directory_data.Uploads {
             }
             var memoryStreamWebP = new MemoryStream();
             await img.SaveAsWebpAsync(memoryStreamWebP);
-            return (memoryStreamWebP, $"Picture rescaled to {width} width and {height} height (actual file is {originalWidth}x{originalHeight})");
+            return (memoryStreamWebP, $"Picture rescaled to {width} width and {height} height (actual file is {originalWidth}x{originalHeight}) - make sure to save");
         }
     }
 }
