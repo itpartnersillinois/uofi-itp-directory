@@ -54,11 +54,6 @@ namespace uofi_itp_directory.Pages.Offices {
             return Task.CompletedTask;
         }
 
-        public async Task LookupId() {
-            var name = await DataWarehouseManager.GetDataWarehouseItem(NetId);
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", string.IsNullOrWhiteSpace(name.Name) ? "No name found" : name.Name);
-        }
-
         public Task RemoveEntry(int id) {
             SecurityEntries.RemoveAll(se => se.Id == id);
             return Task.CompletedTask;
@@ -68,10 +63,10 @@ namespace uofi_itp_directory.Pages.Offices {
 
         public async Task Send() {
             if (!string.IsNullOrWhiteSpace(NetId) && OfficeId.HasValue) {
-                var message = await SecurityEntryHelper.CreateSecurityEntry(NetId, null, OfficeId.Value, await AuthenticationStateProvider.GetUser());
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message.Item2);
-                if (message.Item1 != null) {
-                    SecurityEntries.Add(message.Item1);
+                var (securityEntry, message) = await SecurityEntryHelper.CreateSecurityEntry(NetId, null, OfficeId.Value, await AuthenticationStateProvider.GetUser());
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
+                if (securityEntry != null) {
+                    SecurityEntries.Add(securityEntry);
                 }
                 NetId = "";
                 StateHasChanged();

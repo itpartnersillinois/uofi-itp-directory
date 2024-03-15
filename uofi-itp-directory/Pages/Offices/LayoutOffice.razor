@@ -18,12 +18,15 @@
                 <li>
                     <a title="Unit Administrators" href="/office/users">Unit Administrators</a>
                 </li>
-                <li>
-                    <a title="Internal Information" href="/office/internal">Internal Information</a>
-                </li>
-                <li>
-                    <a title="Links to Pull Information" href="/office/directory">Links to Pull Information</a>
-                </li>
+                @if (FullSecurityItem?.IsUnitAdmin ?? false)
+                {
+                    <li>
+                        <a title="Internal Information" href="/office/internal">Internal Information</a>
+                    </li>
+                    <li>
+                        <a title="Links to Pull Information" href="/office/directory">Links to Pull Information</a>
+                    </li>
+                }
             </ul>
         </il-section-nav>
         <LoginInformation></LoginInformation>

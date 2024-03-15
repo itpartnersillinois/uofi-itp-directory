@@ -25,7 +25,7 @@ namespace uofi_itp_directory_data.DataAccess {
             var securityEntry = new SecurityEntry(netid, name.FirstName, name.LastName, areaId, officeId, editOtherPeople);
             _ = await _directoryRepository.CreateAsync(securityEntry);
             _ = await _logHelper.CreateSecurityLog(changedByNetId, "Created security item", "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
-            return (securityEntry, $"Net ID '{netid}' created");
+            return (securityEntry, $"User '{name.Name}' created");
         }
 
         public async Task<int> Delete(SecurityEntry? securityEntry, string changedByNetId) {

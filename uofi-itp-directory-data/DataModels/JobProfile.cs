@@ -22,9 +22,9 @@ namespace uofi_itp_directory_data.DataModels {
 
         [NotMapped]
         public ProfileDisplayEnum ProfileDisplay {
-            get => !IsActive ? ProfileDisplayEnum.Not_Listed : (ProfileDisplayEnum) InternalOrder;
+            get => !IsActive ? ProfileDisplayEnum.Not_Displayed : (ProfileDisplayEnum) InternalOrder;
             set {
-                IsActive = value != ProfileDisplayEnum.Not_Listed;
+                IsActive = value != ProfileDisplayEnum.Not_Displayed;
                 InternalOrder = (int) value;
             }
         }

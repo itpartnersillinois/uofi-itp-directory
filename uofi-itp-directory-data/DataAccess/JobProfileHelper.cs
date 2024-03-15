@@ -16,6 +16,7 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<(int employeeId, string message)> GenerateJobProfile(int officeId, string netid, string changedByNetId) {
             if (!netid.EndsWith("@illinois.edu"))
                 netid = netid + "@illinois.edu";
+
             var checkExistingProfile = await _directoryRepository.ReadAsync(d => d.JobProfiles.Include(jp => jp.EmployeeProfile).Any(jp => jp.OfficeId == officeId && jp.EmployeeProfile.NetId == netid));
             if (checkExistingProfile)
                 return (0, $"Profile already exists for {netid}");
