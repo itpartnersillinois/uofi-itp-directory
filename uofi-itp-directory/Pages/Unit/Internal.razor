@@ -60,25 +60,37 @@ else if (Area != null && AreaSettings != null)
     @if (ProfileInformation > 0)
     {
         <h2>Profile Url Information</h2>
-        <div class="iled-section-split">
-            <div class="iled-input-box-parent">
-                <div class="iled-input-box">
-                    <label for="ed-profileurl">Profile Url</label>
-                    <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile">
-                </div>
-                <div class="iled-instructions">
-                    URL the system should use to view a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://education.illinois.edu/faculty/{netid}
-                </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-profileurl">Profile Url</label>
+                <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile">
+            </div>
+            <div class="iled-instructions">
+                URL the system should use to view a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://education.illinois.edu/faculty/{netid}
             </div>
         </div>
-        <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-refreshurl-option">Profile Refresh Options</label>
+                <select id="ed-refreshurl-option" @bind="AreaSettings.UrlPeopleRefreshType">
+                    <option value="@PeopleRefreshTypeEnum.None">No Faculty Load</option>
+                    <option value="@PeopleRefreshTypeEnum.Default">Default Faculty Load</option>
+                    <option value="@PeopleRefreshTypeEnum.Custom">Custom URL</option>
+                </select>
+            </div>
+            <div class="iled-instructions">
+                This allows you to automatically load information from this to the default faculty load or a custom load. For default faculty load, please make sure you add an <a href="/unit/directory/">Internal Code</a>
+            </div>
+        </div>
+        @if (AreaSettings.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default)
+        {
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
-                    <label for="ed-refreshurl">Profile Refresh Url</label>
+                    <label for="ed-refreshurl">Options</label>
                     <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
                 </div>
                 <div class="iled-instructions">
-                    URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://facultyapi.itpartners.illinois.edu/api/LoadPerson?name={netid}
+                    Add options for your faculty load profile.
                 </div>
             </div>
             <div class="iled-input-box-parent">
@@ -87,10 +99,31 @@ else if (Area != null && AreaSettings != null)
                     <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles">
                 </div>
                 <div class="iled-instructions">
-                    Check this box if you want a regular refresh of your information the the Profile Refresh Url.
+                    Check this box if you want a regular refresh of your information.
                 </div>
             </div>
-        </div>
+        }
+        @if (AreaSettings.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Custom)
+        {
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-refreshurl">Custom Profile Refresh Url</label>
+                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
+                </div>
+                <div class="iled-instructions">
+                    URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://refresh.illinois.edu/Load?name={netid}
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-auto">Auto-load profiles to directory hook</label>
+                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles">
+                </div>
+                <div class="iled-instructions">
+                    Check this box if you want a regular refresh of your information.
+                </div>
+            </div>
+        }
         <h2>Image Information</h2>
         <div class="iled-section-split">
             <div class="iled-input-box-parent">
@@ -191,10 +224,9 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box">
                 <label for="ed-internalorder">Order</label>
                 <select id="ed-internalorder" @bind="Area.InternalOrder">
-                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
-                    {
-                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
-                    }
+                    <option value="1">Top in List</option>
+                    <option value="2">Middle / Default</option>
+                    <option value="3">Bottom in List</option>
                 </select>
             </div>
             <div class="iled-instructions">

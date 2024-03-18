@@ -53,8 +53,12 @@ namespace uofi_itp_directory.Pages.Unit {
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Send() {
-            _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Directory settings updated");
+            if (await AreaHelper.IsCodeUsed(AreaSettings.InternalCode)) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Area code {AreaSettings.InternalCode} already used");
+            } else {
+                _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Directory settings updated");
+            }
             StateHasChanged();
         }
 

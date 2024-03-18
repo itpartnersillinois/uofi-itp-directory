@@ -40,6 +40,8 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<AreaSettings> GetAreaSettingsByAreaId(int? areaId) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == areaId));
 
+        public async Task<bool> IsCodeUsed(string areaCode) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Any(a => a.InternalCode == areaCode));
+
         public async Task<int> RemoveArea(Area area, string changedByNetId) {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.AreaId == area.Id))) {
                 _ = _directoryRepository.Delete(securityEntry);

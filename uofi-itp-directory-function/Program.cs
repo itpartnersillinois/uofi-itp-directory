@@ -1,4 +1,5 @@
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using uofi_itp_directory_function;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
+    .ConfigureOpenApi()
     .ConfigureAppConfiguration((hostContext, config) => {
         if (hostContext.HostingEnvironment.IsDevelopment()) {
             _ = config.AddUserSecrets<Program>();

@@ -20,6 +20,10 @@
         Unlisted, General, Information_Technology, Human_Resources, Finance, Facilities, Academic, Student_Support, Research, Business_Operations, Communications, Marketing, Advancement, Other = 99
     }
 
+    public enum PeopleRefreshTypeEnum {
+        None, Default, Custom
+    }
+
     public enum ProfileCategoryTypeEnum {
         None, Faculty, Staff, Graduate_Student, Undergraduate_Student, Post__Doctorate, Affiliate_Faculty, Affiliate_Staff, Emeritus, Other = 99
     }
