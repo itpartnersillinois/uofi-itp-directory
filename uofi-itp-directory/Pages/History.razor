@@ -1,0 +1,43 @@
+﻿@page "/history"
+
+<PageTitle>History | UIUC</PageTitle>
+
+<h1>About This Project</h1>
+
+<p>The College of Education needed a way to organize our faculty and staff members. We've used EDW and Illinois Experts to fill out most of the information, but there were a few things that we were missing. </p>
+
+<p>At the same time, TDX was building out their https://help.illinois.edu site, and one of the things it needed was a list of units and offices. Originally, the unit information was stored in a Google Sheets document and pulled using Google APIs. However, it was difficult to update that information. </p>
+
+<p>Based on these two needs, we created a Contact Support Application with Tech Services to store unit and office information. We then added code to store profile information. Finally, we turned our faculty load process to call APIs from this application, and then built a complex Microsoft Power Automate script to run this. This was a lot of work and really not sustainable across multiple colleges.</p>
+
+<p>In 2024, we rebuilt this to update the code, make the interface a lot better, and simplify the directory load.</p>
+
+<h2>Can you get information from this?</h2>
+<p>Yes! This works in conjunction with two APIs:</p>
+<ul>
+    <li><a href="https://directoryapi.itpartners.illinois.edu/api/swagger/ui">The Directory API:</a>: This is an API that can get unit, office, and basic profile information. It does not include anything outside of the Directory application. It also has some hooks that trigger a faculty load at the Faculty API. </li>
+    <li><a href="https://facultyapi.itpartners.illinois.edu/api/swagger/ui">The Faculty API:</a> This is an API-only application that integrates with Illinois Experts, EDW, and course information from various repositories. Because the load process is potentially destructive, the load requires a function key to trigger. One function key is stored in the directory API for default loads, and others are distributed to outside applications for their custom loads.</li>
+</ul>
+
+<h2>How do I create a directory?</h2>
+<p>The easiest way is to do the following:</p>
+<ol>
+    <li>Claim your unit. <a href="https://go.illinois.edu/itpartners-directory-help">Contact us to ask to be a unit administrator for your unit</a>.</li>
+    <li>Under <em>Unit Information</em> -- <em>Links to Pull Information</em>, add an Internal Code. Save your changes. </li>
+    <li>Under <em>Unit Information</em> -- <em>Internal Information</em>, change Profile Information to Full Access.</li>
+    <li>(Optional step) Change the <strong>Profile Url</strong> to where you are going to have your profile be at.</li>
+    <li>Change the <strong>Profile Refresh Options</strong> to Default Faculty Load</li>
+    <li>Ensure the <strong>Auto-load profiles to directory hook</strong> checkbox is checked.</li>
+    <li>Save your changes.</li>
+    <li>Build out your offices and profile information.</li>
+</ol>
+
+<p>Once you have done this, any people you add to your offices will be automatically loaded to the faculty load using the unique ID you specified in step 2. You can add JavaScript to create profiles based on this from any CMS. People will be automatically loaded once they save information in their profile in this application, and we run full refreshes every day. If someone's name is removed from EDW or the profile list here, their information is removed from the directory.</p>
+
+<p>If you have another system that loads your faculty information, you can trigger that in step 5 instead of using the Default Faculty Load.</p>
+
+<p>If you don't have the IT staff to build out a JavaScript profile, we can help you with this. We are working with WIGG and the WCOE to create standard profiles.</p>
+
+<h2>How do I see the code?</h2>
+
+<p>Go to our <a href="https://github.com/itpartnersillinois/uofi-itp-directory">GitHub repository</a>.</p>
