@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace uofi_itp_directory_data.DataModels {
 
     public class AreaSettings : BaseDataItem {
+        private const string _path = "https://facultyapi.itpartners.illinois.edu/api/LoadPerson?name={netid}&source={code}";
         public bool AllowAdministratorsAccessToPeople { get; set; } = true;
         public bool AllowBeta { get; set; } = false;
 
@@ -29,6 +30,20 @@ namespace uofi_itp_directory_data.DataModels {
         public int PictureWidth { get; set; }
         public string SignatureExtension { get; set; } = "";
         public string UrlPeopleRefresh { get; set; } = "";
+
+        [NotMapped]
+        public string UrlPeopleRefreshFullUrl {
+            get {
+                if (UrlPeopleRefreshType == PeopleRefreshTypeEnum.None)
+                    return "";
+                else if (UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default)
+                    return $"{_path}&{UrlPeopleRefresh.Trim(' ', '&')}";
+                else
+                    return UrlPeopleRefresh;
+            }
+        }
+
+        public PeopleRefreshTypeEnum UrlPeopleRefreshType { get; set; }
         public string UrlProfile { get; set; } = "";
     }
 }

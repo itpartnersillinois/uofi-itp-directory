@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_function.ViewModels;
 
@@ -18,17 +22,25 @@ namespace uofi_itp_directory_function {
         }
 
         [Function("Office")]
+        [OpenApiOperation(operationId: "Office", tags: "Office", Description = "Get an office by ID. This includes office hours and office settings.")]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The ID of the office you want")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(OfficeInformation), Description = "An office")]
         public async Task<IActionResult> GetOffice([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Office/{id}")] HttpRequest req, int id)
             => new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Offices
                 .Include(o => o.OfficeHours).Include(o => o.OfficeSettings)
                 .Where(o => o.IsActive && o.Id == id)
-                .Select(o => new OfficeInformation(o)).ToList()));
+                .Select(o => new OfficeInformation(o)).FirstOrDefault()));
 
         [Function("OfficeCode")]
-        public async Task<IActionResult> GetOfficeCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "OfficeCode/{id}")] HttpRequest req, string id)
+        [OpenApiOperation(operationId: "OfficeCode", tags: "Office", Description = "Get an office by a code. This includes office hours and office settings.")]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiParameter(name: "code", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The office code of the office you want")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(OfficeInformation), Description = "An office")]
+        public async Task<IActionResult> GetOfficeCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "OfficeCode/{code}")] HttpRequest req, string code)
             => new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Offices
                 .Include(o => o.OfficeHours).Include(o => o.OfficeSettings)
-                .Where(o => o.IsActive && o.OfficeSettings.InternalCode == id)
+                .Where(o => o.IsActive && o.OfficeSettings.InternalCode == code)
                 .Select(o => new OfficeInformation(o)).ToList()));
     }
 }

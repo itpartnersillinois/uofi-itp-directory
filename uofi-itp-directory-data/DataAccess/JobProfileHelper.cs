@@ -57,7 +57,7 @@ namespace uofi_itp_directory_data.DataAccess {
             var officeId = job.OfficeId;
             var returnValue = await _directoryRepository.DeleteAsync(job);
             _ = await _logHelper.CreateProfileLog(changedByNetId, "Removed Profile", "", employeeId, employeeNetId);
-            _ = await _directoryHookHelper.SendHook(employeeId, officeId);
+            _ = await _directoryHookHelper.SendHookToRemoveEmployee(employeeId, employeeNetId, officeId);
             return returnValue;
         }
     }

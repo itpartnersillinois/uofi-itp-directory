@@ -44,10 +44,9 @@ else if (Office != null)
             <div class="iled-input-box">
                 <label for="ed-internalorder">Order</label>
                 <select id="ed-internalorder" @bind="Office.InternalOrder">
-                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderByDescending(o => o))
-                    {
-                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
-                    }
+                    <option value="1">Top in List</option>
+                    <option value="2">Middle / Default</option>
+                    <option value="3">Bottom in List</option>
                 </select>
             </div>
             <div class="iled-instructions">
