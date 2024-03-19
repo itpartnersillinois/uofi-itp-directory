@@ -50,12 +50,16 @@ namespace uofi_itp_directory.Pages.Offices {
 
         public async Task Generate() {
             if (Office != null) {
-                Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursIncludeHolidayMessage);
-                foreach (var officeHour in OfficeHours) {
-                    _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
+                if (OfficeHours.Any(oh => oh.IsInvalid)) {
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Start Hours must not be after End Hours");
+                } else {
+                    Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursIncludeHolidayMessage);
+                    foreach (var officeHour in OfficeHours) {
+                        _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
+                    }
+                    _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
                 }
-                _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
             }
         }
 

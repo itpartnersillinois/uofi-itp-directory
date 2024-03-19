@@ -15,11 +15,6 @@ namespace uofi_itp_directory.Pages.Unit {
         private MultiChoice? _multiChoice = default!;
         public Area Area { get; set; } = default!;
         public AreaSettings AreaSettings { get; set; } = default!;
-        public string Error { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string NetId { get; set; } = "";
-        public int ProfileInformation { get; set; }
-        public int PublishingLocation { get; set; }
 
         [Parameter]
         public int? UnitId { get; set; }
@@ -40,9 +35,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
-
-        [Inject]
-        protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
 
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;

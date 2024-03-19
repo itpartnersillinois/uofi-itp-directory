@@ -42,21 +42,28 @@ namespace uofi_itp_directory.Pages.Profile {
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
         public async Task Delete(EmployeeActivity activity) {
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity deleted");
-            _ = await EmployeeActivityHelper.DeleteActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+            if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will delete the activity \"{activity.Title}\". Are you sure?")) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity deleted");
+                _ = await EmployeeActivityHelper.DeleteActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+            }
         }
 
         public void New() {
             if (Employee != null) {
-                Employee.EmployeeActivities.Add(new());
+                Employee.EmployeeActivities.Add(new() { InEditState = true });
             }
         }
 
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Save(EmployeeActivity activity) {
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity updated");
-            _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+            if (activity.InEditState) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Activity \"{activity.Title}\" updated");
+                _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+                activity.InEditState = false;
+            } else {
+                activity.InEditState = true;
+            }
         }
 
         protected override async Task OnInitializedAsync() {
@@ -67,6 +74,9 @@ namespace uofi_itp_directory.Pages.Profile {
             } else {
                 ShouldUseExperts = await EmployeeAreaHelper.ShouldUseExperts(Employee.NetId) && await IllinoisExpertsManager.IsInExperts(Employee.NetIdTruncated);
                 Instructions = await EmployeeAreaHelper.ActivitiesInstructions(Employee.NetId);
+                foreach (var activity in Employee.EmployeeActivities) {
+                    activity.InEditState = false;
+                }
             }
         }
 

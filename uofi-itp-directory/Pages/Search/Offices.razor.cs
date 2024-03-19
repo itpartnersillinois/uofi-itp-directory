@@ -54,7 +54,7 @@ namespace uofi_itp_directory.Pages.Search {
                     var title = LookupThinObjects.First(lto => lto.Id == LookupId.Value).Text;
                     CacheHelper.SetCachedOffice(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, new AreaOfficeThinObject(LookupId.Value, title));
                     ClearOffice();
-                    NavigationManager.NavigateTo("/office/general");
+                    NavigationManager.NavigateTo("/office/general?back=search");
                 } else {
                     Office.OfficeSettings = await OfficeHelper.GetOfficeSettingsById(LookupId.Value);
                     Office.OfficeHours = await OfficeHelper.GetOfficeHoursById(LookupId.Value);

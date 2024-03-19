@@ -5,7 +5,6 @@
 <il-section>
     <h1>@UnitTitle</h1>
     <p>Add and remove offices below.</p>
-    <p>@Error</p>
 </il-section>
 @if (!UnitId.HasValue)
 {
@@ -23,8 +22,8 @@ else
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-unitname" class="iled-label-required">Unit Name</label>
-                <input id="ed-unitname" required type="text" @bind="OfficeName">
+                <label for="ed-officename" class="iled-label-required">Office Name</label>
+                <input id="ed-officename" required type="text" @bind="OfficeName">
             </div>
             <div class="iled-instructions">
                 Office Name of the office you are creating.

@@ -19,32 +19,32 @@
                 <div class="iled-input-box-parent">
                     <div class="iled-input-box">
                         <label for="ed-title-@activity.Id" class="iled-label-required">Title</label>
-                        <input id="ed-title-@activity.Id" type="text" required disabled="@Employee.IsEntryDisabled" @bind="activity.Title">
+                        <input id="ed-title-@activity.Id" type="text" required disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.Title">
                     </div>
                 </div>
                 <div class="iled-input-box-parent">
                     <div class="iled-input-box">
                         <label for="ed-url-@activity.Id">Url</label>
-                                <input id="ed-url-@activity.Id" type="url" disabled="@Employee.IsEntryDisabled" @bind="activity.Url">
+                                <input id="ed-url-@activity.Id" type="url" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.Url">
                     </div>
                 </div>
                 <div class="iled-section-split-25">
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
                             <label for="ed-yearstarted-@activity.Id">Year Started</label>
-                                    <input id="ed-yearstarted-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.YearStarted">
+                                    <input id="ed-yearstarted-@activity.Id" type="text" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.YearStarted">
                         </div>
                     </div>
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
                             <label for="ed-yearended-@activity.Id">Year Ended</label>
-                                    <input id="ed-yearended-@activity.Id" type="text" disabled="@Employee.IsEntryDisabled" @bind="activity.YearEnded">
+                                    <input id="ed-yearended-@activity.Id" type="text" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.YearEnded">
                         </div>
                     </div>
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
                             <label for="ed-type-@activity.Id">Type</label>
-                            <select id="ed-type-@activity.Id" disabled="@Employee.IsEntryDisabled"
+                                    <select id="ed-type-@activity.Id" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)"
                                 @bind="activity.Type">
                                 @foreach (var enumtype in Enum.GetValues<ActivityTypeEnum>())
                                 {
@@ -56,7 +56,7 @@
                     <div class="iled-input-box-parent">
                         <div class="iled-input-box">
                             <label for="ed-display-order-@activity.Id">Display Order</label>
-                                    <select id="ed-display-order-@activity.Id" disabled="@Employee.IsEntryDisabled" @bind="activity.InternalOrder">
+                                    <select id="ed-display-order-@activity.Id" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.InternalOrder">
                                 @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
                                 {
                                     <option value="@((int)enumtype)">@enumtype.ToPrettyString()</option>
@@ -69,8 +69,8 @@
                     </div>
                 </div>
                 <div class="iled-buttons-left">
-                    <button class="il-button" @onclick="() => Save(activity)" @onblur="RemoveMessage">Save</button>
-                    <button class="il-button" @onclick="() => Delete(activity)" @onblur="RemoveMessage">Delete</button>
+                    <button class="il-button" disabled="@Employee.IsEntryDisabled" @onclick="() => Save(activity)" @onblur="RemoveMessage">@(activity.InEditState ? "Save" : "Edit")</button>
+                    <button class="il-button" disabled="@(Employee.IsEntryDisabled || activity.InEditState)" @onclick="() => Delete(activity)" @onblur="RemoveMessage">Delete</button>
                 </div>
               </div>
             </div>

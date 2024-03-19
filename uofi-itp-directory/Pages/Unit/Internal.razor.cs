@@ -15,9 +15,6 @@ namespace uofi_itp_directory.Pages.Unit {
         private MultiChoice? _multiChoice = default!;
         public Area Area { get; set; } = default!;
         public AreaSettings AreaSettings { get; set; } = default!;
-        public string Error { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string NetId { get; set; } = "";
         public int ProfileInformation { get; set; }
         public int PublishingLocation { get; set; }
 

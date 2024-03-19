@@ -49,6 +49,7 @@ namespace uofi_itp_directory.Controls {
                 }
             } else if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will remove the user {SecurityEntry?.ListedName} from the access list. Are you sure?")) {
                 var returnValue = await SecurityEntryHelper.Delete(SecurityEntry, currentUser);
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"{SecurityEntry?.ListedName} removed from the access list.");
                 _ = OnClickCallback.InvokeAsync();
                 StateHasChanged();
                 return returnValue;
@@ -59,6 +60,7 @@ namespace uofi_itp_directory.Controls {
         public async Task<int> TogglePrivate() {
             SecurityEntry.IsPublic = !SecurityEntry.IsPublic;
             var returnValue = await SecurityEntryHelper.Update(SecurityEntry, await AuthenticationStateProvider.GetUser());
+            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"{SecurityEntry?.ListedName} moved to {((SecurityEntry?.IsPublic ?? false) ? "primary" : "backup")}.");
             _ = OnChangeCallback.InvokeAsync();
             StateHasChanged();
             return returnValue;

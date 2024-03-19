@@ -5,7 +5,7 @@
         <div>
             @foreach (var office in Information)
             {
-                <span>For office <em>@office.OfficeName</em></span>
+                <span class="iled-float-office">For office <em>@office.OfficeName</em></span>
                 <br />
                 @if (office.OfficeManagers.Count() == 0)
                 {
@@ -13,11 +13,11 @@
                 }
                 @if (office.OfficeManagers.Count() == 1)
                 {
-                    <span>Manager: </span>
+                    <strong>Manager: </strong>
                 }
                 @if (office.OfficeManagers.Count() > 1)
                 {
-                    <span>Managers: </span>
+                    <strong>Managers: </strong>
                 }
                 @foreach (var manager in office.OfficeManagers)
                 {

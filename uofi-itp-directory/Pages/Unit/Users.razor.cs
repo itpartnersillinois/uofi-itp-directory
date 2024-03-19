@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.CampusService;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
@@ -14,7 +13,6 @@ namespace uofi_itp_directory.Pages.Unit {
     public partial class Users {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
-        public string Name { get; set; } = "";
         public string NetId { get; set; } = "";
         public List<SecurityEntry> SecurityEntries { get; set; } = default!;
 
@@ -28,9 +26,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected CacheHolder CacheHolder { get; set; } = default!;
-
-        [Inject]
-        protected DataWarehouseManager DataWarehouseManager { get; set; } = default!;
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
