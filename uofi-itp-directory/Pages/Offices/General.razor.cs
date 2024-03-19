@@ -22,6 +22,9 @@ namespace uofi_itp_directory.Pages.Offices {
 
         public string OfficeTitle { get; set; } = "Office";
 
+        [SupplyParameterFromQuery(Name = "back")]
+        public string? ShowBackButton { get; set; }
+
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 

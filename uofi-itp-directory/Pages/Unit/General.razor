@@ -5,7 +5,10 @@
 <il-section>
     <h1>@UnitTitle</h1>
     <p>Edit your unit’s general information below.</p>
-    <p>@Error</p>
+    @if (!string.IsNullOrWhiteSpace(ShowBackButton) && ShowBackButton == "search")
+    {
+        <p><a href="/search/units" class="il-button">Back to Searching for Units</a></p>
+    }
 </il-section>
 @if (!UnitId.HasValue)
 {
@@ -59,7 +62,7 @@ else if (Area != null)
                 <input id="ed-internalurl" type="text" @bind="Area.InternalUrl">
             </div>
             <div class="iled-instructions">
-                This is the link that users inside your organization will use to access your site. <br />
+                This is the link that users inside the University of Illinois should use to get information. If it is the same as your external link, you may leave this blank. <br />
                 <a href="@Area.InternalUrl" target="_blank">Test Internal Link</a>
             </div>
         </div>

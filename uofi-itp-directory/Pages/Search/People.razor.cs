@@ -27,7 +27,7 @@ namespace uofi_itp_directory.Pages.Search {
         public async Task EditProfile() {
             if (LookupId != null) {
                 CacheHelper.SetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, LookupId);
-                NavigationManager.NavigateTo("/profile/general");
+                NavigationManager.NavigateTo("/profile/general?back=search");
             }
         }
 

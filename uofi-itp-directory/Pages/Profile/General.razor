@@ -8,6 +8,15 @@
     <p>Welcome to @(Employee.IsCurrentUser ? "your profile" : "the profile of " + Employee.ProfileName)! Edit the profile information below. Note that you may not be able to edit everything on this page. Some information is only editable by the employee, and others are only editable by the person who manages your office.</p>
         <Instructions ChildContent="@Instructions"></Instructions>
 
+        @if (!string.IsNullOrWhiteSpace(ShowBackButton) && ShowBackButton == "add")
+        {
+            <p><a href="/office/people" class="il-button">Back to Adding People</a></p>
+        }
+        @if (!string.IsNullOrWhiteSpace(ShowBackButton) && ShowBackButton == "search")
+        {
+            <p><a href="/search/people" class="il-button">Back to Searching for People</a></p>
+        }
+
     <h2>General Information</h2>
     <h3>Preferred Name</h3>
     <div class="iled-section-split">
@@ -17,7 +26,7 @@
                     <input autocomplete="given-name" id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
             </div>
             <div class="iled-instructions">
-                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well.
+                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
             </div>
         </div>
         <div class="iled-input-box-parent">
@@ -26,7 +35,7 @@
                     <input autocomplete="family-name" id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
             </div>
                 <div class="iled-instructions">
-                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well.
+                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
                 </div>
             </div>
     </div>

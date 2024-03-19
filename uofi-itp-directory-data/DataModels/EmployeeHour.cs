@@ -34,6 +34,9 @@ namespace uofi_itp_directory_data.DataModels {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
 
+        [NotMapped]
+        public bool IsInvalid => Start.HasValue && End.HasValue && Start.Value >= End.Value;
+
         public string Notes { get; set; } = "";
 
         [NotMapped]

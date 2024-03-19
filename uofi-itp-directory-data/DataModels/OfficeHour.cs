@@ -31,6 +31,9 @@ namespace uofi_itp_directory_data.DataModels {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
 
+        [NotMapped]
+        public bool IsInvalid => Start.HasValue && End.HasValue && Start.Value > End.Value;
+
         public string Notes { get; set; } = "";
 
         [NotMapped]
@@ -41,7 +44,7 @@ namespace uofi_itp_directory_data.DataModels {
         public int OfficeId { get; set; }
 
         [NotMapped]
-        public string OutputText => HideNotes ? "" : $"{StartTime}-{EndTime}{(string.IsNullOrWhiteSpace(Notes) ? "" : " " + Notes)}";
+        public string OutputText => HideNotes ? "" : Start == End ? $"24 hours{(string.IsNullOrWhiteSpace(Notes) ? "" : " " + Notes)}" : $"{StartTime}-{EndTime}{(string.IsNullOrWhiteSpace(Notes) ? "" : " " + Notes)}";
 
         [NotMapped]
         public DateTime? Start {

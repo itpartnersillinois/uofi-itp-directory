@@ -14,13 +14,9 @@ namespace uofi_itp_directory.Pages.Unit {
     public partial class AddNewOffice {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
-        public string Error { get; set; } = "";
-        public string Name { get; set; } = "";
         public string NetId { get; set; } = "";
         public string OfficeName { get; set; } = "";
         public List<Office> Offices { get; set; } = default!;
-        public int ProfileInformation { get; set; }
-        public int PublishingLocation { get; set; }
 
         [Parameter]
         public int? UnitId { get; set; }
@@ -44,9 +40,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
-
-        [Inject]
-        protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
 
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;
