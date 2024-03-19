@@ -47,6 +47,11 @@ main {
     padding: 10px;
 }
 
+.iled-float span.iled-float-office {
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
 .iled-card-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -314,7 +319,7 @@ div.iled-section-split-25 {
         outline: 3px solid var(--il-altgeld);
     }
 
-    .iled-input-box input[disabled], .iled-input-box select[disabled], .iled-input-box textarea[disabled] {
+    .iled-input-box input[disabled], .iled-hours-parent .iled-hours-time input[disabled], .iled-input-box select[disabled], .iled-input-box textarea[disabled] {
         border: none;
         padding-left: 0;
         background-color: white !important;
@@ -481,11 +486,15 @@ div.iled-section-vertical {
 }
 
 /* Quill tweaks */
-.ql-editor p {
-    font-family: var(--il-font-sans);
-    font-size: 1rem;
+.ql-editor {
     min-height: 250px;
 }
+
+    .ql-editor p {
+        font-family: var(--il-font-sans);
+        font-size: 1rem;
+        padding-bottom: 20px !important;
+    }
 
 /* Blazor warnings */
 #blazor-error-ui {

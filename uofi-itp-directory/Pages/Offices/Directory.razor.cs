@@ -13,7 +13,6 @@ namespace uofi_itp_directory.Pages.Offices {
     public partial class Directory {
         private MultiChoice? _multiChoice = default!;
         private List<AreaOfficeThinObject> _officeThinObjects = default!;
-        public string Error { get; set; } = "";
         public Office Office { get; set; } = default!;
 
         [Parameter]
@@ -36,9 +35,6 @@ namespace uofi_itp_directory.Pages.Offices {
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
-
-        [Inject]
-        protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
 
         public async Task AssignId() {
             OfficeId = _multiChoice?.SelectedId;

@@ -10,7 +10,6 @@
         <li><em>By ID</em>: When you created an office, an ID was assigned to your office. This number can be used to access your information.</li>
         <li><em>By Code</em>: You can create a unique code that you can use. Often, this code is more memorable than your ID.</li>
     </ul>
-    <p>@Error</p>
 
 </il-section>
 @if (!OfficeId.HasValue)
@@ -26,7 +25,7 @@ else if (Office != null)
         <div>
             @if (string.IsNullOrWhiteSpace(OfficeSettings.InternalCode))
             {
-                <p>Because you do not have an internal code set, you do not have a link to get information by code</p>
+                <p>Add an internal code to get information by code</p>
             }
             else
             {

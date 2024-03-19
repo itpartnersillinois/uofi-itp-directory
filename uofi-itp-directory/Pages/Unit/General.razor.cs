@@ -14,9 +14,9 @@ namespace uofi_itp_directory.Pages.Unit {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
         public Area Area { get; set; } = default!;
-        public string Error { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string NetId { get; set; } = "";
+
+        [SupplyParameterFromQuery(Name = "back")]
+        public string? ShowBackButton { get; set; }
 
         [Parameter]
         public int? UnitId { get; set; }
@@ -37,9 +37,6 @@ namespace uofi_itp_directory.Pages.Unit {
 
         [Inject]
         protected PersonOptionHelper PersonOptionHelper { get; set; } = default!;
-
-        [Inject]
-        protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
 
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;

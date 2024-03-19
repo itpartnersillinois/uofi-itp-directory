@@ -29,20 +29,17 @@ namespace uofi_itp_directory.Pages.Profile {
 
         public async Task Generate() {
             if (Employee != null) {
-                Employee.EmployeeHourText = HourParser.GetEmployeeHourString([.. Employee.EmployeeHours]);
-                _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
+                if (Employee.EmployeeHours.Any(eh => eh.IsInvalid)) {
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Start Hours must be before End Hours");
+                } else {
+                    Employee.EmployeeHourText = HourParser.GetEmployeeHourString([.. Employee.EmployeeHours]);
+                    _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
+                }
             }
         }
 
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
-
-        public async Task Send() {
-            if (Employee != null) {
-                _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
-            }
-        }
 
         protected override async Task OnInitializedAsync() {
             var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);

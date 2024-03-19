@@ -11,13 +11,14 @@ namespace uofi_itp_directory.Pages.Profile {
 
     public partial class General {
         public Employee? Employee { get; set; } = default!;
-
         public string Instructions { get; set; } = "";
-
         public string PersonName { get; set; } = "My Profile";
 
         [Parameter]
         public string Refresh { get; set; } = "";
+
+        [SupplyParameterFromQuery(Name = "back")]
+        public string? ShowBackButton { get; set; }
 
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
