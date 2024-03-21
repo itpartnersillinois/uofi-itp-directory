@@ -23,6 +23,7 @@ namespace uofi_itp_directory_function.ViewModels {
         public string Phone { get; set; } = profile.EmployeeProfile.IsPhoneHidden ? "" : profile.EmployeeProfile.Phone ?? string.Empty;
         public string PhotoUrl { get; set; } = profile.EmployeeProfile.PhotoUrl ?? string.Empty;
         public string PreferredPronouns { get; set; } = profile.EmployeeProfile.PreferredPronouns ?? string.Empty;
+        public string ProfileUrl { get; set; } = profile.EmployeeProfile.ProfileUrl ?? string.Empty;
         public string Room { get; set; } = profile.EmployeeProfile.Room ?? string.Empty;
         public string Title { get; set; } = profile.Title ?? string.Empty;
     }

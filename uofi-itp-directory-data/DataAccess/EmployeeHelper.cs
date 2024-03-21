@@ -2,13 +2,15 @@
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.DirectoryHook;
+using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory_data.DataAccess {
 
-    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, LogHelper logHelper) {
+    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, EmployeeAreaHelper employeeAreaHelper, LogHelper logHelper) {
         private readonly DirectoryHookHelper _directoryHookHelper = directoryHookHelper;
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
+        private readonly EmployeeAreaHelper _employeeAreaHelper = employeeAreaHelper;
         private readonly LogHelper _logHelper = logHelper;
 
         public async Task<Employee?> GetEmployee(int? id, string name) {
@@ -40,6 +42,7 @@ namespace uofi_itp_directory_data.DataAccess {
             await _directoryRepository.ReadAsync(d => d.Offices.Include(o => o.Area).ThenInclude(a => a.AreaSettings).SingleOrDefault(o => o.Id == employee.PrimaryJobProfile.OfficeId)?.Area?.AreaSettings) ?? new AreaSettings();
 
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
+            employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);
             var returnValue = await _directoryRepository.UpdateAsync(employee);
             _ = await _directoryHookHelper.SendHook(employee.Id);
             _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, "", employee.Id, employee.NetId);

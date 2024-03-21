@@ -65,7 +65,7 @@ else if (Area != null && AreaSettings != null)
                 <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile">
             </div>
             <div class="iled-instructions">
-                URL the system should use to view a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://education.illinois.edu/faculty/{netid}
+                URL the system should use to view a profile. Use the term <em>{netid}</em> to signify the user's NetID (lower-case) or <em>{name}</em> to signify the user's name (alpha with dashes instead of spaces, all lower-case). Example: https://education.illinois.edu/profile/{netid} or https://education.illinois.edu/profile/{name}
             </div>
         </div>
         <div class="iled-input-box-parent">
