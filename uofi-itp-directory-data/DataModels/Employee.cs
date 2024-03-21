@@ -69,6 +69,7 @@ namespace uofi_itp_directory_data.DataModels {
         [NotMapped]
         public string ProfileName => IsCurrentUser ? "My Profile" : Name;
 
+        public string ProfileUrl { get; set; } = "";
         public string Room { get; set; } = "";
 
         public string GenerateSignatureName() {

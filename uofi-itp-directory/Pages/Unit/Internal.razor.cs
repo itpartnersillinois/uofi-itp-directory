@@ -63,6 +63,7 @@ namespace uofi_itp_directory.Pages.Unit {
                 _ = await SecurityEntryHelper.SetAccessToOtherPeople(Area.Id, AreaSettings.AllowAdministratorsAccessToPeople);
                 _originalAllowAccess = AreaSettings.AllowAdministratorsAccessToPeople;
             }
+            // TODO if someone changes a profile URL, do we need to update this to all employees in the area?
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Internal settings updated");
             StateHasChanged();
         }
