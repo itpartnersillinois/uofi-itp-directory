@@ -23,7 +23,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDbContextFactory<DirectoryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging(true));
 
 builder.Services.AddScoped<DirectoryRepository>();
-builder.Services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), builder.Configuration["FacultyLoadHeadingKey"]));
+builder.Services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), builder.Configuration["FacultyLoadUrl"]));
 builder.Services.AddScoped<LogHelper>();
 builder.Services.AddScoped(c => new DataWarehouseManager(builder.Configuration["DataWarehouseUrl"], builder.Configuration["DataWarehouseKey"]));
 builder.Services.AddScoped(c => new IllinoisExpertsManager(builder.Configuration["ExpertsUrl"], builder.Configuration["ExpertsSecretKey"]));

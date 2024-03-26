@@ -5,19 +5,17 @@ using uofi_itp_directory_data.DataModels;
 namespace uofi_itp_directory_data.DirectoryHook {
 
     public class DirectoryHookHelper {
-        private readonly string _defaultFunctionKey;
         private readonly DirectoryRepository _directoryRepository;
         private readonly string _netIdPlaceholder;
         private readonly string _sourcePlaceholder;
         private readonly string _url;
 
-        public DirectoryHookHelper(DirectoryRepository? directoryRepository, string? defaultFunctionKey) {
+        public DirectoryHookHelper(DirectoryRepository? directoryRepository, string? url) {
             ArgumentNullException.ThrowIfNull(directoryRepository);
             _directoryRepository = directoryRepository;
             _netIdPlaceholder = "{netid}";
-            _defaultFunctionKey = defaultFunctionKey ?? "";
             _sourcePlaceholder = "{source}";
-            _url = "http://localhost:7207/api/LoadPerson/{source}/{netid}";
+            _url = url ?? "";
         }
 
         public async Task<int> LoadAreas() {

@@ -36,7 +36,7 @@ var host = new HostBuilder()
         _ = services.AddScoped<LogHelper>();
         _ = services.AddScoped<EmployeeAreaHelper>();
         _ = services.AddScoped<AreaHelper>();
-        _ = services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), ""));
+        _ = services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), hostContext.Configuration["Values:FacultyLoadUrl"]));
         _ = services.AddScoped<EmployeeHelper>();
         _ = services.AddScoped<QueueManager>();
         _ = services.AddScoped(c => new DataWarehouseManager(hostContext.Configuration["Values:DataWarehouseUrl"], hostContext.Configuration["Values:DataWarehouseKey"]));
