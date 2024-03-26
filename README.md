@@ -34,9 +34,11 @@ For the Elasticsearch instance, create one through AWS. You can set the mapping 
 
 Information about EF Core Tools:
 
+Make sure the uofi-itp-directory project is set up as the startup project before running the commands below:
+
 ``Add-Migration -Name {migration name} -Project uofi-itp-directory-data``
 
-``Update-Database``
+``Update-Database -Project uofi-itp-directory-data``
 
 If you run into the issue "The certificate chain was issued by an authority that is not trusted.", then add **TrustServerCertificate=True** to the connection string.
 

@@ -12,8 +12,8 @@ using uofi_itp_directory_data.Data;
 namespace uofi_itp_directory_data.Migrations
 {
     [DbContext(typeof(DirectoryContext))]
-    [Migration("20240320194132_ProfileUrl")]
-    partial class ProfileUrl
+    [Migration("20240326222810_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -769,7 +769,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 3, 20, 14, 41, 31, 398, DateTimeKind.Local).AddTicks(3312),
+                            LastUpdated = new DateTime(2024, 3, 26, 17, 28, 9, 244, DateTimeKind.Local).AddTicks(8104),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -781,7 +781,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 3, 20, 14, 41, 31, 398, DateTimeKind.Local).AddTicks(3488),
+                            LastUpdated = new DateTime(2024, 3, 26, 17, 28, 9, 244, DateTimeKind.Local).AddTicks(8245),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

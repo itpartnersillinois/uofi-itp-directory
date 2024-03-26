@@ -22,6 +22,7 @@ namespace uofi_itp_directory_data.Migrations
                     AreaType = table.Column<int>(type: "int", nullable: false),
                     Audience = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExternalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InternalOrder = table.Column<int>(type: "int", nullable: false),
                     InternalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsInternalOnly = table.Column<bool>(type: "bit", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -35,6 +36,26 @@ namespace uofi_itp_directory_data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DirectoryEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateRun = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    IsSuccessful = table.Column<bool>(type: "bit", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NetId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DirectoryEntries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -43,8 +64,9 @@ namespace uofi_itp_directory_data.Migrations
                     Biography = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CVUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsInExperts = table.Column<bool>(type: "bit", nullable: false),
+                    EmployeeHourText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsPhoneHidden = table.Column<bool>(type: "bit", nullable: false),
+                    LastRefreshed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ListedNameFirst = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ListedNameLast = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NetId = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -55,6 +77,7 @@ namespace uofi_itp_directory_data.Migrations
                     PreferredNameLast = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PreferredPronouns = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrimaryProfile = table.Column<int>(type: "int", nullable: true),
+                    ProfileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Room = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -72,10 +95,7 @@ namespace uofi_itp_directory_data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChangedByNetId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChangeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Detatils = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NewData = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OldData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     SubjectText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubjectType = table.Column<int>(type: "int", nullable: false),
@@ -120,22 +140,20 @@ namespace uofi_itp_directory_data.Migrations
                     AllowInformationForIllinoisExpertsMembers = table.Column<bool>(type: "bit", nullable: false),
                     AllowPeople = table.Column<bool>(type: "bit", nullable: false),
                     AreaId = table.Column<int>(type: "int", nullable: false),
-                    InstructionsCv = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AutoloadProfiles = table.Column<bool>(type: "bit", nullable: false),
                     InstructionsEmployee = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InstructionsEmployeeActivities = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsEmployeeTags = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsHeadshot = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsMain = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsOfficeTags = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructionsRefresh = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructionsEmployeeCv = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructionsEmployeeHeadshot = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructionsEmployeeSignature = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructionsOffice = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InternalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InternalNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InternalOrder = table.Column<int>(type: "int", nullable: false),
                     PictureHeight = table.Column<int>(type: "int", nullable: false),
                     PictureWidth = table.Column<int>(type: "int", nullable: false),
                     SignatureExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UrlPeopleRefresh = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UrlPeopleRefreshType = table.Column<int>(type: "int", nullable: false),
                     UrlProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -166,9 +184,11 @@ namespace uofi_itp_directory_data.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExternalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HoursIncludeHolidayMessage = table.Column<bool>(type: "bit", nullable: false),
+                    InternalOrder = table.Column<int>(type: "int", nullable: false),
                     InternalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsInternalOnly = table.Column<bool>(type: "bit", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfficeHourText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfficeType = table.Column<int>(type: "int", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Room = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -275,6 +295,7 @@ namespace uofi_itp_directory_data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Category = table.Column<int>(type: "int", nullable: false),
                     EmployeeProfileId = table.Column<int>(type: "int", nullable: false),
                     InternalOrder = table.Column<int>(type: "int", nullable: false),
                     OfficeId = table.Column<int>(type: "int", nullable: false),
@@ -332,7 +353,6 @@ namespace uofi_itp_directory_data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InternalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InternalNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InternalOrder = table.Column<int>(type: "int", nullable: false),
                     OfficeId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -356,11 +376,11 @@ namespace uofi_itp_directory_data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AreaId = table.Column<int>(type: "int", nullable: true),
                     CanEditAllPeopleInUnit = table.Column<bool>(type: "bit", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsFullAdmin = table.Column<bool>(type: "bit", nullable: false),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     ListedNameFirst = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ListedNameLast = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NetId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfficeId = table.Column<int>(type: "int", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -403,11 +423,11 @@ namespace uofi_itp_directory_data.Migrations
 
             migrationBuilder.InsertData(
                 table: "SecurityEntries",
-                columns: new[] { "Id", "AreaId", "CanEditAllPeopleInUnit", "IsActive", "IsFullAdmin", "IsPublic", "LastUpdated", "ListedNameFirst", "ListedNameLast", "NetId", "OfficeId" },
+                columns: new[] { "Id", "AreaId", "CanEditAllPeopleInUnit", "Email", "IsActive", "IsFullAdmin", "IsPublic", "LastUpdated", "ListedNameFirst", "ListedNameLast", "OfficeId" },
                 values: new object[,]
                 {
-                    { -2, null, true, true, true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rob", "Watson", "rbwatson@illinois.edu", null },
-                    { -1, null, true, true, true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bryan", "Jonker", "jonker@illinois.edu", null }
+                    { -2, null, true, "rbwatson@illinois.edu", true, true, false, new DateTime(2024, 3, 26, 17, 28, 9, 244, DateTimeKind.Local).AddTicks(8245), "Rob", "Watson", null },
+                    { -1, null, true, "jonker@illinois.edu", true, true, false, new DateTime(2024, 3, 26, 17, 28, 9, 244, DateTimeKind.Local).AddTicks(8104), "Bryan", "Jonker", null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -494,6 +514,9 @@ namespace uofi_itp_directory_data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AreaTags");
+
+            migrationBuilder.DropTable(
+                name: "DirectoryEntries");
 
             migrationBuilder.DropTable(
                 name: "EmployeeActivities");
