@@ -33,14 +33,7 @@ namespace uofi_itp_directory_function {
         public async Task<IActionResult> LoadPersonManually([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "Load/Manual")] HttpRequest req) {
             var body = new StreamReader(req.Body).ReadToEnd();
             try {
-                if (!string.IsNullOrWhiteSpace(body)) {
-                    var header = req.Headers.FirstOrDefault(x => x.Key == "x-functions-key").Value.FirstOrDefault() ?? "";
-                    // if (!_securityCodes.Contains(header + college)) {
-                    //     return new BadRequestObjectResult("API key is incorrect when sending body information for college " + college);
-                    // }
-                }
-                //   var url = _importProcess.ImportNew(name, college, mode, body);
-                return new OkObjectResult("");
+                return new OkObjectResult("Not implemented yet");
             } catch (Exception e) {
                 return new BadRequestObjectResult(e.Message);
             }
