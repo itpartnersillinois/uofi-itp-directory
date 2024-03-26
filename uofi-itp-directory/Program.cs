@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.CampusService;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DirectoryHook;
 using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 using uofi_itp_directory_data.Uploads;
+using uofi_itp_directory_external.DataWarehouse;
+using uofi_itp_directory_external.Experts;
 
 var builder = WebApplication.CreateBuilder(args);
 

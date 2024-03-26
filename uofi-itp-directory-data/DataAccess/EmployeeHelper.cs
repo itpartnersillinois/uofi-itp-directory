@@ -14,7 +14,7 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly LogHelper _logHelper = logHelper;
 
         public async Task<Employee?> GetEmployee(int? id, string name) {
-            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
+            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
             if (employee == null) {
                 return null;
             }
@@ -36,6 +36,13 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<Employee?> GetEmployeeForSignature(int? id, string name) => await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
+
+        public async Task<Employee?> GetEmployeeReadOnly(string netId, string source) {
+            netId = netId.Replace("@illinois.edu", "") + "@illinois.edu";
+            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).ThenInclude(a => a.AreaSettings).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == netId));
+            _ = (employee?.JobProfiles.ToList().RemoveAll(j => j.Office.Area.AreaSettings.InternalCode != source));
+            return employee;
+        }
 
         public async Task<AreaSettings> GetEmployeeSettings(Employee? employee) => employee == null ?
             new AreaSettings() :

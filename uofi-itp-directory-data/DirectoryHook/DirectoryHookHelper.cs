@@ -9,6 +9,7 @@ namespace uofi_itp_directory_data.DirectoryHook {
         private readonly DirectoryRepository _directoryRepository;
         private readonly string _netIdPlaceholder;
         private readonly string _sourcePlaceholder;
+        private readonly string _url;
 
         public DirectoryHookHelper(DirectoryRepository? directoryRepository, string? defaultFunctionKey) {
             ArgumentNullException.ThrowIfNull(directoryRepository);
@@ -16,11 +17,12 @@ namespace uofi_itp_directory_data.DirectoryHook {
             _netIdPlaceholder = "{netid}";
             _defaultFunctionKey = defaultFunctionKey ?? "";
             _sourcePlaceholder = "{source}";
+            _url = "http://localhost:7207/api/LoadPerson/{source}/{netid}";
         }
 
         public async Task<int> LoadAreas() {
             var returnValue = 0;
-            var areasToAdd = (await _directoryRepository.ReadAsync(d => d.AreaSettings.Where(a => a.AutoloadProfiles && a.UrlPeopleRefreshFullUrl != "").Select(a => a.AreaId))).ToList();
+            var areasToAdd = (await _directoryRepository.ReadAsync(d => d.AreaSettings.Where(a => a.AutoloadProfiles && a.UrlPeopleRefreshType != PeopleRefreshTypeEnum.None).Select(a => a.AreaId))).ToList();
             foreach (var employeeId in await _directoryRepository.ReadAsync(d => d.JobProfiles.Include(jp => jp.Office)
                 .Where(jp => areasToAdd.Contains(jp.Office.AreaId))
                 .Select(jp => jp.EmployeeProfileId).Distinct().ToList())) {
@@ -67,30 +69,19 @@ namespace uofi_itp_directory_data.DirectoryHook {
             var codesUsed = new List<string>();
             foreach (var profile in employee.JobProfiles.Where(jp => jp != null && jp.Office != null)) {
                 var areaSettings = await _directoryRepository.ReadAsync(d => d.AreaSettings.SingleOrDefault(a => a.AreaId == profile.Office.AreaId));
-                var url = areaSettings?.UrlPeopleRefreshFullUrl.Replace(_netIdPlaceholder, netId) ?? "";
-                // validate URL, if not good, then send a results message and wipe out URL so it does not get processed
-                if (string.IsNullOrWhiteSpace(url)) {
-                    areAllSuccessful = false;
-                    results += $"{profile.Office.Title}: profile refresh url is blank. ";
-                    url = "";
-                }
-                if (url.Contains(_sourcePlaceholder) && string.IsNullOrWhiteSpace(areaSettings?.InternalCode)) {
-                    areAllSuccessful = false;
-                    results += $"{profile.Office.Title}: internal code is blank and using {_sourcePlaceholder} in url. ";
-                    url = "";
-                } else if (url.Contains(_sourcePlaceholder) && codesUsed.Contains(areaSettings?.InternalCode ?? "")) {
-                    results += $"{profile.Office.Title}: {areaSettings?.InternalCode} already sent. ";
-                    url = "";
-                } else if (url.Contains(_sourcePlaceholder)) {
-                    codesUsed.Add(areaSettings?.InternalCode ?? "");
-                    url = url.Replace(_sourcePlaceholder, areaSettings?.InternalCode);
-                }
-                if (!string.IsNullOrWhiteSpace(url)) {
+                if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Custom) {
+                    var url = areaSettings?.UrlPeopleRefreshFullUrl.Replace(_netIdPlaceholder, netId).Replace(_sourcePlaceholder, areaSettings?.InternalCode) ?? "";
                     using var client = new HttpClient();
                     using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-                    if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default) {
-                        requestMessage.Headers.Add("x-functions-key", _defaultFunctionKey);
-                    }
+                    using var res = await client.SendAsync(requestMessage);
+                    areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
+                    results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";
+                } else if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default && codesUsed.Contains(areaSettings?.InternalCode ?? "")) {
+                    results += $"{profile.Office.Title}: {areaSettings?.InternalCode} already sent. ";
+                } else if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default) {
+                    var url = _url.Replace(_netIdPlaceholder, netId).Replace(_sourcePlaceholder, areaSettings?.InternalCode) ?? "";
+                    using var client = new HttpClient();
+                    using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                     using var res = await client.SendAsync(requestMessage);
                     areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
                     results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";

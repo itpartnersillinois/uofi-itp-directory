@@ -75,7 +75,14 @@
     <h3>Job Title(s)</h3>
     @foreach (var profile in Employee.JobProfiles)
     {
-        <div class="iled-section-split">
+            @if (Employee.JobProfiles.Count > 1 && profile.OfficeId == Employee.PrimaryJobProfile.OfficeId)
+            {
+                <h4>@profile.Office.Title (primary)</h4>
+            } else
+            {
+                <h4>@profile.Office.Title</h4>
+            }
+            <div class="iled-section-split">
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-title-@profile.Id">Title</label>

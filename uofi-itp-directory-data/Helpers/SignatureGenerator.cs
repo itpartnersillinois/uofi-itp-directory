@@ -17,13 +17,13 @@ namespace uofi_itp_directory_data.Helpers {
     $"{Set("address1", employee.Room + " " + employee.Building)}" +
     $"{Set("address2", employee.PrimaryJobProfile.Office.Address)}" +
     $"{Set("cityStateZip", employee.PrimaryJobProfile.Office.City)}" +
-    $"{Set("phone", employee.Phone)}" +
+    $"{Set("phone", employee.IsPhoneHidden ? "" : employee.Phone)}" +
     $"{Set("email", employee.NetId)}" +
     $"{Set("website1", employee.PrimaryJobProfile.Office.ExternalUrl)}" +
     $"{Set("campus", employee.PrimaryJobProfile.Office.Area.Title)}{(string.IsNullOrWhiteSpace(areaInformation) ? "" : "&" + areaInformation.Trim('&'))}";
 
         private string Set(string name, string value, bool isFirst = false) {
-            return (isFirst ? "" : "&") + (value == null ? name + "=" : name + "=" + value.Replace("&", "&amp;"));
+            return (isFirst ? "" : "&") + (string.IsNullOrWhiteSpace(value) ? name + "=" : name + "=" + value.Replace("&", "&amp;"));
         }
     }
 }

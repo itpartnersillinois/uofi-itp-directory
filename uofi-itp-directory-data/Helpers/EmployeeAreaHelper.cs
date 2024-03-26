@@ -8,6 +8,8 @@ namespace uofi_itp_directory_data.Helpers {
     public class EmployeeAreaHelper(DirectoryRepository directoryRepository) {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
 
+        public static string ConvertName(string name) => Regex.Replace(name, "[^A-Za-z0-9 ]", "").Replace(" ", "-").ToLowerInvariant();
+
         public static string ConvertProfileUrl(string profileUrl, string netid, string name) => profileUrl.Replace("{netid}", ConvertNetId(netid)).Replace("{name}", ConvertName(name));
 
         public async Task<string> ActivitiesInstructions(string netid) => (await GetSettings(netid)).areaSettings.InstructionsEmployeeActivities;
@@ -28,8 +30,6 @@ namespace uofi_itp_directory_data.Helpers {
         public async Task<bool> ShouldUseExperts(string netid) => (await GetSettings(netid)).areaSettings.AllowInformationForIllinoisExpertsMembers;
 
         public async Task<string> SignatureInstructions(string netid) => (await GetSettings(netid)).areaSettings.InstructionsEmployeeSignature;
-
-        private static string ConvertName(string name) => Regex.Replace(name, "[^A-Za-z0-9 ]", "").Replace(" ", "-").ToLowerInvariant();
 
         private static string ConvertNetId(string netid) => netid.Replace("@illinois.edu", "").ToLowerInvariant();
 

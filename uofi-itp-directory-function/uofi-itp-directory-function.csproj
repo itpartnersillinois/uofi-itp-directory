@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\uofi-itp-directory-data\uofi-itp-directory-data.csproj" />
+    <ProjectReference Include="..\uofi-itp-directory-search\uofi-itp-directory-search.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

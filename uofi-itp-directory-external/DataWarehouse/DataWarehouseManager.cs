@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace uofi_itp_directory_data.CampusService {
+namespace uofi_itp_directory_external.DataWarehouse {
 
     public class DataWarehouseManager(string? baseUrl, string? key) {
         private readonly string _baseUrl = baseUrl ?? "";
@@ -25,16 +25,19 @@ namespace uofi_itp_directory_data.CampusService {
             }
             var information = data?.list[0];
             return new DataWarehouseItem() {
+                NetId = information?.netIds[0].netId ?? "",
                 FirstName = information?.name?.firstName?.ToString() ?? string.Empty,
                 LastName = information?.name?.lastName?.ToString() ?? string.Empty,
                 Title = information?.title ?? string.Empty,
-                AddressLine1 = information?.address?.streetLine1?.ToString() ?? string.Empty,
-                AddressLine2 = information?.address?.streetLine2?.ToString() ?? string.Empty,
-                City = information?.address?.city?.ToString() ?? string.Empty,
+                Street1 = information?.address?.streetLine1?.ToString() ?? string.Empty,
+                Street2 = information?.address?.streetLine2?.ToString() ?? string.Empty,
+                Street3 = information?.address?.streetLine3?.ToString() ?? string.Empty,
+                CityFromCampus = information?.address?.city?.ToString() ?? string.Empty,
                 State = information?.address?.state?.code?.ToString() ?? string.Empty,
-                ZipCode = information?.address?.zipCode?.ToString() ?? string.Empty,
+                ZipFromCampus = information?.address?.zipCode?.ToString() ?? string.Empty,
                 Phone = information?.phone?.phoneNumber?.ToString() ?? string.Empty,
-                PhoneAreaCode = information?.phone?.areaCode?.ToString() ?? string.Empty
+                PhoneAreaCode = information?.phone?.areaCode?.ToString() ?? string.Empty,
+                Uin = information?.uin ?? string.Empty,
             };
         }
     }
