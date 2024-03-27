@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
-using uofi_itp_directory_data.CampusService;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
+using uofi_itp_directory_external.DataWarehouse;
 
 namespace uofi_itp_directory.Pages.Admin {
 

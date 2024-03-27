@@ -1,7 +1,8 @@
-﻿using uofi_itp_directory_data.CampusService;
+﻿using Microsoft.EntityFrameworkCore;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
+using uofi_itp_directory_external.DataWarehouse;
 
 namespace uofi_itp_directory_data.DataAccess {
 
@@ -39,6 +40,10 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<List<Area>> GetAreas() => [.. (await _directoryRepository.ReadAsync(d => d.Areas.OrderBy(a => a.Title)))];
 
         public async Task<AreaSettings> GetAreaSettingsByAreaId(int? areaId) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == areaId));
+
+        public async Task<AreaSettings> GetAreaSettingsBySource(string source) => await _directoryRepository.ReadAsync(d => d.AreaSettings.SingleOrDefault(a => a.InternalCode == source)) ?? new();
+
+        public async Task<List<Office>> GetOfficesBySource(string source) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Include(a => a.Area).ThenInclude(a => a.Offices).SingleOrDefault(a => a.InternalCode == source)?.Area.Offices.Where(o => o.IsActive).ToList()) ?? [];
 
         public async Task<bool> IsCodeUsed(string areaCode) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Any(a => a.InternalCode == areaCode));
 

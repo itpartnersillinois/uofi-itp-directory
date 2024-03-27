@@ -37,7 +37,7 @@ namespace uofi_itp_directory_function {
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "code", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The office code of the office you want")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(OfficeInformation), Description = "An office")]
-        public async Task<IActionResult> GetOfficeCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "OfficeCode/{code}")] HttpRequest req, string code)
+        public async Task<IActionResult> GetOfficeCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Office/Code/{code}")] HttpRequest req, string code)
             => new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Offices
                 .Include(o => o.OfficeHours).Include(o => o.OfficeSettings)
                 .Where(o => o.IsActive && o.OfficeSettings.InternalCode == code)

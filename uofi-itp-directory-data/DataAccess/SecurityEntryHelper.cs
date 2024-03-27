@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using uofi_itp_directory_data.CampusService;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataModels;
 using uofi_itp_directory_data.Security;
+using uofi_itp_directory_external.DataWarehouse;
 
 namespace uofi_itp_directory_data.DataAccess {
 
