@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>uofi_itp_directory_search</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\uofi-itp-directory-data\uofi-itp-directory-data.csproj" />
+    <ProjectReference Include="..\uofi-itp-directory-external\uofi-itp-directory-external.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 
 namespace uofi_itp_directory_data.DataModels {
 
@@ -42,12 +43,16 @@ namespace uofi_itp_directory_data.DataModels {
         public string NameLast => string.IsNullOrWhiteSpace(PreferredNameLast) ? ListedNameLast : PreferredNameLast;
 
         [NotMapped]
+        public string NameLinked => Regex.Replace(Name, "[^A-Za-z0-9 ]", "").Replace(" ", "-").ToLowerInvariant();
+
+        [NotMapped]
         public string NameReversed => string.IsNullOrWhiteSpace(NameFirst) || string.IsNullOrWhiteSpace(NameLast) ? "" : $"{NameLast}, {NameFirst}";
 
+        // TODO Is this really a NetID or an email? Need to nail this down
         public string NetId { get; set; } = "";
 
         [NotMapped]
-        public string NetIdTruncated => NetId?.ToLowerInvariant().Replace("@illinois.edu", "") ?? "";
+        public string NetIdTruncated => NetId?.ToLowerInvariant().Replace("@illinois.edu", "").ToLowerInvariant() ?? "";
 
         public string OfficeInformation { get; set; } = "";
 

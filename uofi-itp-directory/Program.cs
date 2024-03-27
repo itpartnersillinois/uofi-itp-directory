@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using uofi_itp_directory_data.Cache;
-using uofi_itp_directory_data.CampusService;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_data.DirectoryHook;
 using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 using uofi_itp_directory_data.Uploads;
+using uofi_itp_directory_external.DataWarehouse;
+using uofi_itp_directory_external.Experts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDbContextFactory<DirectoryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging(true));
 
 builder.Services.AddScoped<DirectoryRepository>();
-builder.Services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), builder.Configuration["FacultyLoadHeadingKey"]));
+builder.Services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), builder.Configuration["FacultyLoadUrl"]));
 builder.Services.AddScoped<LogHelper>();
 builder.Services.AddScoped(c => new DataWarehouseManager(builder.Configuration["DataWarehouseUrl"], builder.Configuration["DataWarehouseKey"]));
 builder.Services.AddScoped(c => new IllinoisExpertsManager(builder.Configuration["ExpertsUrl"], builder.Configuration["ExpertsSecretKey"]));

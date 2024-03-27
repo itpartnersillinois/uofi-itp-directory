@@ -27,5 +27,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\uofi-itp-directory-data\uofi-itp-directory-data.csproj" />
+      <ProjectReference Include="..\uofi-itp-directory-external\uofi-itp-directory-external.csproj" />
     </ItemGroup>
 </Project>

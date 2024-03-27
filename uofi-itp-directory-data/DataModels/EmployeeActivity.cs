@@ -19,6 +19,10 @@ namespace uofi_itp_directory_data.DataModels {
         public string Title { get; set; } = "";
         public ActivityTypeEnum Type { get; set; }
         public string Url { get; set; } = "";
+
+        [NotMapped]
+        public string Year => string.IsNullOrWhiteSpace(YearStarted) ? YearEnded : YearStarted;
+
         public string YearEnded { get; set; } = "";
         public string YearStarted { get; set; } = "";
     }
