@@ -6,7 +6,7 @@ namespace uofi_itp_directory_function.Helpers {
         private const string _jobTypes = "jobTypes";
         private const string _offices = "offices";
         private const string _searchCriteria = "q";
-        private const string _skip = "take";
+        private const string _skip = "skip";
         private const string _splitString = "[-]";
         private const string _take = "take";
         private const string _useFullText = "useFullText";
