@@ -8,7 +8,7 @@ namespace uofi_itp_directory_search.ViewModel {
         public int Count { get; set; }
 
         [JsonProperty("people")]
-        public List<Employee> People { get; set; } = [];
+        public List<EmployeeCompact> People { get; set; } = [];
 
         [JsonProperty("suggestion")]
         public string Suggestion { get; set; } = "";

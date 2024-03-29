@@ -5,7 +5,7 @@ namespace uofi_itp_directory_search.SearchHelper {
 
     public static class DirectoryOfficeItemTranslator {
 
-        public static DirectoryOfficeItem? Translate(Office office, IEnumerable<ViewModel.Employee> people) {
+        public static DirectoryOfficeItem? Translate(Office office, IEnumerable<ViewModel.EmployeeCompact> people) {
             var associatedPeople = people.Where(p => p.JobProfiles.Any(j => j.Office == office.Title)).ToList();
             if (!associatedPeople.Any()) {
                 return null;

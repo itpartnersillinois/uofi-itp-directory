@@ -34,8 +34,8 @@ namespace uofi_itp_directory_data.Helpers {
         private static string ConvertNetId(string netid) => netid.Replace("@illinois.edu", "").ToLowerInvariant();
 
         private async Task<(AreaSettings areaSettings, string fullName)> GetSettings(string netid) {
-            var office = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).SingleOrDefault(e => e.NetId == netid));
-            return office == null || office.Id == 0 ? (new AreaSettings(), "") : (await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == office.PrimaryJobProfile.Office.AreaId)), office.Name);
+            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).SingleOrDefault(e => e.NetId == netid));
+            return employee == null || employee.Id == 0 ? (new AreaSettings(), "") : (await _directoryRepository.ReadAsync(d => d.AreaSettings.Single(a => a.AreaId == employee.PrimaryJobProfile.Office.AreaId)), employee.Name);
         }
 
         private async Task<AreaSettings> GetSettings(int? officeId) {

@@ -33,6 +33,9 @@ namespace uofi_itp_directory.Pages.Unit {
         protected CacheHolder CacheHolder { get; set; } = default!;
 
         [Inject]
+        protected EmployeeHelper EmployeeHelper { get; set; } = default!;
+
+        [Inject]
         protected IJSRuntime JsRuntime { get; set; } = default!;
 
         [Inject]
@@ -42,6 +45,8 @@ namespace uofi_itp_directory.Pages.Unit {
         protected SecurityEntryHelper SecurityEntryHelper { get; set; } = default!;
 
         private bool _originalAllowAccess { get; set; }
+
+        private string _originalUrlProfile { get; set; }
 
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;
@@ -63,7 +68,10 @@ namespace uofi_itp_directory.Pages.Unit {
                 _ = await SecurityEntryHelper.SetAccessToOtherPeople(Area.Id, AreaSettings.AllowAdministratorsAccessToPeople);
                 _originalAllowAccess = AreaSettings.AllowAdministratorsAccessToPeople;
             }
-            // TODO if someone changes a profile URL, do we need to update this to all employees in the area?
+            if (_originalUrlProfile != AreaSettings.UrlProfile) {
+                _ = await EmployeeHelper.UpdateAllEmployeeUrlProfiles(Area.Id, AreaSettings.UrlProfile);
+                _originalUrlProfile = AreaSettings.UrlProfile;
+            }
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Internal settings updated");
             StateHasChanged();
         }
@@ -113,6 +121,7 @@ namespace uofi_itp_directory.Pages.Unit {
             PublishingLocation = SetPublishingLocation(Area);
             ProfileInformation = SetProfileInformation(AreaSettings);
             _originalAllowAccess = AreaSettings.AllowAdministratorsAccessToPeople;
+            _originalUrlProfile = AreaSettings.UrlProfile;
         }
     }
 }

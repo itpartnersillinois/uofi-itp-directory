@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -23,7 +22,6 @@ namespace uofi_itp_directory_function {
 
         [Function("EmployeeAllPeopleByArea")]
         [OpenApiOperation(operationId: "EmployeeAllPeopleByArea", tags: "Employee", Description = "Get all employees by area. Note this is the raw employee information and is not the directory.")]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = false, Type = typeof(int), Description = "The ID of the area you want")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IEnumerable<EmployeeInformation>), Description = "A list of employees, including job profiles and office information.")]
         public async Task<IActionResult> GetAllPeopleByArea([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Employee/Area/{id}")] HttpRequest req, int id)
@@ -35,7 +33,6 @@ namespace uofi_itp_directory_function {
 
         [Function("EmployeeByUserName")]
         [OpenApiOperation(operationId: "EmployeeByUserName", tags: "Employee", Description = "Get an employee by Net ID. This includes job profile information. Note this is the raw employee information and is not the directory.")]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "username", In = ParameterLocation.Path, Required = false, Type = typeof(int), Description = "The Net ID of the person you want. This may or may not include the @illinois.edu.")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(EmployeeInformation), Description = "A list of employees, including job profiles and office information")]
         public async Task<IActionResult> GetByUsername([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Employee/Get/{username}")] HttpRequest req, string username)

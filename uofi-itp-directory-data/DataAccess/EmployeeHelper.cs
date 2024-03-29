@@ -55,5 +55,16 @@ namespace uofi_itp_directory_data.DataAccess {
             _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, "", employee.Id, employee.NetId);
             return returnValue;
         }
+
+        public async Task<int> UpdateAllEmployeeUrlProfiles(int areaId, string url) {
+            var returnValue = 0;
+            foreach (var employee in await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Where(e => e.JobProfiles.Any(jp => jp.Office.AreaId == areaId)))) {
+                if (employee.PrimaryJobProfile.Office.AreaId == areaId) {
+                    employee.ProfileUrl = EmployeeAreaHelper.ConvertProfileUrl(url, employee.NetId, employee.Name);
+                    returnValue += await _directoryRepository.UpdateAsync(employee);
+                }
+            }
+            return returnValue;
+        }
     }
 }

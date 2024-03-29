@@ -57,7 +57,7 @@
                         <div class="iled-input-box">
                             <label for="ed-display-order-@activity.Id">Display Order</label>
                                     <select id="ed-display-order-@activity.Id" disabled="@(Employee.IsEntryDisabled || !activity.InEditState)" @bind="activity.InternalOrder">
-                                @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>())
+                                @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderBy(o => o))
                                 {
                                     <option value="@((int)enumtype)">@enumtype.ToPrettyString()</option>
                                 }
