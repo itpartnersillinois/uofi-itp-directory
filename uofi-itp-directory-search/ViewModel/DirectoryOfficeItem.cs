@@ -19,23 +19,20 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("externalurl")]
         public string ExternalUrl { get; set; } = "";
 
-        [JsonProperty("internalurl")]
-        public string InternalUrl { get; set; } = "";
-
-        [JsonProperty("ticketurl")]
-        public string TicketUrl { get; set; } = "";
-
         [JsonProperty("hourstext")]
         public string HoursText { get; set; } = "";
 
         [JsonProperty("internalorder")]
         public int InternalOrder { get; set; }
 
+        [JsonProperty("internalurl")]
+        public string InternalUrl { get; set; } = "";
+
         [JsonProperty("map")]
         public string Map { get; set; } = "";
 
         [JsonProperty("people")]
-        public List<Employee> People { get; set; } = [];
+        public List<EmployeeCompact> People { get; set; } = [];
 
         [JsonProperty("phone")]
         public string Phone { get; set; } = "";
@@ -45,6 +42,9 @@ namespace uofi_itp_directory_search.ViewModel {
 
         [JsonProperty("state")]
         public string State { get; set; } = "";
+
+        [JsonProperty("ticketurl")]
+        public string TicketUrl { get; set; } = "";
 
         [JsonProperty("title")]
         public string Title { get; set; } = "";

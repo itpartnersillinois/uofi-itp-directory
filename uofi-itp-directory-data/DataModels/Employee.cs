@@ -67,7 +67,7 @@ namespace uofi_itp_directory_data.DataModels {
         public string PreferredPronouns { get; set; } = "";
 
         [NotMapped]
-        public JobProfile PrimaryJobProfile => JobProfiles.FirstOrDefault(jp => PrimaryProfile == null || jp.OfficeId == PrimaryProfile) ?? new JobProfile();
+        public JobProfile PrimaryJobProfile => JobProfiles.FirstOrDefault(jp => PrimaryProfile == null || jp.OfficeId == PrimaryProfile) ?? JobProfiles.FirstOrDefault() ?? new JobProfile();
 
         public int? PrimaryProfile { get; set; }
 

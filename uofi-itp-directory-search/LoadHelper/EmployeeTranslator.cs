@@ -27,6 +27,8 @@ namespace uofi_itp_directory_search.LoadHelper {
             NetId = directoryEmployee.NetIdTruncated,
             Phone = directoryEmployee.IsPhoneHidden ? "" : ChooseFirstNonBlank(directoryEmployee.Phone, dataWarehouseItem.PhoneFull),
             PreferredPronouns = directoryEmployee.PreferredPronouns,
+            PrimaryOffice = directoryEmployee.PrimaryJobProfile.Office.Title,
+            PrimaryTitle = directoryEmployee.PrimaryJobProfile.Title,
             ProfileUrl = directoryEmployee.ProfileUrl,
             RoomNumber = directoryEmployee.Room,
             Source = source,
