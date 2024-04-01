@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Linq;
 using uofi_itp_directory_data.DirectoryHook;
 using uofi_itp_directory_function.Helpers;
 using uofi_itp_directory_search.LoadHelper;
@@ -27,10 +26,9 @@ namespace uofi_itp_directory_function {
 
         [Function("LoadPersonManually")]
         [OpenApiOperation(operationId: "Load Person", tags: "Load", Description = "Load a person sending the json of the body, manually overriding any other options. Note that you need to register your API key with IT Partners to let us know you want to use this option. If you do this, we will not load anything from EDW -- we will rely on you to give us basic information and profile information.")]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Header)]
         [OpenApiParameter(name: "name", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The NetID of the person you want to load.")]
         [OpenApiParameter(name: "source", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Source value.")]
-        [OpenApiRequestBody(bodyType: typeof(JObject), contentType: "")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "A status of what it did.")]
         public async Task<IActionResult> LoadPersonManually([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "Load/Manual")] HttpRequest req) {
             var body = new StreamReader(req.Body).ReadToEnd();

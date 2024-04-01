@@ -31,6 +31,9 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("map")]
         public string Map { get; set; } = "";
 
+        [JsonProperty("officetype")]
+        public string OfficeType { get; set; } = "";
+
         [JsonProperty("people")]
         public List<EmployeeCompact> People { get; set; } = [];
 

@@ -33,6 +33,7 @@ namespace uofi_itp_directory_function {
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && (search == "" || a.Title.Contains(search) || a.Audience.Contains(search) ||
                     a.Offices.Any(o => o.Title.Contains(search)) || a.Offices.Any(o => o.Audience.Contains(search))))
+                .OrderBy(a => a.InternalOrder).ThenBy(a => a.Title)
                 .Select(a => new AreaInformation(a, false)).ToList()));
         }
 
@@ -48,6 +49,7 @@ namespace uofi_itp_directory_function {
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && !a.IsInternalOnly && (search == "" || a.Title.Contains(search) || a.Audience.Contains(search) ||
                     a.Offices.Any(o => o.Title.Contains(search)) || a.Offices.Any(o => o.Audience.Contains(search))))
+                .OrderBy(a => a.InternalOrder).ThenBy(a => a.Title)
                 .Select(a => new AreaInformation(a, true)).ToList()));
         }
 
