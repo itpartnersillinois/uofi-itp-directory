@@ -49,6 +49,11 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("phone")]
         public string Phone { get; set; } = "";
 
+        [JsonProperty("phoneformatted")]
+        public string PhoneFormatted => !Phone.Contains('-') && Phone.Length == 7
+            ? "217-" + Phone.Insert(3, "-") : !Phone.Contains('-') && Phone.Length == 10
+            ? Phone.Insert(6, "-").Insert(3, "-") : Phone;
+
         [JsonProperty("preferredpronouns")]
         public string PreferredPronouns { get; set; } = "";
 
@@ -76,8 +81,9 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("zip")]
         public string Zip { get; set; } = "";
 
-        public void TransferPrimaryOfficeAndTitle() {
+        public void TransferPrimaryOfficeAndTitle(string officeName) {
             if (JobProfiles.Count == 1) {
+                _ = JobProfiles.RemoveAll(jp => jp.Office != officeName);
                 PrimaryOffice = JobProfiles.Single().Office;
                 PrimaryTitle = JobProfiles.Single().Title;
             }

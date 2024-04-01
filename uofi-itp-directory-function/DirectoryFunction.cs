@@ -37,13 +37,13 @@ namespace uofi_itp_directory_function {
         public async Task<IActionResult> GetByUin([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Directory/GetByUin/{source}/{uin}")] HttpRequest req, string source, string uin) => new JsonResult(await _personGetter.GetByUin(uin, source));
 
         [Function("GetFullDirectory")]
-        [OpenApiOperation(operationId: "GetFullDirectory", tags: "Directory", Description = "Get a list of profiles by search criteria.")]
+        [OpenApiOperation(operationId: "GetFullDirectory", tags: "Directory", Description = "Get a list of offices and profiles by search criteria.")]
         [OpenApiParameter(name: "source", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The source parameter given to you")]
         [OpenApiParameter(name: "q", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "A full text search string.")]
         [OpenApiParameter(name: "offices", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "A list of departments, separated by [-].")]
         [OpenApiParameter(name: "jobTypes", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "A list of job types (faculty, staff, etc.), separated by [-].")]
         [OpenApiParameter(name: "useFullText", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Does your full text search get everything, or just names? Defaults to true")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(DirectoryFullItem), Description = "items, which is a Profile object; count, a total count of names; and spelling, an spelling request if you don't have any items")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(DirectoryFullItem), Description = "offices, which lists offices and people inside the office; and suggestion, an spelling request if you don't have any items")]
         public async Task<IActionResult> GetFullDirectory([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Directory/GetFull/{source}")] HttpRequest req, string source) => new JsonResult(await _directoryManager.GetFullDirectory(RequestHelper.GetSearch(req), RequestHelper.GetOffices(req), RequestHelper.GetJobTypes(req), RequestHelper.GetUseFullText(req), source));
 
         [Function("GetProfile")]
@@ -62,7 +62,7 @@ namespace uofi_itp_directory_function {
         [OpenApiParameter(name: "useFullText", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Does your full text search get everything, or just names? Defaults to true")]
         [OpenApiParameter(name: "take", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "How many items do you want? For paging. Defaults to 10.")]
         [OpenApiParameter(name: "skip", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "How many items do you skip? For paging. Defaults to 0.")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(DirectoryItem), Description = "items, which is a Profile object; count, a total count of names; and spelling, an spelling request if you don't have any items")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(DirectoryItem), Description = "items, which is a Profile object; count, a total count of names; and suggestion, an spelling request if you don't have any items")]
         public async Task<IActionResult> Search([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Directory/Search/{source}")] HttpRequest req, string source) => new JsonResult(await _personGetter.Search(RequestHelper.GetSearch(req), RequestHelper.GetOffices(req), RequestHelper.GetJobTypes(req), RequestHelper.GetUseFullText(req), RequestHelper.GetSkip(req), RequestHelper.GetTake(req), source));
     }
 }
