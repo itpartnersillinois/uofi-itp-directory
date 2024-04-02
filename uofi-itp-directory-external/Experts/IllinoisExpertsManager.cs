@@ -14,7 +14,7 @@ namespace uofi_itp_directory_external.Experts {
             if (!profile.Keywords.Any()) {
                 profile.Keywords = await KeywordReader.AddKeywords(profile.ExpertsId, _baseUrl, _key);
             }
-            profile.Publicationss = await PublicationReader.AddPublications(profile.ExpertsId, _baseUrl, _key);
+            profile.Publications = await PublicationReader.AddPublications(profile.ExpertsId, _baseUrl, _key);
 
             var (backgrounds, presentations) = await ActivityReader.AddActivitiesToBackgrounds(profile.ExpertsId, _baseUrl, _key);
             profile.Organizations.AddRange(backgrounds);

@@ -14,7 +14,7 @@ namespace uofi_itp_directory_search.LoadHelper {
 
         public async Task<bool> SaveSingle(Employee employee) => await SendInformation(BuildUrl(employee), JsonConvert.SerializeObject(employee));
 
-        private string BuildDeleteUrl(string source, string netid) => _baseUrl + "/" + Employee.GenerateId(source, netid);
+        private string BuildDeleteUrl(string source, string netid) => _baseUrl + "/_doc/" + Employee.GenerateId(source, netid);
 
         private string BuildUrl(Employee employee) => _baseUrl + "/_doc/" + employee.Id;
 

@@ -13,7 +13,7 @@
         public string NetId { get; internal set; } = "";
         public List<ExpertsItem> Organizations { get; set; } = [];
         public List<ExpertsItem> Presentations { get; set; } = [];
-        public List<ExpertsItem> Publicationss { get; set; } = [];
+        public List<ExpertsItem> Publications { get; set; } = [];
         public string Quote { get; set; } = "";
         public string ResearchStatement { get; set; } = "";
         public List<ExpertsItem> Services { get; set; } = default!;
