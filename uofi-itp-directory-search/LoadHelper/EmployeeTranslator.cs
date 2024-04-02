@@ -42,42 +42,52 @@ namespace uofi_itp_directory_search.LoadHelper {
             Awards = TranslateAwards(directoryEmployee.EmployeeActivities, expertsProfile.Awards),
             Organizations = TranslateOrganizations(directoryEmployee.EmployeeActivities, expertsProfile.Organizations),
             Courses = TranslateCourses(dataModelCourses),
-            EducationHistory = TranslateEducationHistory(directoryEmployee.EmployeeActivities, expertsProfile.Organizations),
+            EducationHistory = TranslateEducationHistory(directoryEmployee.EmployeeActivities, expertsProfile.EducationHistory),
+            Grants = TranslateGrants(expertsProfile.Grants),
             JobProfiles = TranslateJobProfiles(directoryEmployee.JobProfiles),
             Keywords = expertsProfile.Keywords,
             Links = TranslateLinks(directoryEmployee.EmployeeActivities, expertsProfile.Links),
-            Presentations = TranslatePresentations(directoryEmployee.EmployeeActivities, expertsProfile.Links),
-            Publications = TranslatePublications(directoryEmployee.EmployeeActivities, expertsProfile.Links)
+            Presentations = TranslatePresentations(directoryEmployee.EmployeeActivities, expertsProfile.Presentations),
+            Publications = TranslatePublications(directoryEmployee.EmployeeActivities, expertsProfile.Publications),
+            Services = TranslateServices(expertsProfile.Services),
         };
 
         private static string ChooseFirstNonBlank(params string?[] args) => args.FirstOrDefault(a => !string.IsNullOrWhiteSpace(a)) ?? "";
 
         private static List<DatedItem> TranslateAwards(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url, Year = a.Year }).ToList()
+                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url, Year = a.Year }).ToList()
                 : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Award).Select(da => new DatedItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url, Year = da.Year }).ToList();
 
         private static List<Course> TranslateCourses(IEnumerable<pC.Course> courses) => courses.Select(c => new Course { CourseNumber = c.CourseNumber, Description = c.Description, Rubric = c.Rubric, Title = c.Name, Url = c.Url }).ToList();
 
         private static List<InstitutionalRangedItem> TranslateEducationHistory(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new InstitutionalRangedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url, YearStarted = a.Year, YearEnded = a.YearEnded, Institution = a.Institution }).ToList()
+                ? experts.Select(a => new InstitutionalRangedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url, YearStarted = a.Year, YearEnded = a.YearEnded, Institution = a.Institution }).ToList()
                 : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Education).Select(da => new InstitutionalRangedItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url, YearStarted = da.YearStarted, YearEnded = da.YearEnded }).ToList();
+
+        private static List<BaseItem> TranslateGrants(IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
+                ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()
+                : [];
 
         private static List<JobProfile> TranslateJobProfiles(IEnumerable<dM.JobProfile> profiles) => profiles.Where(j => j.Category != dM.ProfileCategoryTypeEnum.None || j.ProfileDisplay == dM.ProfileDisplayEnum.Not_Displayed).Select(j => new JobProfile { DisplayOrder = j.InternalOrder, JobType = j.Category.ToString(), Office = j.Office.Title, Title = j.Title }).ToList();
 
         private static List<BaseItem> TranslateLinks(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url }).ToList()
+                ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()
                 : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Link).Select(da => new BaseItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url }).ToList();
 
-        private static List<BaseItem> TranslateOrganizations(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url }).ToList()
-                : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Committee).Select(da => new BaseItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url }).ToList();
+        private static List<InstitutionalRangedItem> TranslateOrganizations(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
+                ? experts.Select(a => new InstitutionalRangedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url, Institution = a.Institution, YearEnded = a.YearEnded, YearStarted = a.Year }).ToList()
+                : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Committee).Select(da => new InstitutionalRangedItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url }).ToList();
 
         private static List<DatedItem> TranslatePresentations(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url }).ToList()
+                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()
                 : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Presentation).Select(da => new DatedItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url }).ToList();
 
         private static List<DatedItem> TranslatePublications(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
-                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.Title, Url = a.Url, Year = a.Year }).ToList()
+                ? experts.Select(a => new DatedItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url, Year = a.Year }).ToList()
                 : directoryActivites.Where(da => da.Type == dM.ActivityTypeEnum.Publication).Select(da => new DatedItem { DisplayOrder = da.InternalOrder, IsHighlighted = false, Title = da.Title, Url = da.Url, Year = da.Year }).ToList();
+
+        private static List<BaseItem> TranslateServices(IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
+                ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()
+                : [];
     }
 }

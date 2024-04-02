@@ -22,19 +22,19 @@ else if (Office != null)
         </div>
     </div>
     <h2>Publishing Information</h2>
-    <div class="iled-section-split">
-        <div class="iled-input-box-parent">
-            <div class="iled-input-box">
-                <label for="ed-location">Publishing Location</label>
-                <select id="ed-location" @bind="PublishingLocation">
-                    <option value="0">Do not show</option>
-                    <option value="1">Publish to site</option>
-                    <option value="2">Publish to site and helpdesk</option>
-                </select>
-            </div>
-            <div class="iled-instructions">
-                Note that if your entire unit is listed as "do not show", this will override your office settings. 
-            </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-location">Publishing Location</label>
+            <select id="ed-location" @bind="PublishingLocation">
+                <option value="0">Do not show but allow people to be added</option>
+                <option value="1">Publish to site</option>
+                <option value="2">Publish to site and helpdesk</option>
+                <option value="9">Do not show and do not add people</option>
+            </select>
+        </div>
+        <div class="iled-instructions">
+            Note that if your entire unit is listed as "do not show", this will override your office settings. <br />
+            If an office is listed as "do not show but allow people to be added", then it can be used to group people across multiple offices. 
         </div>
     </div>
     @if (Office.IsAreaAdmin)

@@ -25,6 +25,9 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("expertsurl")]
         public string ExpertsUrl { get; set; } = "";
 
+        [JsonProperty("grants")]
+        public List<BaseItem> Grants { get; set; } = default!;
+
         [JsonProperty("id")]
         public string Id => GenerateId(Source, NetId);
 
@@ -47,7 +50,7 @@ namespace uofi_itp_directory_search.ViewModel {
         public List<string> OfficeTitleList => JobProfiles?.Select(a => $"{a.Office.ToLowerInvariant()} {a.JobType.ToLowerInvariant()}").Distinct().ToList() ?? [];
 
         [JsonProperty("organizations")]
-        public List<BaseItem> Organizations { get; set; } = default!;
+        public List<InstitutionalRangedItem> Organizations { get; set; } = default!;
 
         [JsonProperty("presentations")]
         public List<DatedItem> Presentations { get; set; } = default!;
@@ -60,6 +63,9 @@ namespace uofi_itp_directory_search.ViewModel {
 
         [JsonProperty("researchstatement")]
         public string ResearchStatement { get; set; } = "";
+
+        [JsonProperty("services")]
+        public List<BaseItem> Services { get; set; } = default!;
 
         [JsonProperty("suggest")]
         public dynamic? Suggest => string.IsNullOrWhiteSpace(NetId) ? null : new { input = new[] { LastName, FirstName }, contexts = new { source = Source } };
