@@ -97,19 +97,23 @@ namespace uofi_itp_directory_external.Experts {
                 if (!profile.EducationHistory.Any()) {
                     profile.EducationHistory = (expertProfile?.educations as IEnumerable<dynamic>)?.Select((education, i) => new ExpertsItem {
                         Year = (education.period?.endDate?.year) ?? (education.awardDate != null ? (Convert.ToDateTime(education.awardDate)).Year.ToString() : ""),
-                        Title = (education.qualification?.term?.text?.First != null ? education.qualification?.term?.text?.First.value : "") + ". " + (education.fieldOfStudy?.term?.text?.First != null ? education.fieldOfStudy?.term?.text?.First?.value : ""),
-                        Institution = education.organisationalUnits?.First != null && education.organisationalUnits?.First?.externalOrganisationalUnit?.name?.text?.First.value != null ? education.organisationalUnits?.First?.externalOrganisationalUnit?.name?.text?.First.value :
-                             education.organisationalUnits?.First?.organisationalUnit?.name?.text?.First.value
+                        Title = education.qualification?.term?.text?.First != null ? education.qualification?.term?.text?.First.value : "",
+                        TitleSecondPart = education.fieldOfStudy?.term?.text?.First != null ? education.fieldOfStudy?.term?.text?.First?.value : "",
+                        SortOrder = i,
+                        Institution = education.organisationalUnits?.First != null && education.organisationalUnits?.First?.externalOrganisationalUnit?.name?.text?.First.value != null ? education.organisationalUnits?.First?.externalOrganisationalUnit?.name?.text?.First.value : education.organisationalUnits?.First?.organisationalUnit?.name?.text?.First.value
                     }).ToList() ?? new List<ExpertsItem>();
                 }
 
-                profile.Organizations = (expertProfile?.staffOrganisationAssociations as IEnumerable<dynamic>)?.Where(activity => !string.IsNullOrWhiteSpace(activity.jobDescription?.text[0]?.value?.ToString()))
-                    .Select((activity, i) => new ExpertsItem {
-                        Title = activity.jobDescription?.text[0]?.value?.ToString() + ". " + activity.organisationalUnit?.name?.text[0] == null || activity.organisationalUnit?.name?.text[0].ToString() == "" ? "" : activity.organisationalUnit?.name?.text[0].value.ToString(),
-                        Institution = "University of Illinois, Urbana-Champaign",
-                        Year = "",
-                        YearEnded = "",
-                    }).ToList() ?? new List<ExpertsItem>();
+                var organizations = (expertProfile?.staffOrganisationAssociations as IEnumerable<dynamic>)?.Where(activity => !string.IsNullOrWhiteSpace(activity.jobDescription?.text[0]?.value?.ToString())).ToList();
+
+                profile.Organizations = organizations?.Select((activity, i) => new ExpertsItem {
+                    Title = activity.jobDescription?.text[0]?.value?.ToString(),
+                    Institution = "University of Illinois, Urbana-Champaign",
+                    TitleSecondPart = activity.organisationalUnit?.name?.text[0] == null || activity.organisationalUnit?.name?.text[0].ToString() == "" ? "" : activity.organisationalUnit?.name?.text[0].value.ToString(),
+                    SortOrder = i,
+                    Year = "",
+                    YearEnded = "",
+                }).ToList() ?? new List<ExpertsItem>();
 
                 if (profile.Keywords == null || !profile.Keywords.Any()) {
                     var keywordsList = new List<string>();

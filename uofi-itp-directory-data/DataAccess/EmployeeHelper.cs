@@ -40,7 +40,9 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<Employee?> GetEmployeeReadOnly(string netId, string source) {
             netId = netId.Replace("@illinois.edu", "") + "@illinois.edu";
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).ThenInclude(a => a.AreaSettings).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == netId));
-            _ = (employee?.JobProfiles.ToList().RemoveAll(j => j.Office.Area.AreaSettings.InternalCode != source));
+            if (employee != null && employee.JobProfiles != null) {
+                employee.JobProfiles = employee.JobProfiles.Where(j => j.Office.Area.AreaSettings.InternalCode == source && j.Office.CanAddPeople).ToList();
+            }
             return employee;
         }
 

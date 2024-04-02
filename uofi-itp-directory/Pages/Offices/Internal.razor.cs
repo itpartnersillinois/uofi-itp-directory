@@ -49,7 +49,8 @@ namespace uofi_itp_directory.Pages.Offices {
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Send() {
-            Office.IsActive = PublishingLocation > 0;
+            Office.IsActive = PublishingLocation > 0 && PublishingLocation != 9;
+            Office.CanAddPeople = PublishingLocation != 9;
             Office.IsInternalOnly = PublishingLocation == 1;
             _ = OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
             _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
@@ -73,6 +74,9 @@ namespace uofi_itp_directory.Pages.Offices {
         }
 
         private static int SetPublishingLocation(Office office) {
+            if (!office.IsActive && !office.CanAddPeople) {
+                return 9;
+            }
             if (!office.IsActive) {
                 return 0;
             }
