@@ -22,12 +22,12 @@ namespace uofi_itp_directory_function.ViewModels {
 
         public string ExternalUrl { get; set; } = office.ExternalUrl;
 
-        public string HoursMessage { get; set; } = "";
+        public string HoursMessage { get; set; } = office.OfficeHourText;
 
         public int Id { get; set; } = office.Id;
 
         public string InternalCode { get; set; } = office.OfficeSettings.InternalCode;
-        public bool InternalOnly { get; set; }
+        public bool InternalOnly { get; set; } = office.IsInternalOnly;
         public string InternalUrl { get; set; } = office.InternalUrl;
 
         public string Notes { get; set; } = office.Notes;
