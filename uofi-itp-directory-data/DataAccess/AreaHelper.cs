@@ -43,7 +43,7 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<AreaSettings> GetAreaSettingsBySource(string source) => await _directoryRepository.ReadAsync(d => d.AreaSettings.SingleOrDefault(a => a.InternalCode == source)) ?? new();
 
-        public async Task<List<Office>> GetOfficesBySource(string source) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Include(a => a.Area).ThenInclude(a => a.Offices).SingleOrDefault(a => a.InternalCode == source)?.Area.Offices.Where(o => o.IsActive).ToList()) ?? [];
+        public async Task<List<Office>> GetOfficesBySource(string source, IEnumerable<string> offices) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Include(a => a.Area).ThenInclude(a => a.Offices).SingleOrDefault(a => a.InternalCode == source)?.Area.Offices.Where(o => o.IsActive && (!offices.Any() || offices.Contains(o.Title))).ToList()) ?? [];
 
         public async Task<bool> IsCodeUsed(string areaCode) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Any(a => a.InternalCode == areaCode));
 
