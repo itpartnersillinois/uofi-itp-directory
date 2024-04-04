@@ -38,13 +38,11 @@ namespace uofi_itp_directory_data.DataAccess {
                 _ = await _directoryRepository.CreateAsync(employee);
                 _ = await _logHelper.CreateEmployeeLog(changedByNetId, "Added New Employee", "", employee.Id, employee.NetId);
                 _ = await _logHelper.CreateProfileLog(changedByNetId, "Added Profile to New Employee", "", employee.Id, employee.NetId);
-                _ = await _directoryHookHelper.SendHook(employee.Id);
                 return (employee.Id, $"Employee {name.Name} created with new information");
             }
 
             _ = await _directoryRepository.CreateAsync(new JobProfile { IsActive = false, InternalOrder = 2, LastUpdated = DateTime.Now, Title = name.Title, EmployeeProfileId = existingEmployee.Id, OfficeId = officeId });
             _ = await _logHelper.CreateProfileLog(changedByNetId, "Added Profile to Existing Employee", "", existingEmployee.Id, existingEmployee.NetId);
-            _ = await _directoryHookHelper.SendHook(existingEmployee.Id);
 
             return (existingEmployee.Id, $"Employee {name.Name} created with existing information");
         }

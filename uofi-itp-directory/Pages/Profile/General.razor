@@ -99,22 +99,23 @@
                     }
                     </select>
                 </div>
+                <div class="iled-instructions">
+                    A job type of "None" means the person will not be listed.
+                </div>
             </div>
         </div>
-        <div class="iled-section-split">
-            <div class="iled-input-box-parent">
-                <div class="iled-input-box">
-                    <label for="ed-order-@profile.Id">Display Order</label>
-                    <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
-                        @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderBy(o => o))
-                        {
-                            <option value="@enumtype">@enumtype.ToPrettyString()</option>
-                        }
-                    </select>
-                </div>
-                <div class="iled-instructions">
-                    Profiles are normally listed in alphabetical order. This allows an administrator to manually change the order of the profile. 
-                </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-order-@profile.Id">Display Order</label>
+                <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
+                    @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderBy(o => o))
+                    {
+                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Profiles are normally listed in alphabetical order. This allows an administrator to manually change the order of the profile. 
             </div>
         </div>
         }

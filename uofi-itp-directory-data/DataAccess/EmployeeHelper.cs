@@ -53,7 +53,7 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
             employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);
             var returnValue = await _directoryRepository.UpdateAsync(employee);
-            _ = await _directoryHookHelper.SendHook(employee.Id);
+            _ = await _directoryHookHelper.SendHook(employee.Id, true);
             _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, "", employee.Id, employee.NetId);
             return returnValue;
         }
