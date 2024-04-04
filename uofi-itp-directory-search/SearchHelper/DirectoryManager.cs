@@ -9,7 +9,7 @@ namespace uofi_itp_directory_search.SearchHelper {
 
         public async Task<DirectoryFullItem> GetFullDirectory(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, bool useFullText, string source) {
             var people = await _personGetter.SearchByArea(query, offices, jobTypes, useFullText, source);
-            var officeInformation = await _areaHelper.GetOfficesBySource(source);
+            var officeInformation = await _areaHelper.GetOfficesBySource(source, offices);
 
             var items = officeInformation.Select(o => DirectoryOfficeItemTranslator.Translate(o, people.People)).OrderBy(o => o?.Title).ToList();
 

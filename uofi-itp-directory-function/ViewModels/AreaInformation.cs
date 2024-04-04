@@ -3,7 +3,7 @@ using uofi_itp_directory_data.Helpers;
 
 namespace uofi_itp_directory_function.ViewModels {
 
-    public class AreaInformation(Area area, bool externalOnly) {
+    public class AreaInformation(Area area, bool externalOnly, IEnumerable<OfficeTypeEnum> officeTypes) {
         public string AreaType { get; set; } = area.AreaType.ToPrettyString();
 
         public string Audience { get; set; } = area.Audience;
@@ -18,7 +18,7 @@ namespace uofi_itp_directory_function.ViewModels {
 
         public string Notes { get; set; } = area.Notes;
 
-        public IEnumerable<OfficeInformation> Offices { get; set; } = area.Offices.Where(o => o.IsActive && !(externalOnly && o.IsInternalOnly)).Select(o => new OfficeInformation(o));
+        public IEnumerable<OfficeInformation> Offices { get; set; } = area.Offices.Where(o => o.IsActive && (!officeTypes.Any() || officeTypes.Contains(o.OfficeType)) && !(externalOnly && o.IsInternalOnly)).Select(o => new OfficeInformation(o));
         public int Priority { get; set; } = area.InternalOrder;
         public string Title { get; set; } = area.Title;
     }
