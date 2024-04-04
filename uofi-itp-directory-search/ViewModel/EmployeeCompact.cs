@@ -82,10 +82,10 @@ namespace uofi_itp_directory_search.ViewModel {
         public string Zip { get; set; } = "";
 
         public void TransferPrimaryOfficeAndTitle(string officeName) {
-            if (JobProfiles.Count == 1) {
-                _ = JobProfiles.RemoveAll(jp => jp.Office != officeName);
-                PrimaryOffice = JobProfiles.Single().Office;
-                PrimaryTitle = JobProfiles.Single().Title;
+            if (JobProfiles.Count > 1) {
+                JobProfiles = JobProfiles.Where(jp => jp.Office == officeName).ToList();
+                PrimaryOffice = JobProfiles.First().Office;
+                PrimaryTitle = JobProfiles.First().Title;
             }
         }
     }
