@@ -33,7 +33,7 @@ namespace uofi_itp_directory_data.DirectoryHook {
             if (entry == null) {
                 return new DirectoryEntry(0);
             }
-            var (successful, netId, results) = await SendHook(entry.EmployeeId);
+            var (successful, netId, results) = await SendHook(entry.EmployeeId, false);
             entry.DateRun = DateTime.Now;
             entry.LastUpdated = DateTime.Now;
             entry.IsSuccessful = successful;
@@ -43,9 +43,9 @@ namespace uofi_itp_directory_data.DirectoryHook {
             return entry;
         }
 
-        public async Task<(bool isSuccessful, string netid, string results)> SendHook(int employeeId) {
+        public async Task<(bool isSuccessful, string netid, string results)> SendHook(int employeeId, bool ignoreResults) {
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).SingleOrDefault(e => e.Id == employeeId));
-            return await SendHookPrivate(employee);
+            return await SendHookPrivate(employee, ignoreResults);
         }
 
         public async Task<(bool isSuccessful, string netid, string results)> SendHookToRemoveEmployee(int employeeId, string netId, int officeId) {
@@ -54,10 +54,10 @@ namespace uofi_itp_directory_data.DirectoryHook {
             var office = await _directoryRepository.ReadAsync(d => d.Offices.FirstOrDefault(o => o.Id == officeId));
             employee ??= new Employee { NetId = netId };
             employee.JobProfiles = office == null ? new List<JobProfile>() : new List<JobProfile> { new() { Office = office } };
-            return await SendHookPrivate(employee);
+            return await SendHookPrivate(employee, false);
         }
 
-        private async Task<(bool isSuccessful, string netid, string results)> SendHookPrivate(Employee? employee) {
+        private async Task<(bool isSuccessful, string netid, string results)> SendHookPrivate(Employee? employee, bool ignoreResults) {
             if (employee == null) {
                 return (false, "", "employee not found");
             }
@@ -71,18 +71,28 @@ namespace uofi_itp_directory_data.DirectoryHook {
                     var url = areaSettings?.UrlPeopleRefreshFullUrl.Replace(_netIdPlaceholder, netId).Replace(_sourcePlaceholder, areaSettings?.InternalCode) ?? "";
                     using var client = new HttpClient();
                     using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-                    using var res = await client.SendAsync(requestMessage);
-                    areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
-                    results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";
+                    if (ignoreResults) {
+                        _ = await client.SendAsync(requestMessage);
+                        results += $"{profile.Office.Title}: sent. ";
+                    } else {
+                        using var res = await client.SendAsync(requestMessage);
+                        areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
+                        results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";
+                    }
                 } else if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default && codesUsed.Contains(areaSettings?.InternalCode ?? "")) {
                     results += $"{profile.Office.Title}: {areaSettings?.InternalCode} already sent. ";
                 } else if (areaSettings?.UrlPeopleRefreshType == PeopleRefreshTypeEnum.Default) {
                     var url = _url.Replace(_netIdPlaceholder, netId).Replace(_sourcePlaceholder, areaSettings?.InternalCode) ?? "";
                     using var client = new HttpClient();
                     using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-                    using var res = await client.SendAsync(requestMessage);
-                    areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
-                    results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";
+                    if (ignoreResults) {
+                        _ = await client.SendAsync(requestMessage);
+                        results += $"{profile.Office.Title}: sent. ";
+                    } else {
+                        using var res = await client.SendAsync(requestMessage);
+                        areAllSuccessful = areAllSuccessful || res.IsSuccessStatusCode;
+                        results += $"{profile.Office.Title}: {await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? ""}. ";
+                    }
                 }
             }
             return (areAllSuccessful, netId, results);
