@@ -5,12 +5,14 @@ using System.Text.RegularExpressions;
 namespace uofi_itp_directory_data.DataModels {
 
     public class Employee : BaseDataItem {
+        public string AddressLine1 { get; set; } = "";
+        public string AddressLine2 { get; set; } = "";
         public string Biography { get; set; } = "";
         public string Building { get; set; } = "";
+        public string City { get; set; } = "";
         public string CVUrl { get; set; } = "";
         public virtual ICollection<EmployeeActivity> EmployeeActivities { get; set; } = default!;
         public virtual ICollection<EmployeeHour> EmployeeHours { get; set; } = default!;
-
         public string EmployeeHourText { get; set; } = "";
 
         [Key]
@@ -18,19 +20,20 @@ namespace uofi_itp_directory_data.DataModels {
         public override int Id { get; set; }
 
         [NotMapped]
-        public bool IsCurrentUser { get; set; } = false; // used by the code to determine if this user is this person
+        public bool IsCurrentUser { get; set; } = false;
 
         [NotMapped]
-        public bool IsEntryDisabled { get; set; } = true; // used by the code to determine if the user can edit this object
+        public bool IsEntryDisabled { get; set; } = true;
 
         public bool IsPhoneHidden { get; set; } = false;
 
+        // used by the code to determine if the user can edit this object
         public virtual ICollection<JobProfile> JobProfiles { get; set; } = default!;
 
+        // used by the code to determine if this user is this person
         public DateTime? LastRefreshed { get; set; }
 
         public string ListedNameFirst { get; set; } = "";
-
         public string ListedNameLast { get; set; } = "";
 
         [NotMapped]
@@ -54,16 +57,10 @@ namespace uofi_itp_directory_data.DataModels {
         [NotMapped]
         public string NetIdTruncated => NetId?.ToLowerInvariant().Replace("@illinois.edu", "").ToLowerInvariant() ?? "";
 
-        public string OfficeInformation { get; set; } = "";
-
         public string Phone { get; set; } = "";
-
         public string PhotoUrl { get; set; } = "";
-
         public string PreferredNameFirst { get; set; } = "";
-
         public string PreferredNameLast { get; set; } = "";
-
         public string PreferredPronouns { get; set; } = "";
 
         [NotMapped]
@@ -76,6 +73,9 @@ namespace uofi_itp_directory_data.DataModels {
 
         public string ProfileUrl { get; set; } = "";
         public string Room { get; set; } = "";
+        public string State { get; set; } = "";
+        public bool UsePrimaryOfficeAsAddress { get; set; } = false;
+        public string ZipCode { get; set; } = "";
 
         public string GenerateSignatureName() {
             if (string.IsNullOrWhiteSpace(PreferredNameFirst) && string.IsNullOrWhiteSpace(ListedNameFirst) && string.IsNullOrWhiteSpace(PreferredNameLast) && string.IsNullOrWhiteSpace(ListedNameLast)) {

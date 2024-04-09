@@ -29,8 +29,7 @@ namespace uofi_itp_directory_external.ProgramCourse {
                         Url = item.url,
                         Name = item.title
                     }).ToList();
-            } catch (Exception e) {
-                // _ = TeamLogger.Log($"Error getting program courses for username '{netid}': {e.Message}. {json}");
+            } catch {
                 return new List<Course>();
             }
         }

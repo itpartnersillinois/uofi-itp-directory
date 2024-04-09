@@ -15,8 +15,8 @@ namespace uofi_itp_directory_data.Helpers {
     $"{Set("role1", employee.PrimaryJobProfile.Title)}" +
     $"{Set("role2", "")}" +
     $"{Set("address1", employee.Room + " " + employee.Building)}" +
-    $"{Set("address2", employee.PrimaryJobProfile.Office.Address)}" +
-    $"{Set("cityStateZip", employee.PrimaryJobProfile.Office.City)}" +
+    $"{Set("address2", employee.AddressLine1)}" +
+    $"{Set("cityStateZip", string.IsNullOrWhiteSpace(employee.City) ? "" : employee.City + ", " + employee.State + " " + employee.ZipCode)}" +
     $"{Set("phone", employee.IsPhoneHidden ? "" : employee.Phone)}" +
     $"{Set("email", employee.NetId)}" +
     $"{Set("website1", employee.PrimaryJobProfile.Office.ExternalUrl)}" +
