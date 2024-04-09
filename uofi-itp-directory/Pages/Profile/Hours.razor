@@ -8,19 +8,11 @@
         <h1>@Employee.ProfileName Hours</h1>
         <p>Edit office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM". If working in more than one office, please select ‘other’ and clarify which office for the day.</p>
     </il-section>
-    <h2>Office Location</h2>
-    <div class="iled-input-box-parent">
-        <div class="iled-input-box">
-            <label for="ed-room">Room and Building</label>
-            <input id="ed-room" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.OfficeInformation">
-        </div>
-    </div>
 
-    <h2>Office Hours</h2>
     foreach (var officeHour in Employee.EmployeeHours)
     {
         <div class="iled-hours-parent">
-            <h3>@officeHour.Day</h3>
+            <h2>@officeHour.Day</h2>
             <div class="iled-hours-time">
                 <label for="ed-date-from-@officeHour.DayNumeric" class="iled-sr-only">From </label>
                 <input id="ed-date-from-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.Start">

@@ -26,18 +26,18 @@
                     <input autocomplete="given-name" id="ed-firstname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameFirst">
             </div>
             <div class="iled-instructions">
-                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
+                You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-lastname">Last Name</label>
-                    <input autocomplete="family-name" id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
+                <input autocomplete="family-name" id="ed-lastname" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.PreferredNameLast">
             </div>
-                <div class="iled-instructions">
-                    You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
-                </div>
+            <div class="iled-instructions">
+                You may <a href="https://go.uillinois.edu/myprofile">edit this in the My UI Info</a> and it will update your directory information as well. If blank, we are pulling your information from My UI Info.
             </div>
+        </div>
     </div>
     <h3>Preferred Pronouns</h3>
     <div class="iled-section-split">
@@ -63,26 +63,17 @@
             </div>
         </div>
     </div>
-    <h3>Phone Number</h3>
-    <p>Phone numbers <a href="https://go.uillinois.edu/myprofile">can be edited in the My UI Info</a></p>
-    <div class="iled-input-box-parent">
-        <div class="iled-input-box">
-            <label for="ed-hidephone">Hide Phone Number</label>
-            <input id="ed-hidephone" type="checkbox" disabled="@Employee.IsEntryDisabled" @bind="Employee.IsPhoneHidden">
-        </div>
-    </div>
-
     <h3>Job Title(s)</h3>
     @foreach (var profile in Employee.JobProfiles)
     {
-            @if (Employee.JobProfiles.Count > 1 && profile.OfficeId == Employee.PrimaryJobProfile.OfficeId)
-            {
-                <h4>@profile.Office.Title (primary)</h4>
-            } else
-            {
-                <h4>@profile.Office.Title</h4>
-            }
-            <div class="iled-section-split">
+        @if (Employee.JobProfiles.Count > 1 && profile.OfficeId == Employee.PrimaryJobProfile.OfficeId)
+        {
+            <h4>@profile.Office.Title (primary)</h4>
+        } else
+        {
+            <h4>@profile.Office.Title</h4>
+        }
+        <div class="iled-section-split">
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-title-@profile.Id">Title</label>
@@ -118,12 +109,77 @@
                 Profiles are normally listed in alphabetical order. This allows an administrator to manually change the order of the profile. 
             </div>
         </div>
-        }
-        <div class="iled-buttons-left">
-            <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
-            <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+    }
+        <h3>Office Address and Phone Number</h3>
+        <p>This information <a href="https://go.uillinois.edu/myprofile">can also be edited in the My UI Info</a>. If this information is left blank, it will use the My UI Info.</p>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-room">Room Number</label>
+                    <input id="ed-room" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.Room">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-building">Building</label>
+                    <input id="ed-building" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.Building">
+                </div>
+            </div>
         </div>
-        <ToastPopup></ToastPopup>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-address1">Address Line 1</label>
+                <input id="ed-address1" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.AddressLine1">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-address2">Address Line 2</label>
+                <input id="ed-address2" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.AddressLine2">
+            </div>
+        </div>
+        <div class="iled-section-split-3">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-city">City</label>
+                    <input id="ed-city" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.City">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-state">State</label>
+                    <input id="ed-state" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.State">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-zipcode">Zip Code</label>
+                    <input id="ed-zipcode" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.ZipCode">
+                </div>
+            </div>
+        </div>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-phone">Phone Number</label>
+                    <input id="ed-phone" type="text" disabled="@Employee.IsEntryDisabled" @bind="Employee.Phone">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-hidephone">Hide Phone Number</label>
+                    <input id="ed-hidephone" type="checkbox" disabled="@Employee.IsEntryDisabled" @bind="Employee.IsPhoneHidden">
+                </div>
+                <div class="iled-instructions">
+                    This will allow you to not display your phone number even if it is <a href="https://go.uillinois.edu/myprofile">listed in My UI Info</a>.
+                </div>
+            </div>
+        </div>
+        <div class="iled-buttons-left">
+        <button class="il-button" @onclick="Send" disabled="@Employee.IsEntryDisabled" @onblur="RemoveMessage">Save</button>
+        <ViewProfile NetId="@Employee.NetId"></ViewProfile>
+    </div>
+    <ToastPopup></ToastPopup>
 
 </il-section>
 }

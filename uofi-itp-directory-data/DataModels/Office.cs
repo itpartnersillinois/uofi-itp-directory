@@ -50,6 +50,7 @@ namespace uofi_itp_directory_data.DataModels {
         public OfficeTypeEnum OfficeType { get; set; }
         public string Phone { get; set; } = "";
         public string Room { get; set; } = "";
+        public string State { get; set; } = "";
         public IEnumerable<AreaTag> Tags { get; set; } = default!;
         public string TicketUrl { get; set; } = "";
         public string Title { get; set; } = "";

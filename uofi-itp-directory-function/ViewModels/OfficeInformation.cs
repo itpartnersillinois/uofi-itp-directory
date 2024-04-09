@@ -4,7 +4,7 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory_function.ViewModels {
 
     public class OfficeInformation(Office office) {
-        public string Address { get; set; } = string.IsNullOrWhiteSpace(office.City) || string.IsNullOrWhiteSpace(office.ZipCode) ? office.Address : $"{office.Address}, {office.City}, IL {office.ZipCode}";
+        public string Address { get; set; } = string.IsNullOrWhiteSpace(office.City) || string.IsNullOrWhiteSpace(office.ZipCode) ? office.Address : $"{office.Address}, {office.City}, {(string.IsNullOrWhiteSpace(office.State) ? "IL" : office.State)} {office.ZipCode}";
 
         public string Area { get; set; } = office.Area.Title;
 
@@ -39,6 +39,8 @@ namespace uofi_itp_directory_function.ViewModels {
         public int Priority { get; set; } = office.InternalOrder;
 
         public string Room { get; set; } = office.Room;
+
+        public string State { get; set; } = office.State;
 
         public string StreetAddress { get; set; } = office.Address;
 
