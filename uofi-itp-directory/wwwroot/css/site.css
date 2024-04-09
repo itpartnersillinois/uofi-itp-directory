@@ -249,6 +249,12 @@ div.iled-section-split {
     column-gap: 40px;
 }
 
+div.iled-section-split-3 {
+    display: grid;
+    grid-template-columns: calc(60% - 20px) calc(20% - 40px) calc(20% - 20px);
+    column-gap: 40px;
+}
+
 div.iled-section-split-25 {
     display: grid;
     grid-template-columns: calc(25% - 30px) calc(25% - 30px) calc(25% - 30px) calc(25% - 30px);

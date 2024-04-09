@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uofi_itp_directory_data.Data;
 
@@ -11,9 +12,11 @@ using uofi_itp_directory_data.Data;
 namespace uofi_itp_directory_data.Migrations
 {
     [DbContext(typeof(DirectoryContext))]
-    partial class DirectoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240409145115_UpdateOfficeLocationData")]
+    partial class UpdateOfficeLocationData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -639,10 +642,6 @@ namespace uofi_itp_directory_data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("TicketUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -792,7 +791,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 4, 9, 16, 14, 53, 302, DateTimeKind.Local).AddTicks(3346),
+                            LastUpdated = new DateTime(2024, 4, 9, 9, 51, 14, 379, DateTimeKind.Local).AddTicks(9660),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -804,7 +803,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 4, 9, 16, 14, 53, 302, DateTimeKind.Local).AddTicks(3504),
+                            LastUpdated = new DateTime(2024, 4, 9, 9, 51, 14, 379, DateTimeKind.Local).AddTicks(9790),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

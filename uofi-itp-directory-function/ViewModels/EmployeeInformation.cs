@@ -4,9 +4,13 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory_function.ViewModels {
 
     public class EmployeeInformation(JobProfile profile) {
+        public string AddressLine1 { get; set; } = profile.EmployeeProfile.AddressLine1 ?? string.Empty;
+        public string AddressLine2 { get; set; } = profile.EmployeeProfile.AddressLine2 ?? string.Empty;
+
         public string Biography { get; set; } = profile.EmployeeProfile.Biography ?? string.Empty;
         public string Building { get; set; } = profile.EmployeeProfile.Building ?? string.Empty;
         public string Category { get; set; } = profile.Category.ToPrettyString();
+        public string City { get; set; } = profile.EmployeeProfile.City ?? string.Empty;
         public string CVUrl { get; set; } = profile.EmployeeProfile.CVUrl ?? string.Empty;
         public string Email { get; set; } = profile.EmployeeProfile.NetId ?? string.Empty;
         public IEnumerable<EmployeeActivityInformation> EmployeeActivityInformation { get; set; } = profile.EmployeeProfile.EmployeeActivities.OrderBy(eh => eh.Type).ThenBy(eh => eh.InternalOrder).Select(ea => new EmployeeActivityInformation(ea));
@@ -25,6 +29,8 @@ namespace uofi_itp_directory_function.ViewModels {
         public string PreferredPronouns { get; set; } = profile.EmployeeProfile.PreferredPronouns ?? string.Empty;
         public string ProfileUrl { get; set; } = profile.EmployeeProfile.ProfileUrl ?? string.Empty;
         public string Room { get; set; } = profile.EmployeeProfile.Room ?? string.Empty;
+        public string State { get; set; } = profile.EmployeeProfile.State ?? string.Empty;
         public string Title { get; set; } = profile.Title ?? string.Empty;
+        public string Zip { get; set; } = profile.EmployeeProfile.ZipCode ?? string.Empty;
     }
 }

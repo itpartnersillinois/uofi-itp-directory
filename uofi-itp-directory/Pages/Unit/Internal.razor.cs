@@ -46,7 +46,7 @@ namespace uofi_itp_directory.Pages.Unit {
 
         private bool _originalAllowAccess { get; set; }
 
-        private string _originalUrlProfile { get; set; }
+        private string _originalUrlProfile { get; set; } = "";
 
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;
