@@ -17,25 +17,6 @@
     Yes! This works in conjunction with the <a href="https://directoryapi.itpartners.illinois.edu/api/swagger/ui">Directory API</a>. This is an API that can get unit, office, and basic profile information. It also has a hook that trigger a faculty load. The faculty load integrates with Illinois Experts, EDW, and course information from various repositories. There are plans to add additional functionality to allow colleges to load their own information about their faculty. Because this load is potentially destructive, we will need to create a custom key. This key will be distributed to outside applications for their custom loads.
 </p>
 
-<h2>How do I create a directory?</h2>
-<p>The easiest way is to do the following:</p>
-<ol>
-    <li>Claim your unit. <a href="https://go.illinois.edu/itpartners-directory-help">Contact us to ask to be a unit administrator for your unit</a>.</li>
-    <li>Under <em>Unit Information</em> -- <em>Links to Pull Information</em>, add an Internal Code. Save your changes. </li>
-    <li>Under <em>Unit Information</em> -- <em>Internal Information</em>, change Profile Information to Full Access.</li>
-    <li>(Optional step) Change the <strong>Profile Url</strong> to where you are going to have your profile be at.</li>
-    <li>Change the <strong>Profile Refresh Options</strong> to Default Faculty Load</li>
-    <li>Ensure the <strong>Auto-load profiles to directory hook</strong> checkbox is checked.</li>
-    <li>Save your changes.</li>
-    <li>Build out your offices and profile information.</li>
-</ol>
-
-<p>Once you have done this, any people you add to your offices will be automatically loaded to the faculty load using the unique ID you specified in step 2. You can add JavaScript to create profiles based on this from any CMS. People will be automatically loaded once they save information in their profile in this application, and we run full refreshes every day. If someone's name is removed from EDW or the profile list here, their information is removed from the directory.</p>
-
-<p>If you have another system that loads your faculty information, you can trigger that in step 5 instead of using the Default Faculty Load.</p>
-
-<p>If you don't have the IT staff to build out a JavaScript profile, we can help you with this. We are working with WIGG and the WCOE to create standard profiles.</p>
-
 <h2>How do I see the code?</h2>
 
 <p>Go to our <a href="https://github.com/itpartnersillinois/uofi-itp-directory">GitHub repository</a>.</p>

@@ -76,7 +76,7 @@ namespace uofi_itp_directory_function {
         public async Task<IActionResult> GetAreaCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Area/Code/{code}")] HttpRequest req, string code) {
             var officeTypes = req.GetOfficesTypes();
             return new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Areas
-                .Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
+                .Include(a => a.AreaSettings).Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && a.AreaSettings.InternalCode == code)
                 .Select(a => new AreaInformation(a, false, officeTypes)).ToList().Where(a => a.Offices.Any()).FirstOrDefault()));

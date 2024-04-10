@@ -55,7 +55,7 @@ namespace uofi_itp_directory.Pages.Offices {
                 } else {
                     Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursIncludeHolidayMessage);
                     foreach (var officeHour in OfficeHours) {
-                        _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
+                        _ = await OfficeHelper.UpdateOfficeHour(officeHour, Office.Title, await AuthenticationStateProvider.GetUser());
                     }
                     _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
@@ -64,15 +64,6 @@ namespace uofi_itp_directory.Pages.Offices {
         }
 
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
-
-        public async Task Send() {
-            foreach (var officeHour in OfficeHours) {
-                _ = await OfficeHelper.UpdateOfficeHour(officeHour, await AuthenticationStateProvider.GetUser());
-            }
-            _ = await OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
-            StateHasChanged();
-        }
 
         protected override async Task OnInitializedAsync() {
             var cachedAreaThinObject = CacheHelper.GetCachedOffice(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder);
