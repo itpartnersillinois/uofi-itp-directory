@@ -24,12 +24,12 @@ namespace uofi_itp_directory_data.DataAccess {
             }
             var securityEntry = new SecurityEntry(netid, name.FirstName, name.LastName, areaId, officeId, editOtherPeople);
             _ = await _directoryRepository.CreateAsync(securityEntry);
-            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Created security item", "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Created security item", securityEntry?.ToString() ?? "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
             return (securityEntry, $"User '{name.Name}' created");
         }
 
         public async Task<int> Delete(SecurityEntry? securityEntry, string changedByNetId) {
-            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Deleted security item", "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Deleted security item", securityEntry?.ToString() ?? "", securityEntry?.Id ?? 0, securityEntry?.Email ?? "");
             return await _directoryRepository.DeleteAsync(securityEntry);
         }
 
@@ -52,7 +52,7 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<int> Update(SecurityEntry securityEntry, string changedByNetId) {
-            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Updated security item", "", securityEntry.Id, securityEntry.Email);
+            _ = await _logHelper.CreateSecurityLog(changedByNetId, "Updated security item", securityEntry.ToString(), securityEntry.Id, securityEntry.Email);
             return await _directoryRepository.UpdateAsync(securityEntry);
         }
     }

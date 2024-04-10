@@ -54,7 +54,7 @@ namespace uofi_itp_directory_data.DataAccess {
             employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);
             var returnValue = await _directoryRepository.UpdateAsync(employee);
             _ = await _directoryHookHelper.SendHook(employee.Id, true);
-            _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, "", employee.Id, employee.NetId);
+            _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, employee.ToString(), employee.Id, employee.NetId);
             return returnValue;
         }
 

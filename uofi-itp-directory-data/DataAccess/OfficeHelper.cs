@@ -44,27 +44,29 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<OfficeSettings> GetOfficeSettingsById(int officeId) => await _directoryRepository.ReadAsync(d => d.OfficeSettings.Single(o => o.OfficeId == officeId));
 
+        public async Task<bool> IsCodeUsed(string officeCode) => await _directoryRepository.ReadAsync(d => d.OfficeSettings.Any(a => a.InternalCode == officeCode));
+
         public async Task<int> RemoveOffice(Office office, string changedByNetId) {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.OfficeId == office.Id))) {
                 _directoryRepository.Delete(securityEntry);
             }
             office.Admins = Array.Empty<SecurityEntry>();
-            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Removed office", "", office.Id, office.Title);
+            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Removed office", office.ToString(), office.Id, office.Title);
             return await _directoryRepository.DeleteAsync(office);
         }
 
         public async Task<int> UpdateOffice(Office office, string changedByNetId) {
-            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office", "", office.Id, office.Title);
+            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office", office.ToString(), office.Id, office.Title);
             return await _directoryRepository.UpdateAsync(office);
         }
 
-        public async Task<int> UpdateOfficeHour(OfficeHour office, string changedByNetId) {
-            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office hour", "", office.OfficeId, "");
+        public async Task<int> UpdateOfficeHour(OfficeHour office, string officeName, string changedByNetId) {
+            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office hour", office.ToString(), office.OfficeId, officeName);
             return await _directoryRepository.UpdateAsync(office);
         }
 
         public async Task<int> UpdateOfficeSettings(OfficeSettings office, string officeName, string changedByNetId) {
-            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office settings", "", office.OfficeId, officeName);
+            _ = await _logHelper.CreateOfficeLog(changedByNetId, "Changed office settings", office.ToString(), office.OfficeId, officeName);
             return await _directoryRepository.UpdateAsync(office);
         }
     }

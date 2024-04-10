@@ -52,17 +52,17 @@ namespace uofi_itp_directory_data.DataAccess {
                 _ = _directoryRepository.Delete(securityEntry);
             }
             area.Admins = Array.Empty<SecurityEntry>();
-            _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", "", area.Id, area.Title);
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", area.ToString(), area.Id, area.Title);
             return await _directoryRepository.DeleteAsync(area);
         }
 
         public async Task<int> UpdateArea(Area area, string changedByNetId) {
-            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area", "", area.Id, area.Title);
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area", area.ToString(), area.Id, area.Title);
             return await _directoryRepository.UpdateAsync(area);
         }
 
         public async Task<int> UpdateAreaSettings(AreaSettings area, string areaName, string changedByNetId) {
-            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area settings", "", area.AreaId, areaName);
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Changed area settings", area.ToString(), area.AreaId, areaName);
             return await _directoryRepository.UpdateAsync(area);
         }
     }
