@@ -54,7 +54,7 @@ namespace uofi_itp_directory_data.DataAccess {
             var job = _directoryRepository.Read(d => d.JobProfiles.Single(jp => jp.Id == jobProfileId));
             var officeId = job.OfficeId;
             var returnValue = await _directoryRepository.DeleteAsync(job);
-            _ = await _logHelper.CreateProfileLog(changedByNetId, "Removed Profile", "", employeeId, employeeNetId);
+            _ = await _logHelper.CreateProfileLog(changedByNetId, "Removed Profile", job.ToString(), employeeId, employeeNetId);
             _ = await _directoryHookHelper.SendHookToRemoveEmployee(employeeId, employeeNetId, officeId);
             return returnValue;
         }

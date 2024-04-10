@@ -45,8 +45,12 @@ namespace uofi_itp_directory.Pages.Offices {
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
         public async Task Send() {
-            _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+            if (await OfficeHelper.IsCodeUsed(OfficeSettings.InternalCode)) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Office code {OfficeSettings.InternalCode} already used - please choose another");
+            } else {
+                _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+            }
             StateHasChanged();
         }
 

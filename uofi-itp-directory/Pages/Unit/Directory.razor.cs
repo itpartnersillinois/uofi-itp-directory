@@ -46,7 +46,7 @@ namespace uofi_itp_directory.Pages.Unit {
 
         public async Task Send() {
             if (await AreaHelper.IsCodeUsed(AreaSettings.InternalCode)) {
-                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Area code {AreaSettings.InternalCode} already used");
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Area code {AreaSettings.InternalCode} already used - please choose another");
             } else {
                 _ = await AreaHelper.UpdateAreaSettings(AreaSettings, Area.Title, await AuthenticationStateProvider.GetUser());
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Directory settings updated");
