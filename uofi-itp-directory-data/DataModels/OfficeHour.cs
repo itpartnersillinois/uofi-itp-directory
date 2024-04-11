@@ -55,7 +55,7 @@ namespace uofi_itp_directory_data.DataModels {
         public string StartTime { get; set; } = "";
 
         public void SetNotes(LocationTypeEnum locationType) {
-            Notes = LocationMapping.ContainsValue(locationType) ? LocationMapping.First(lm => lm.Value == locationType).Key : "";
+            Notes = LocationMapping.ContainsValue(locationType) ? LocationMapping.First(lm => lm.Value == locationType).Key : "Other";
         }
     }
 }

@@ -21,10 +21,9 @@ namespace uofi_itp_directory_external.DataWarehouse {
             using var content = res.Content;
             var json = content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<dynamic>(json);
-            if (data == null) {
-            }
             var information = data?.list[0];
-            return new DataWarehouseItem() {
+            var informationString = information?.ToString() ?? "";
+            return information?.Count == 0 || string.IsNullOrWhiteSpace(informationString) || informationString == "{}" ? new DataWarehouseItem() : new DataWarehouseItem() {
                 NetId = information?.netIds[0].netId ?? "",
                 FirstName = information?.name?.firstName?.ToString() ?? string.Empty,
                 LastName = information?.name?.lastName?.ToString() ?? string.Empty,
