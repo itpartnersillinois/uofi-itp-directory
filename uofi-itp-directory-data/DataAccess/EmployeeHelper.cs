@@ -7,11 +7,25 @@ using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory_data.DataAccess {
 
-    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, EmployeeAreaHelper employeeAreaHelper, LogHelper logHelper) {
+    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, DirectoryContext directoryContext, EmployeeAreaHelper employeeAreaHelper, LogHelper logHelper) {
+        private readonly DirectoryContext _directoryContext = directoryContext;
         private readonly DirectoryHookHelper _directoryHookHelper = directoryHookHelper;
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly EmployeeAreaHelper _employeeAreaHelper = employeeAreaHelper;
         private readonly LogHelper _logHelper = logHelper;
+
+        public async Task<int> DeleteEmployee(string netId) {
+            var returnValue = 0;
+            var employeeId = (await _directoryRepository.ReadAsync(d => d.Employees.FirstOrDefault(e => e.NetId == netId)))?.Id ?? 0;
+            if (employeeId != 0) {
+                _ = await _directoryContext.EmployeeActivities.Where(e => e.EmployeeId == employeeId).ExecuteDeleteAsync();
+                _ = await _directoryContext.JobProfiles.Where(e => e.EmployeeProfileId == employeeId).ExecuteDeleteAsync();
+                _ = await _directoryContext.EmployeeHours.Where(e => e.EmployeeId == employeeId).ExecuteDeleteAsync();
+                returnValue = await _directoryContext.Employees.Where(e => e.Id == employeeId).ExecuteDeleteAsync();
+                _ = await _directoryRepository.CreateAsync(new Log { IsActive = true, SubjectType = LogTypeEnum.Employee, SubjectId = employeeId, SubjectText = netId, ChangedByNetId = "automated", ChangeType = "Deleted", Data = "NetID is removed from EDW" });
+            }
+            return returnValue;
+        }
 
         public async Task<Employee?> GetEmployee(int? id, string name) {
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
