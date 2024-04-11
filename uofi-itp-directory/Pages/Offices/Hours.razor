@@ -23,6 +23,9 @@ else if (OfficeHours != null)
                 <input id="ed-date-to-@officeHour.DayNumeric" type="time" @bind="@officeHour.End">
             </div>
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
+                <input id="ed-date-location-none-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
+                       name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.None))" />
+                <label for="ed-date-location-none-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
                 <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
