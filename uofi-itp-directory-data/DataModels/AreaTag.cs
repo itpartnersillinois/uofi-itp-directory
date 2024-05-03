@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace uofi_itp_directory_data.DataModels {
 
     public class AreaTag : BaseDataItem {
+        public bool AllowEmployeeToEdit { get; set; }
         public int AreaId { get; set; }
 
         [Key]

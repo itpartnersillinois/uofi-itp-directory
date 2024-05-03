@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -11,16 +10,15 @@ using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory.Pages.Unit {
 
-    public partial class General {
-        private bool _isDirty = false;
-        protected void SetDirty() => _isDirty = true;
-
+    public partial class Tags {
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
-        public Area Area { get; set; } = default!;
 
-        [SupplyParameterFromQuery(Name = "back")]
-        public string? ShowBackButton { get; set; }
+        public List<AreaTag>? AreaTags { get; set; } = null;
+
+        public bool NewTagEditable { get; set; }
+
+        public string NewTagName { get; set; } = "";
 
         [Parameter]
         public int? UnitId { get; set; }
@@ -45,23 +43,35 @@ namespace uofi_itp_directory.Pages.Unit {
         public async Task AssignId() {
             UnitId = _multiChoice?.SelectedId;
             UnitTitle = _multiChoice?.SelectedTitle ?? "";
-            await AssignTextFields();
+            await Assign();
         }
 
         public async Task RemoveMessage() => _ = await JsRuntime.InvokeAsync<bool>("removeAlertOnScreen");
 
+        public async Task RemoveTag(AreaTag tag) {
+            if (await JsRuntime.InvokeAsync<bool>("confirm", $"You are removing the tag {tag.Title} from the system. Job profiles will still have the tag and need to be removed independently. Are you really sure you want to do this?")) {
+                _ = await AreaHelper.RemoveTag(tag, await AuthenticationStateProvider.GetUser(), UnitTitle);
+                AreaTags?.Remove(tag);
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag removed");
+                StateHasChanged();
+            }
+        }
+
         public async Task Send() {
-            _ = await AreaHelper.UpdateArea(Area, await AuthenticationStateProvider.GetUser());
-            _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
-            _isDirty = false;
+            if (string.IsNullOrWhiteSpace(NewTagName)) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag name needs to be filled out");
+            } else {
+                var tag = await AreaHelper.AddTagToArea(UnitId.HasValue ? UnitId.Value : 0, NewTagName, NewTagEditable, await AuthenticationStateProvider.GetUser(), UnitTitle);
+                AreaTags?.Add(tag);
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag added");
+                NewTagEditable = false;
+                NewTagName = "";
+            }
             StateHasChanged();
         }
-        private async Task LocationChangingHandler(LocationChangingContext arg) {
-            if (_isDirty) {
-                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
-                    arg.PreventNavigation();
-                }
-            }
+
+        protected async Task Assign() {
+            AreaTags = await AreaHelper.GetAreaTagsByAreaId(UnitId);
         }
 
         protected override async Task OnInitializedAsync() {
@@ -69,16 +79,14 @@ namespace uofi_itp_directory.Pages.Unit {
             if (cachedAreaThinObject != null) {
                 UnitId = cachedAreaThinObject.Id;
                 UnitTitle = cachedAreaThinObject.Title;
-                await AssignTextFields();
+                await Assign();
             }
             _areaThinObjects = await AccessHelper.GetAreas(await AuthenticationStateProvider.GetAuthenticationStateAsync(), PersonOptionHelper);
             if (_areaThinObjects.IsSingle()) {
                 UnitId = _areaThinObjects.Single().Id;
                 UnitTitle = _areaThinObjects.Single().Title;
-                await AssignTextFields();
+                await Assign();
             }
         }
-
-        private async Task AssignTextFields() => Area = await AreaHelper.GetAreaById(UnitId, await AuthenticationStateProvider.GetUser());
     }
 }

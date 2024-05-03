@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -11,6 +12,7 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Headshot {
+        private bool _isDirty = false;
         public Employee? Employee { get; set; } = default!;
 
         public int Height { get; set; }
@@ -44,6 +46,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void DeleteImage() {
             if (Employee != null && ImageUploader != null) {
                 Employee.PhotoUrl = "";
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -53,6 +56,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void SaveImage() {
             if (Employee != null && ImageUploader != null) {
                 Employee.PhotoUrl = ImageUploader.FileUrl;
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -63,6 +67,7 @@ namespace uofi_itp_directory.Pages.Profile {
                     Employee.PhotoUrl = ImageUploader.FileUrl;
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Headshot");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+                    _isDirty = false;
                 }
             }
         }
@@ -82,5 +87,13 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

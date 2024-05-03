@@ -1,7 +1,7 @@
 ﻿@page "/office/internal/{officeid:int?}"
 
-<PageTitle>Office Internal | UIUC</PageTitle>
-
+<PageTitle>Office Internal | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 <il-section>
     <h1>@OfficeTitle Internal</h1>
     <p>Edit your office’s general information below.</p>
@@ -15,7 +15,7 @@ else if (Office != null)
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
             <label for="ed-internalnotes">Internal Notes</label>
-            <textarea id="ed-internalnotes" @bind="OfficeSettings.InternalNotes"></textarea>
+            <textarea id="ed-internalnotes" @bind="OfficeSettings.InternalNotes" @bind:after="SetDirty"></textarea>
         </div>
         <div class="iled-instructions">
             Internal notes are used to keep track of information about this office and are not exposed to the end user. 
@@ -25,7 +25,7 @@ else if (Office != null)
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
             <label for="ed-location">Publishing Location</label>
-            <select id="ed-location" @bind="PublishingLocation">
+            <select id="ed-location" @bind="PublishingLocation" @bind:after="SetDirty">
                 <option value="0">Do not show but allow people to be added</option>
                 <option value="1">Publish to site</option>
                 <option value="2">Publish to site and helpdesk</option>
@@ -43,7 +43,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-internalorder">Order</label>
-                <select id="ed-internalorder" @bind="Office.InternalOrder">
+                <select id="ed-internalorder" @bind="Office.InternalOrder" @bind:after="SetDirty">
                     <option value="1">Top in List</option>
                     <option value="3">Middle / Default</option>
                     <option value="5">Bottom in List</option>

@@ -1,6 +1,7 @@
 ﻿@page "/profile/biography/{refresh?}"
 
-<PageTitle>Profile Biography | UIUC</PageTitle>
+<PageTitle>Profile Biography | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=true />
 @if (Employee != null)
 {
     <il-section>

@@ -1,5 +1,5 @@
 ﻿<div class="iled-section-vertical">
-    @if (!IsDisabled)
+    @if (!IsDisabled && string.IsNullOrWhiteSpace(FileUrl))
     {
         <div class="iled-input-box-parent">
             <div class="iled-input-box">

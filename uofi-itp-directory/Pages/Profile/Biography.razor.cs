@@ -1,6 +1,7 @@
 ﻿using Blazored.TextEditor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory_data.Cache;
@@ -15,6 +16,7 @@ namespace uofi_itp_directory.Pages.Profile {
         private BlazoredTextEditor? QuillBiography = default!;
 
         public string BiographyText { get; set; } = "";
+
         public Employee? Employee { get; set; } = default!;
 
         public bool HideQuillInformationForUpdates { get; set; } = false;
@@ -66,5 +68,13 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (QuillBiography != null && await QuillBiography.GetHTML() != Employee?.Biography) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@
     }
 
     public enum OfficeTypeEnum {
-        Unlisted, General, Information_Technology, Human_Resources, Finance, Facilities, Academic, Student_Support, Research, Business_Operations, Communications, Marketing, Advancement, Community_Engagement, Custom_1, Custom_2, Custom_3, Custom_4, Other = 99
+        Unlisted, General, Information_Technology, Human_Resources, Finance, Facilities, Academic, Student_Support, Research, Business_Operations, Communications, Marketing, Advancement, Administration, Community_Engagement, Custom_1, Custom_2, Custom_3, Custom_4, Other = 99
     }
 
     public enum PeopleRefreshTypeEnum {

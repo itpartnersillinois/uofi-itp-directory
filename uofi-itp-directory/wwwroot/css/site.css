@@ -265,6 +265,10 @@ div.iled-section-split-25 {
     margin: 20px 0 5px 0;
 }
 
+    .iled-input-box-parent.iled-input-box-buttons button {
+        width: 100%;
+    }
+
 /* Form Information to replace ils- code */
 .iled-input-box {
     display: flex;

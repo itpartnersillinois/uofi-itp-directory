@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uofi_itp_directory_data.Data;
 
@@ -11,9 +12,11 @@ using uofi_itp_directory_data.Data;
 namespace uofi_itp_directory_data.Migrations
 {
     [DbContext(typeof(DirectoryContext))]
-    partial class DirectoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240503182003_PhaseTwo")]
+    partial class PhaseTwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -469,10 +472,6 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("EmployeeProfileId")
                         .HasColumnType("int");
 
@@ -508,9 +507,6 @@ namespace uofi_itp_directory_data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("AllowEmployeeToEdit")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -813,7 +809,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 3, 15, 46, 33, 872, DateTimeKind.Local).AddTicks(7671),
+                            LastUpdated = new DateTime(2024, 5, 3, 13, 20, 2, 900, DateTimeKind.Local).AddTicks(9265),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -825,7 +821,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 3, 15, 46, 33, 872, DateTimeKind.Local).AddTicks(7818),
+                            LastUpdated = new DateTime(2024, 5, 3, 13, 20, 2, 900, DateTimeKind.Local).AddTicks(9383),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

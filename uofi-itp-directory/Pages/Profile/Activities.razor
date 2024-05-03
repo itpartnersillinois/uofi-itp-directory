@@ -1,6 +1,7 @@
 ﻿@page "/profile/activities/{refresh?}"
 
-<PageTitle>Profile Activities | UIUC</PageTitle>
+<PageTitle>Profile Activities | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 @if (Employee != null)
 {
     <il-section>

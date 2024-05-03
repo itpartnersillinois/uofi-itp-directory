@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -38,6 +39,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void DeleteDocument() {
             if (Employee != null && DocumentUploader != null) {
                 Employee.CVUrl = "";
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -47,6 +49,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void SaveDocument() {
             if (Employee != null && DocumentUploader != null) {
                 Employee.CVUrl = DocumentUploader.FileUrl;
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -57,6 +60,7 @@ namespace uofi_itp_directory.Pages.Profile {
                     Employee.CVUrl = DocumentUploader.FileUrl;
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "CV Updated");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+                    _isDirty = false;
                 }
             }
         }
@@ -68,6 +72,16 @@ namespace uofi_itp_directory.Pages.Profile {
                 throw new Exception("No employee");
             }
             Instructions = await EmployeeAreaHelper.CvInstructions(Employee.NetId);
+        }
+
+        private bool _isDirty = false;
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();

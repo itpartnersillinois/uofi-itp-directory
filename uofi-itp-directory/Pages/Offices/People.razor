@@ -1,6 +1,6 @@
 ﻿@page "/office/people/{officeid:int?}"
 
-<PageTitle>Office People | UIUC</PageTitle>
+<PageTitle>Office People | Illinois</PageTitle>
 
 <il-section>
     <h1>@OfficeTitle People</h1>
@@ -30,8 +30,8 @@ else if (JobProfiles != null)
         </div>
     </div>
     <div class="iled-buttons-left">
-    <button class="il-button" @onclick="Edit">Edit Employee</button>
-    <button class="il-button il-orange" @onclick="Remove">Remove Profile</button>
+        <button class="il-button" disabled="@IsPersonDisabled" @onclick="Edit">Edit Employee</button>
+        <button class="il-button il-orange" disabled="@IsPersonDisabled" @onclick="Remove">Remove Profile</button>
     </div>
 
     <div class="iled-section-split iled-margin-top">

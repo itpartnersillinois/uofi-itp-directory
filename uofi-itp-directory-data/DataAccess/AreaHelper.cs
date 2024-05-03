@@ -11,6 +11,13 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
+        public async Task<AreaTag> AddTagToArea(int areaId, string title, bool allowEmployee, string changedByNetId, string areaTitle) {
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Added area tag", title, areaId, areaTitle);
+            var newTag = new AreaTag { AreaId = areaId, AllowEmployeeToEdit = allowEmployee, IsActive = true, LastUpdated = DateTime.Now, Title = title };
+            _ = await _directoryRepository.CreateAsync(newTag);
+            return newTag;
+        }
+
         public async Task<(string, Area?)> GenerateArea(string unitname, string netid, string changedByNetId) {
             var checkExistingArea = await _directoryRepository.ReadAsync(a => a.Areas.FirstOrDefault(a => a.Title == unitname));
             if (checkExistingArea != null)
@@ -43,6 +50,8 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<AreaSettings> GetAreaSettingsBySource(string source) => await _directoryRepository.ReadAsync(d => d.AreaSettings.SingleOrDefault(a => a.InternalCode == source)) ?? new();
 
+        public async Task<List<AreaTag>> GetAreaTagsByAreaId(int? areaId) => [.. (await _directoryRepository.ReadAsync(d => d.AreaTags.Where(a => a.AreaId == areaId).OrderBy(a => a.Title)))];
+
         public async Task<List<Office>> GetOfficesBySource(string source, IEnumerable<string> offices) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Include(a => a.Area).ThenInclude(a => a.Offices).SingleOrDefault(a => a.InternalCode == source)?.Area.Offices.Where(o => o.IsActive && (!offices.Any() || offices.Contains(o.Title))).ToList()) ?? [];
 
         public async Task<bool> IsCodeUsed(string areaCode) => await _directoryRepository.ReadAsync(d => d.AreaSettings.Any(a => a.InternalCode == areaCode));
@@ -51,9 +60,14 @@ namespace uofi_itp_directory_data.DataAccess {
             foreach (var securityEntry in _directoryRepository.Read(d => d.SecurityEntries.Where(se => se.AreaId == area.Id))) {
                 _ = _directoryRepository.Delete(securityEntry);
             }
-            area.Admins = Array.Empty<SecurityEntry>();
+            area.Admins = [];
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area", area.ToString(), area.Id, area.Title);
             return await _directoryRepository.DeleteAsync(area);
+        }
+
+        public async Task<int> RemoveTag(AreaTag areaTag, string changedByNetId, string areaTitle) {
+            _ = await _logHelper.CreateAreaLog(changedByNetId, "Removed area tag", areaTag.ToString(), areaTag.AreaId, areaTitle);
+            return await _directoryRepository.DeleteAsync(areaTag);
         }
 
         public async Task<int> UpdateArea(Area area, string changedByNetId) {

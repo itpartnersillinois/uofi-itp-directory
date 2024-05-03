@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uofi_itp_directory_data.Data;
 
@@ -11,13 +12,15 @@ using uofi_itp_directory_data.Data;
 namespace uofi_itp_directory_data.Migrations
 {
     [DbContext(typeof(DirectoryContext))]
-    partial class DirectoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240429200349_OfficeDescription")]
+    partial class OfficeDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -198,9 +201,6 @@ namespace uofi_itp_directory_data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("AllowEmployeeToEdit")
-                        .HasColumnType("bit");
 
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
@@ -469,10 +469,6 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("EmployeeProfileId")
                         .HasColumnType("int");
 
@@ -509,9 +505,6 @@ namespace uofi_itp_directory_data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("AllowEmployeeToEdit")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -520,10 +513,6 @@ namespace uofi_itp_directory_data.Migrations
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -551,9 +540,6 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailSent")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -813,7 +799,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 3, 15, 46, 33, 872, DateTimeKind.Local).AddTicks(7671),
+                            LastUpdated = new DateTime(2024, 4, 29, 15, 3, 48, 715, DateTimeKind.Local).AddTicks(4838),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -825,7 +811,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 3, 15, 46, 33, 872, DateTimeKind.Local).AddTicks(7818),
+                            LastUpdated = new DateTime(2024, 4, 29, 15, 3, 48, 715, DateTimeKind.Local).AddTicks(4980),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

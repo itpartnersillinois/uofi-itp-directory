@@ -5,6 +5,7 @@ namespace uofi_itp_directory_data.DataModels {
 
     public class JobProfile : BaseDataItem {
         public ProfileCategoryTypeEnum Category { get; set; }
+        public string Description { get; set; } = "";
         public virtual Employee EmployeeProfile { get; set; } = default!;
         public int EmployeeProfileId { get; set; }
 
@@ -31,5 +32,13 @@ namespace uofi_itp_directory_data.DataModels {
 
         public virtual ICollection<JobProfileTag> Tags { get; set; } = default!;
         public string Title { get; set; } = "";
+
+        public bool AddTag(string title, bool allowEdit) {
+            if (Tags != null && !Tags.Any(t => t.Title == title)) {
+                Tags.Add(new JobProfileTag { Title = title, AllowEmployeeToEdit = allowEdit, IsActive = true, LastUpdated = DateTime.Now });
+                return true;
+            }
+            return false;
+        }
     }
 }

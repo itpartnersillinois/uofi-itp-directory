@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory_data.Cache;
@@ -10,6 +11,9 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Hours {
+        private bool _isDirty = false;
+        protected void SetDirty() => _isDirty = true;
+
         public Employee? Employee { get; set; } = default!;
 
         [Parameter]
@@ -35,6 +39,14 @@ namespace uofi_itp_directory.Pages.Profile {
                     Employee.EmployeeHourText = HourParser.GetEmployeeHourString([.. Employee.EmployeeHours]);
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
+                    _isDirty = false;
+                }
+            }
+        }
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
                 }
             }
         }
