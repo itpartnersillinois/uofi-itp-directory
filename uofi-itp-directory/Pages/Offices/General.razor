@@ -1,7 +1,7 @@
 ﻿@page "/office/general/{officeid:int?}"
 
-<PageTitle>Office General | UIUC</PageTitle>
-
+<PageTitle>Office General | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 <il-section>
     <h1>@OfficeTitle</h1>
     <p>Edit your office’s general information below.</p>
@@ -21,13 +21,13 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-unitname" class="iled-label-required">Office Name</label>
-                <input id="ed-unitname" type="text" required @bind="Office.Title">
+                <input id="ed-unitname" type="text" required @bind="Office.Title" @bind:after="SetDirty">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-unittype">Office Type</label>
-                <select id="ed-unittype" @bind="Office.OfficeType">
+                <select id="ed-unittype" @bind="Office.OfficeType" @bind:after="SetDirty">
                     @foreach (var enumtype in Enum.GetValues<OfficeTypeEnum>())
                     {
                         <option value="@enumtype">@enumtype.ToPrettyString()</option>
@@ -38,8 +38,17 @@ else if (Office != null)
     </div>
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
+            <label for="ed-description">Office Description:</label>
+            <input id="ed-description" type="text" @bind="Office.Description" @bind:after="SetDirty">
+        </div>
+        <div class="iled-instructions">
+            A brief blurb about your office, shows up in the internal directory.
+        </div>
+    </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
             <label for="ed-audience">Who does this office serve?</label>
-            <input id="ed-audience" type="text" @bind="Office.Audience">
+            <input id="ed-audience" type="text" @bind="Office.Audience" @bind:after="SetDirty">
         </div>
         <div class="iled-instructions">
             Who does this office serve? Students in general, staff, students of a particular college, etc.? If your office is listed, this will show up in the Tech Help Center Help Desks page.
@@ -50,7 +59,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-email">Email</label>
-                <input id="ed-email" type="text" @bind="Office.Email">
+                <input id="ed-email" type="text" @bind="Office.Email" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Department or unit email. Please do not use an individual's email address.
@@ -59,7 +68,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-phone">Phone</label>
-                <input id="ed-phone" type="text" @bind="Office.Phone">
+                <input id="ed-phone" type="text" @bind="Office.Phone" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Department or unit phone number, including area code. Please do not use an individual's phone number.
@@ -70,7 +79,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-externalurl">External Url</label>
-                <input id="ed-externalurl" type="text" @bind="Office.ExternalUrl">
+                <input id="ed-externalurl" type="text" @bind="Office.ExternalUrl" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 This is the link that outside users will use to access your site.<br />
@@ -80,7 +89,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-internalurl">Internal Url</label>
-                <input id="ed-internalurl" type="text" @bind="Office.InternalUrl">
+                <input id="ed-internalurl" type="text" @bind="Office.InternalUrl" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 This is the link that users inside the University of Illinois should use to get information. If it is the same as your external link, you may leave this blank. <br />
@@ -91,11 +100,11 @@ else if (Office != null)
     <div class="iled-section-split">
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
-                <label for="ed-ticketurl">Url for Tickets</label>
-                <input id="ed-ticketurl" type="text" @bind="Office.TicketUrl">
+                <label for="ed-ticketurl">Url for Help Desk Tickets</label>
+                <input id="ed-ticketurl" type="text" @bind="Office.TicketUrl" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
-                This is the link to submit help tickets to your office. If you do not have a ticket intake form, please leave blank. <br />
+                This is the link to submit help tickets to your office (usually TDX). If you do not have a ticket intake form, please leave blank. <br />
                 <a href="@Office.TicketUrl" target="_blank">Test Ticket Link</a>
             </div>
         </div>
@@ -105,13 +114,13 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-room">Room #</label>
-                <input id="ed-room" type="text" @bind="Office.Room">
+                <input id="ed-room" type="text" @bind="Office.Room" @bind:after="SetDirty">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-building">Building</label>
-                <input id="ed-building" type="text" @bind="Office.Building">
+                <input id="ed-building" type="text" @bind="Office.Building" @bind:after="SetDirty">
             </div>
         </div>
     </div>
@@ -119,7 +128,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-bcode">Building Code</label>
-                <input id="ed-bcode" type="text" @bind="Office.BuildingCode">
+                <input id="ed-bcode" type="text" @bind="Office.BuildingCode" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 The four-digit building code can be found on the <a href="https://fs.illinois.edu/building-list-by-building-number" target="_blank">F & S Website</a>. This link will open in a new tab.
@@ -128,7 +137,7 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-address">Mailing Address</label>
-                <input id="ed-address" type="text" @bind="Office.Address">
+                <input id="ed-address" type="text" @bind="Office.Address" @bind:after="SetDirty">
             </div>
         </div>
     </div>
@@ -136,19 +145,19 @@ else if (Office != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-city">City</label>
-                <input id="ed-city" type="text" @bind="Office.City">
+                <input id="ed-city" type="text" @bind="Office.City" @bind:after="SetDirty">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-state">State</label>
-                <input id="ed-state" type="text" @bind="Office.State">
+                <input id="ed-state" type="text" @bind="Office.State" @bind:after="SetDirty">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-zip">Zip Code</label>
-                <input id="ed-zip" type="text" @bind="Office.ZipCode">
+                <input id="ed-zip" type="text" @bind="Office.ZipCode" @bind:after="SetDirty">
             </div>
         </div>
     </div>

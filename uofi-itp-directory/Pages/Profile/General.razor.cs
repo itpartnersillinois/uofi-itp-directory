@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory_data.Cache;
@@ -10,8 +11,12 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class General {
+        private bool _isDirty = false;
+
         public Employee? Employee { get; set; } = default!;
+
         public string Instructions { get; set; } = "";
+
         public string PersonName { get; set; } = "My Profile";
 
         [Parameter]
@@ -19,6 +24,9 @@ namespace uofi_itp_directory.Pages.Profile {
 
         [SupplyParameterFromQuery(Name = "back")]
         public string? ShowBackButton { get; set; }
+
+        [Inject]
+        protected AreaHelper AreaHelper { get; set; } = default!;
 
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
@@ -39,8 +47,10 @@ namespace uofi_itp_directory.Pages.Profile {
 
         public async Task Send() {
             if (Employee != null) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
                 _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Employee General");
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+                _isDirty = false;
             }
         }
 
@@ -55,5 +65,15 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        protected void SetDirty() => _isDirty = true;
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

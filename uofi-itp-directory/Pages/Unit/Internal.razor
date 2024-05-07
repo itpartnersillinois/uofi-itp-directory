@@ -1,7 +1,7 @@
 ﻿@page "/unit/internal/{unitid:int?}"
 
-<PageTitle>Unit Internal | UIUC</PageTitle>
-
+<PageTitle>Unit Internal | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 <il-section>
     <h1>@UnitTitle Internal Information</h1>
     <p>Edit your unit’s internal information below.</p>
@@ -15,7 +15,7 @@ else if (Area != null && AreaSettings != null)
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
             <label for="ed-internalnotes">Internal Notes</label>
-            <textarea id="ed-internalnotes" @bind="AreaSettings.InternalNotes"></textarea>
+            <textarea id="ed-internalnotes" @bind="AreaSettings.InternalNotes" @bind:after="SetDirty"></textarea>
         </div>
         <div class="iled-instructions">
             Internal notes are used to keep track of information about this area and are not exposed to the end user. 
@@ -25,7 +25,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-beta">Allow Beta Access</label>
-                <input id="ed-beta" type="checkbox" required @bind="AreaSettings.AllowBeta">
+                <input id="ed-beta" type="checkbox" required @bind="AreaSettings.AllowBeta" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Check this box if you want access to beta features of the directory. 
@@ -34,7 +34,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-editprofile">Profile Information</label>
-                <select id="ed-editprofile" @bind="ProfileInformation">
+                <select id="ed-editprofile" @bind="ProfileInformation" @bind:after="SetDirty">
                     <option value="0">Do not allow profile information</option>
                     <option value="1">Allow people to edit profile information</option>
                     <option value="2">Allow office administrators to edit profile</option>
@@ -51,7 +51,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-location">Publishing Location</label>
-                <select id="ed-location" @bind="PublishingLocation">
+                <select id="ed-location" @bind="PublishingLocation" @bind:after="SetDirty">
                     <option value="0">Do not show</option>
                     <option value="1">Publish to site</option>
                     <option value="2">Publish to site and helpdesk</option>
@@ -65,7 +65,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-profileurl">Profile Url</label>
-                <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile">
+                <input id="ed-profileurl" type="text" @bind="AreaSettings.UrlProfile" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 URL the system should use to view a profile. Updating this will take a while. Use the term <em>{netid}</em> to signify the user's NetID (lower-case) or <em>{name}</em> to signify the user's name (alpha with dashes instead of spaces, all lower-case). Example: https://education.illinois.edu/profile/{netid} or https://education.illinois.edu/profile/{name}
@@ -74,7 +74,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-refreshurl-option">Profile Refresh Options</label>
-                <select id="ed-refreshurl-option" @bind="AreaSettings.UrlPeopleRefreshType">
+                <select id="ed-refreshurl-option" @bind="AreaSettings.UrlPeopleRefreshType" @bind:after="SetDirty">
                     <option value="@PeopleRefreshTypeEnum.None">No Faculty Load</option>
                     <option value="@PeopleRefreshTypeEnum.Default">Default Faculty Load</option>
                     <option value="@PeopleRefreshTypeEnum.Custom">Custom URL</option>
@@ -89,7 +89,7 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-refreshurl">Options</label>
-                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
+                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh" @bind:after="SetDirty">
                 </div>
                 <div class="iled-instructions">
                     Add options for your faculty load profile.
@@ -98,7 +98,7 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-auto">Auto-load profiles to directory hook</label>
-                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles">
+                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles" @bind:after="SetDirty">
                 </div>
                 <div class="iled-instructions">
                     Check this box if you want a regular refresh of your information.
@@ -110,7 +110,7 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-refreshurl">Custom Profile Refresh Url</label>
-                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh">
+                    <input id="ed-refreshurl" type="text" @bind="AreaSettings.UrlPeopleRefresh" @bind:after="SetDirty">
                 </div>
                 <div class="iled-instructions">
                     URL the system should use to refresh a profile. Use the term <em>{netid}</em> to signify the user's NetID. Example: https://refresh.illinois.edu/Load?name={netid}
@@ -119,7 +119,7 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-auto">Auto-load profiles to directory hook</label>
-                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles">
+                    <input id="ed-auto" type="checkbox" @bind="AreaSettings.AutoloadProfiles" @bind:after="SetDirty">
                 </div>
                 <div class="iled-instructions">
                     Check this box if you want a regular refresh of your information.
@@ -131,13 +131,13 @@ else if (Area != null && AreaSettings != null)
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-imagewidth">Profile Image Width</label>
-                    <input id="ed-imagewidth" type="text" @bind="AreaSettings.PictureWidth">
+                    <input id="ed-imagewidth" type="text" @bind="AreaSettings.PictureWidth" @bind:after="SetDirty">
                 </div>
             </div>
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
                     <label for="ed-imageheight">Profile Image Height</label>
-                    <input id="ed-imageheight" type="text" @bind="AreaSettings.PictureHeight">
+                    <input id="ed-imageheight" type="text" @bind="AreaSettings.PictureHeight" @bind:after="SetDirty">
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-signatureaddition">Email Signature Additions</label>
-                <input id="ed-signatureaddition" type="text" @bind="AreaSettings.SignatureExtension">
+                <input id="ed-signatureaddition" type="text" @bind="AreaSettings.SignatureExtension" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 You can add additional links to your employees' email signature by sending a custom querystring. See <a href="https://webservices.illinois.edu/webservices/js/ds/signature.js" target="_blank">this javascript file that generates the signature</a> to determine what needs to be sent. Popular querystring additions are <em>facebook</em>, <em>twitter</em>, <em>instagram</em>, <em>linkedin</em>, <em>youtube</em>, and <em>disclaimer</em>. Pass them in the pattern <em>&amp;facebook=https://www.facebook.com/speciallink</em>.
@@ -156,7 +156,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins1">Office Instructions</label>
-                <input id="ed-ins1" type="text" required @bind="AreaSettings.InstructionsOffice">
+                <input id="ed-ins1" type="text" required @bind="AreaSettings.InstructionsOffice" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is editing an office? 
@@ -165,7 +165,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins2">Employee Instructions</label>
-                <input id="ed-ins2" type="text" @bind="AreaSettings.InstructionsEmployee">
+                <input id="ed-ins2" type="text" @bind="AreaSettings.InstructionsEmployee" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is editing a job profile or employee information?
@@ -182,7 +182,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins4">Employee Signature Instructions</label>
-                <input id="ed-ins4" type="text" @bind="AreaSettings.InstructionsEmployeeSignature">
+                <input id="ed-ins4" type="text" @bind="AreaSettings.InstructionsEmployeeSignature" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is generating an employee signature?
@@ -191,7 +191,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins5">Employee Headshot Instructions</label>
-                <input id="ed-ins5" type="text" @bind="AreaSettings.InstructionsEmployeeHeadshot">
+                <input id="ed-ins5" type="text" @bind="AreaSettings.InstructionsEmployeeHeadshot" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is uploading an employee headshot? This does not include dimensions.
@@ -200,7 +200,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins6">Employee CV Instructions</label>
-                <input id="ed-ins6" type="text" @bind="AreaSettings.InstructionsEmployeeCv">
+                <input id="ed-ins6" type="text" @bind="AreaSettings.InstructionsEmployeeCv" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is uploading an employee CV?
@@ -212,7 +212,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-ins7">Office Instructions</label>
-                <input id="ed-ins7" type="text" @bind="AreaSettings.InstructionsOffice">
+                <input id="ed-ins7" type="text" @bind="AreaSettings.InstructionsOffice" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 Do you want specific instructions to show up when a user is editing an office?
@@ -225,7 +225,7 @@ else if (Area != null && AreaSettings != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-internalorder">Order</label>
-                <select id="ed-internalorder" @bind="Area.InternalOrder">
+                <select id="ed-internalorder" @bind="Area.InternalOrder" @bind:after="SetDirty">
                     <option value="1">Top in List</option>
                     <option value="3">Middle / Default</option>
                     <option value="5">Bottom in List</option>

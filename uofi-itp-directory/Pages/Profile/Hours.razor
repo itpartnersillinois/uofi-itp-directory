@@ -1,7 +1,7 @@
 ﻿@page "/profile/hours/{refresh?}"
 
-<PageTitle>Profile Hours | UIUC</PageTitle>
-
+<PageTitle>Profile Hours | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 @if (Employee != null)
 {
     <il-section>
@@ -15,9 +15,9 @@
             <h2>@officeHour.Day</h2>
             <div class="iled-hours-time">
                 <label for="ed-date-from-@officeHour.DayNumeric" class="iled-sr-only">From </label>
-                <input id="ed-date-from-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.Start">
+                <input id="ed-date-from-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.Start" @bind:after="SetDirty">
                 <label for="ed-date-to-@officeHour.DayNumeric">to </label>
-                <input id="ed-date-to-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.End">
+                <input id="ed-date-to-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" type="time" @bind="@officeHour.End" @bind:after="SetDirty">
             </div>
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
                 <input id="ed-date-location-blank-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
@@ -25,7 +25,7 @@
                 <label for="ed-date-location-blank-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
-                <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
+                <label for="ed-date-location-office-@officeHour.DayNumeric">On Campus</label>
                 <input type="radio" id="ed-date-location-remote-@officeHour.DayNumeric" disabled="@Employee.IsEntryDisabled" checked="@(officeHour.NotesEnum == LocationTypeEnum.Remote)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Remote))" />
                 <label for="ed-date-location-remote-@officeHour.DayNumeric">Remote</label>

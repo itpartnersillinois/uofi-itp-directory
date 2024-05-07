@@ -15,5 +15,7 @@ namespace uofi_itp_directory_data.DataModels {
         public virtual Office Office { get; set; } = default!;
 
         public int OfficeId { get; set; }
+
+        public bool UseJobSpecificDescription { get; set; }
     }
 }

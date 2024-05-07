@@ -6,7 +6,7 @@ namespace uofi_itp_directory_data.DataModels {
     public class OfficeHour : BaseDataItem {
 
         public static readonly Dictionary<string, LocationTypeEnum> LocationMapping = new() {
-            { "In Office", LocationTypeEnum.Office},
+            { "On Campus", LocationTypeEnum.Office},
             { "", LocationTypeEnum.None },
             { "Remote", LocationTypeEnum.Remote }
         };

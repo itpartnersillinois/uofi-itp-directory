@@ -7,15 +7,14 @@ namespace uofi_itp_directory_search.SearchHelper {
     public static class DirectoryOfficeItemTranslator {
 
         public static DirectoryOfficeItem? Translate(Office office, IEnumerable<ViewModel.EmployeeCompact> people) {
-            var associatedPeople = people.Where(p => p.JobProfiles.Any(j => j.Office == office.Title)).ToList();
-            associatedPeople.ForEach(p => p.TransferPrimaryOfficeAndTitle(office.Title));
+            var associatedPeople = people.Where(p => p.JobProfiles.Any(j => j.Office == office.Title)).Select(p => EmployeeCompact.TransferPrimaryOfficeAndTitle(p, office.Title)).ToList();
             return associatedPeople.Count == 0
                 ? null
                 : new DirectoryOfficeItem {
                     Address = office.Address,
                     Building = office.Building,
                     City = office.City,
-                    State = "IL",
+                    State = office.State,
                     Zip = office.ZipCode,
                     Email = office.Email,
                     ExternalUrl = office.ExternalUrl,

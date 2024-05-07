@@ -17,7 +17,7 @@ namespace uofi_itp_directory_data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -199,7 +199,13 @@ namespace uofi_itp_directory_data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AllowEmployeeToEdit")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Filter")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -466,6 +472,10 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EmployeeProfileId")
                         .HasColumnType("int");
 
@@ -502,6 +512,9 @@ namespace uofi_itp_directory_data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AllowEmployeeToEdit")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -510,6 +523,10 @@ namespace uofi_itp_directory_data.Migrations
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -537,6 +554,9 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailSent")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -590,6 +610,10 @@ namespace uofi_itp_directory_data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -726,6 +750,9 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("OfficeId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("UseJobSpecificDescription")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OfficeId")
@@ -792,7 +819,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 4, 9, 16, 14, 53, 302, DateTimeKind.Local).AddTicks(3346),
+                            LastUpdated = new DateTime(2024, 5, 6, 15, 5, 41, 893, DateTimeKind.Local).AddTicks(4534),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -804,7 +831,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 4, 9, 16, 14, 53, 302, DateTimeKind.Local).AddTicks(3504),
+                            LastUpdated = new DateTime(2024, 5, 6, 15, 5, 41, 893, DateTimeKind.Local).AddTicks(4717),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

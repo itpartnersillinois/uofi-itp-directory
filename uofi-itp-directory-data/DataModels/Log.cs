@@ -8,6 +8,7 @@ namespace uofi_itp_directory_data.DataModels {
         public string ChangeType { get; set; } = "";
         public string Data { get; set; } = "";
         public string DateCreated => LastUpdated.ToString("f");
+        public bool EmailSent { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,0 +1,62 @@
+﻿@page "/unit/tags/{unitid:int?}"
+
+<PageTitle>Unit Tags | Illinois</PageTitle>
+
+<il-section>
+    <h1>@UnitTitle Tags</h1>
+    <p>Edit your unit’s tags below.</p>
+</il-section>
+@if (!UnitId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Area" AreaOfficeThinObjects="_areaThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else if (AreaTags != null)
+{
+    <il-section>
+        <h2>Existing Tags</h2>
+        <p>Note that tags cannot be edited. If you need to change a tag, then delete the old tag and re-add it. Also note that if you remove a tag, job profiles will still have the old tag.</p>
+        @foreach (var tag in AreaTags)
+        {
+            <div class="iled-username">
+                <span>@tag.FullTitle</span> <button class="il-button il-orange" @onclick="() => RemoveTag(tag)">Remove Tag</button>
+            </div>
+        }
+    </il-section>
+
+    <il-section>
+        <h2>Add New Tag</h2>
+        <div class="iled-section-split">
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-tagname" class="iled-label-required">Tag Name</label>
+                    <input id="ed-tagname" required type="text" @bind="NewTagName">
+                </div>
+            </div>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-editable">Can Employee Change this on Profile?</label>
+                    <input id="ed-editable" type="checkbox" @bind="NewTagEditable">
+                </div>
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-filter">Who is this tag for?</label>
+                <select id="ed-filter" @bind="NewTagFilter">
+                    @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                    {
+                        <option value="@enumtype">@(enumtype == ProfileCategoryTypeEnum.None ? "No restrictions" : @enumtype.ToPrettyString() + " only")</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Change this if you only want certain job types to use this tag.
+            </div>
+        </div>
+        <div class="iled-buttons-left">
+            <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Add New Tag</button>
+            <ClearCacheButton></ClearCacheButton>
+        </div>
+        <ToastPopup></ToastPopup>
+    </il-section>
+}

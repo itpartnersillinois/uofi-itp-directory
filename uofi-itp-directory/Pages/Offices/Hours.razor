@@ -1,7 +1,7 @@
 ﻿@page "/office/hours/{officeid:int?}"
 
-<PageTitle>Office Hours | UIUC</PageTitle>
-
+<PageTitle>Office Hours | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 <il-section>
     <h1>@OfficeTitle Hours</h1>
     <p>Edit your office hours below. If you leave either the opening or closing time blank, it will not display the day of the week. Use the format "8:00 AM". If your office is open 24 hours, place "12:00 AM" for both the starting and ending hours.</p>
@@ -18,9 +18,9 @@ else if (OfficeHours != null)
            <h2>@officeHour.Day</h2>
             <div class="iled-hours-time">
                 <label for="ed-date-from-@officeHour.DayNumeric" class="iled-sr-only">From </label>
-                <input id="ed-date-from-@officeHour.DayNumeric" type="time" @bind="@officeHour.Start">
+                <input id="ed-date-from-@officeHour.DayNumeric" type="time" @bind="@officeHour.Start" @bind:after="SetDirty">
                 <label for="ed-date-to-@officeHour.DayNumeric">to </label>
-                <input id="ed-date-to-@officeHour.DayNumeric" type="time" @bind="@officeHour.End">
+                <input id="ed-date-to-@officeHour.DayNumeric" type="time" @bind="@officeHour.End" @bind:after="SetDirty">
             </div>
             <div class="iled-hours-location" hidden="@officeHour.HideNotes">
                 <input id="ed-date-location-none-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.None)"
@@ -28,7 +28,7 @@ else if (OfficeHours != null)
                 <label for="ed-date-location-none-@officeHour.DayNumeric">Blank</label>
                 <input id="ed-date-location-office-@officeHour.DayNumeric" type="radio" checked="@(officeHour.NotesEnum == LocationTypeEnum.Office)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Office))" />
-                <label for="ed-date-location-office-@officeHour.DayNumeric">In Office</label>
+                <label for="ed-date-location-office-@officeHour.DayNumeric">On Campus</label>
                 <input type="radio" id="ed-date-location-remote-@officeHour.DayNumeric" checked="@(officeHour.NotesEnum == LocationTypeEnum.Remote)"
                        name="ed-date-location-@officeHour.DayNumeric" @onchange="@(() => officeHour.SetNotes(LocationTypeEnum.Remote))" />
                 <label for="ed-date-location-remote-@officeHour.DayNumeric">Remote</label>
@@ -45,7 +45,7 @@ else if (OfficeHours != null)
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
             <label for="ed-holiday">Add the text "Closed for University Holidays" to the office hours.</label>
-            <input id="ed-holiday" type="checkbox" @bind="Office.HoursIncludeHolidayMessage">
+            <input id="ed-holiday" type="checkbox" @bind="Office.HoursIncludeHolidayMessage" @bind:after="SetDirty">
         </div>
     </div>
 

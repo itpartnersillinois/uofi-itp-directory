@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -11,6 +12,7 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Cv {
+        private bool _isDirty = false;
         public DocumentUploader? DocumentUploader { get; set; } = default!;
 
         public Employee? Employee { get; set; } = default!;
@@ -38,6 +40,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void DeleteDocument() {
             if (Employee != null && DocumentUploader != null) {
                 Employee.CVUrl = "";
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -47,6 +50,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public void SaveDocument() {
             if (Employee != null && DocumentUploader != null) {
                 Employee.CVUrl = DocumentUploader.FileUrl;
+                _isDirty = true;
                 StateHasChanged();
             }
         }
@@ -54,9 +58,11 @@ namespace uofi_itp_directory.Pages.Profile {
         public async Task Send() {
             if (Employee != null && DocumentUploader != null) {
                 if (await DocumentUploader.SaveFile()) {
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
                     Employee.CVUrl = DocumentUploader.FileUrl;
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "CV Updated");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+                    _isDirty = false;
                 }
             }
         }
@@ -71,5 +77,13 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

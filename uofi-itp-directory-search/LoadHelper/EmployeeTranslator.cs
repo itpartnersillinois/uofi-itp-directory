@@ -68,7 +68,7 @@ namespace uofi_itp_directory_search.LoadHelper {
                 ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()
                 : [];
 
-        private static List<JobProfile> TranslateJobProfiles(IEnumerable<dM.JobProfile> profiles) => profiles.Where(j => j.Category != dM.ProfileCategoryTypeEnum.None || j.ProfileDisplay == dM.ProfileDisplayEnum.Not_Displayed).Select(j => new JobProfile { DisplayOrder = j.InternalOrder, JobType = j.Category.ToString(), Office = j.Office.Title, Title = j.Title }).ToList();
+        private static List<JobProfile> TranslateJobProfiles(IEnumerable<dM.JobProfile> profiles) => profiles.Where(j => j.Category != dM.ProfileCategoryTypeEnum.None || j.ProfileDisplay == dM.ProfileDisplayEnum.Not_Displayed).Select(j => new JobProfile { DisplayOrder = j.InternalOrder, JobType = j.Category.ToString(), Office = j.Office.Title, Title = j.Title, Description = j.Description, Tags = j.Tags.Select(jt => jt.Title).ToList() }).ToList();
 
         private static List<BaseItem> TranslateLinks(IEnumerable<dM.EmployeeActivity> directoryActivites, IEnumerable<ExpertsItem> experts) => experts != null && experts.Any()
                 ? experts.Select(a => new BaseItem { DisplayOrder = a.SortOrder, IsHighlighted = a.IsHighlighted, Title = a.TitleFull, Url = a.Url }).ToList()

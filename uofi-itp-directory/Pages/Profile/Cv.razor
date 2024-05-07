@@ -1,6 +1,7 @@
 ﻿@page "/profile/cv/{refresh?}"
 
-<PageTitle>Profile CV | UIUC</PageTitle>
+<PageTitle>Profile CV | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 @if (Employee != null)
 {
     <il-section>

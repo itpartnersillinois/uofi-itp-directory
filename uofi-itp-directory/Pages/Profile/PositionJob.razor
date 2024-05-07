@@ -1,0 +1,124 @@
+﻿@page "/profile/job/{refresh?}"
+
+<PageTitle>Job | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
+
+@if (Employee != null)
+{
+    <il-section>
+        <h1>@Employee.ProfileName Jobs</h1>
+        <p>Edit job information below. Note that you may not be able to edit everything on this page.</p>
+        <Instructions ChildContent="@Instructions"></Instructions>
+
+        @if (!string.IsNullOrWhiteSpace(ShowBackButton) && ShowBackButton == "add")
+        {
+            <p><a href="/office/people" class="il-button">Back to Adding People</a></p>
+        }
+
+        @if (IsMultiple)
+        {
+            <h2>Primary Office</h2>
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-primaryoffice">Primary Office</label>
+                    <select id="ed-primaryoffice" @bind="Employee.PrimaryProfile" @bind:after="SetDirty">
+                        @foreach (var profile in Employee.JobProfiles)
+                        {
+                            <option value="@profile.OfficeId">@profile.Title / @profile.Office.Title</option>
+                        }
+                    </select>
+                </div>
+                <div class="iled-instructions">
+                    Your primary profile is what shows up as your title if someone is looking at your profile. If not chosen, then the first one created will be your profile.
+                </div>
+            </div>
+
+        }
+        @foreach (var profile in Employee.JobProfiles)
+        {
+            @if (Employee.JobProfiles.Count > 1 && profile.OfficeId == Employee.PrimaryJobProfile.OfficeId)
+            {
+                <h2>@profile.Office.Title (primary)</h2>
+            }
+            else
+            {
+                <h2>@profile.Office.Title</h2>
+            }
+            <div class="iled-section-split">
+                <div class="iled-input-box-parent">
+                    <div class="iled-input-box">
+                        <label for="ed-title-@profile.Id">Title</label>
+                        <input id="ed-title-@profile.Id" type="text" disabled="@profile.IsEntryDisabled" @bind="profile.Title" @bind:after="SetDirty">
+                    </div>
+                </div>
+                <div class="iled-input-box-parent">
+                    <div class="iled-input-box">
+                        <label for="ed-type-@profile.Id">Job Type</label>
+                        <select id="ed-type-@profile.Id" @bind="profile.Category" disabled="@profile.IsEntryDisabled" @bind:after="SetDirty">
+                            @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                            {
+                                <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="iled-instructions">
+                        A job type of "None" means the person will not be listed.
+                    </div>
+                </div>
+            </div>
+            @if (OfficeDescriptionUsed.ContainsKey(profile.Office.Id) && OfficeDescriptionUsed[profile.Office.Id])
+            {
+                <div class="iled-input-box-parent">
+                    <div class="iled-input-box">
+                        <label for="ed-description-@profile.Id">Job-specific Description</label>
+                        <textarea id="ed-description-@profile.Id" type="text" disabled="@profile.IsEntryDisabled" @bind="profile.Description" @bind:after="SetDirty"></textarea>
+                    </div>
+                    <div class="iled-instructions">
+                        Job profile description, used for office-specific directories
+                    </div>
+                </div>
+            }
+            <div class="iled-input-box-parent">
+                <div class="iled-input-box">
+                    <label for="ed-order-@profile.Id">Display Order</label>
+                    <select id="ed-order-@profile.Id" @bind="profile.ProfileDisplay" disabled="@profile.IsEntryDisabled">
+                        @foreach (var enumtype in Enum.GetValues<ProfileDisplayEnum>().OrderBy(o => o))
+                        {
+                            <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="iled-instructions">
+                    Profiles are normally listed in alphabetical order. This allows an administrator to manually change the order of the profile.
+                </div>
+            </div>
+            @if (AreaTags.ContainsKey(profile.Office.AreaId) && AreaTags[profile.Office.AreaId].Any(t => t.IsShown(profile.Category)))
+            {
+                <div class="iled-section-split">
+                    <div class="iled-input-box-parent iled-input-box-buttons">
+                        <h5>Available Tags</h5>
+                        @foreach (var tag in AreaTags[profile.Office.AreaId].Where(t => t.IsShown(profile.Category)))
+                        {
+                            <button disabled="@(profile.IsEntryDisabled && tag.AllowEmployeeToEdit)" class="il-button" @onclick="() => AddTag(tag, profile)">@tag.Title</button>
+                        }
+                        <div class="iled-instructions">
+                            These are a list of tags that <strong>can be</strong> chosen for this profile. You may click on a tag to add it to this profile.
+                        </div>
+                    </div>
+                    <div class="iled-input-box-parent iled-input-box-buttons">
+                        <h5>Tags Applied to Profile</h5>
+                        @foreach (var tag in profile.Tags)
+                        {
+                            <button disabled="@(profile.IsEntryDisabled && tag.AllowEmployeeToEdit)" class="il-button" @onclick="() => RemoveTag(tag, profile)">@tag.Title</button>
+                        }
+                        <div class="iled-instructions">
+                            These are a list of tags that <strong>have been</strong> chosen for this profile. You may click on a tag to remove it from this profile.
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <ToastPopup></ToastPopup>
+
+    </il-section>
+}
