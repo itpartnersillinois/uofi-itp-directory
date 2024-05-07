@@ -6,7 +6,8 @@
 {
     <il-section>
         <h1>@Employee.ProfileName CV</h1>
-        <p>Add a professional resume or CV to this profile by uploading a file below. Make sure you save any changes.</p>
+        <p>Add a professional resume or CV to this profile by uploading a file below. If you have a CV already loaded, delete the CV before uploading a new document. Make sure you save any changes.</p>
+        <p><strong>Note that this is on a public website. Remove any personal information like phone numbers and addresses before uploading.</strong></p>
         <Instructions ChildContent="@Instructions"></Instructions>
         <DocumentUploader IsDisabled=@Employee.IsEntryDisabled @ref="@DocumentUploader" FileUrl="@Employee.CVUrl" ItemId="@Employee.NetIdTruncated" Delete="DeleteDocument" Save="SaveDocument"></DocumentUploader>
 
