@@ -11,9 +11,9 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
-        public async Task<AreaTag> AddTagToArea(int areaId, string title, bool allowEmployee, string changedByNetId, string areaTitle) {
+        public async Task<AreaTag> AddTagToArea(int areaId, string title, bool allowEmployee, ProfileCategoryTypeEnum filter, string changedByNetId, string areaTitle) {
             _ = await _logHelper.CreateAreaLog(changedByNetId, "Added area tag", title, areaId, areaTitle);
-            var newTag = new AreaTag { AreaId = areaId, AllowEmployeeToEdit = allowEmployee, IsActive = true, LastUpdated = DateTime.Now, Title = title };
+            var newTag = new AreaTag { AreaId = areaId, AllowEmployeeToEdit = allowEmployee, Filter = filter, IsActive = true, LastUpdated = DateTime.Now, Title = title };
             _ = await _directoryRepository.CreateAsync(newTag);
             return newTag;
         }

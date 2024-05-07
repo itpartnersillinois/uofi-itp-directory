@@ -37,6 +37,15 @@ else if (Office != null)
             If an office is listed as "do not show but allow people to be added", then it can be used to group people across multiple offices. 
         </div>
     </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-jobspecific">Include a Job-Specific Description</label>
+            <input id="ed-jobspecific" type="checkbox" required @bind="OfficeSettings.UseJobSpecificDescription" @bind:after="SetDirty">
+        </div>
+        <div class="iled-instructions">
+            Check this box if profiles have a job-specific description that has information about your office / department.
+        </div>
+    </div>
     @if (Office.IsAreaAdmin)
     {
         <h2>Order Information</h2>

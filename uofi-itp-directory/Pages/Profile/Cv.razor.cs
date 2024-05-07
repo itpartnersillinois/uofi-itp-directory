@@ -12,6 +12,7 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Cv {
+        private bool _isDirty = false;
         public DocumentUploader? DocumentUploader { get; set; } = default!;
 
         public Employee? Employee { get; set; } = default!;
@@ -57,6 +58,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public async Task Send() {
             if (Employee != null && DocumentUploader != null) {
                 if (await DocumentUploader.SaveFile()) {
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
                     Employee.CVUrl = DocumentUploader.FileUrl;
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "CV Updated");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
@@ -74,7 +76,7 @@ namespace uofi_itp_directory.Pages.Profile {
             Instructions = await EmployeeAreaHelper.CvInstructions(Employee.NetId);
         }
 
-        private bool _isDirty = false;
+        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
 
         private async Task LocationChangingHandler(LocationChangingContext arg) {
             if (_isDirty) {
@@ -83,7 +85,5 @@ namespace uofi_itp_directory.Pages.Profile {
                 }
             }
         }
-
-        protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
     }
 }

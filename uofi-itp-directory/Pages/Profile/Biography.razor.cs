@@ -48,6 +48,7 @@ namespace uofi_itp_directory.Pages.Profile {
 
         public async Task Send() {
             if (Employee != null && QuillBiography != null) {
+                _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
                 Employee.Biography = await QuillBiography.GetHTML();
                 _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Biography: " + Employee.Biography);
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");

@@ -12,8 +12,6 @@ namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Hours {
         private bool _isDirty = false;
-        protected void SetDirty() => _isDirty = true;
-
         public Employee? Employee { get; set; } = default!;
 
         [Parameter]
@@ -36,17 +34,11 @@ namespace uofi_itp_directory.Pages.Profile {
                 if (Employee.EmployeeHours.Any(eh => eh.IsInvalid)) {
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Start Hours must be before End Hours");
                 } else {
+                    _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
                     Employee.EmployeeHourText = HourParser.GetEmployeeHourString([.. Employee.EmployeeHours]);
                     _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Hours");
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Text Rebuilt and Information updated");
                     _isDirty = false;
-                }
-            }
-        }
-        private async Task LocationChangingHandler(LocationChangingContext arg) {
-            if (_isDirty) {
-                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
-                    arg.PreventNavigation();
                 }
             }
         }
@@ -62,5 +54,15 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        protected void SetDirty() => _isDirty = true;
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

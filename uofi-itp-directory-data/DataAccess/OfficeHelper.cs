@@ -42,6 +42,8 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<List<Office>> GetOffices(int areaId) => [.. (await _directoryRepository.ReadAsync(d => d.Offices.Where(o => o.AreaId == areaId).OrderBy(a => a.Title)))];
 
+        public async Task<bool> GetOfficeSettingJobDescriptionById(int officeId) => await _directoryRepository.ReadAsync(d => d.OfficeSettings.Single(o => o.OfficeId == officeId).UseJobSpecificDescription);
+
         public async Task<OfficeSettings> GetOfficeSettingsById(int officeId) => await _directoryRepository.ReadAsync(d => d.OfficeSettings.Single(o => o.OfficeId == officeId));
 
         public async Task<bool> IsCodeUsed(string officeCode) => await _directoryRepository.ReadAsync(d => d.OfficeSettings.Any(a => a.InternalCode == officeCode));

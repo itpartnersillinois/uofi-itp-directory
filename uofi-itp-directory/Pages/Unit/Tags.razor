@@ -18,7 +18,7 @@ else if (AreaTags != null)
         @foreach (var tag in AreaTags)
         {
             <div class="iled-username">
-                <span>@tag.Title @(tag.AllowEmployeeToEdit ? "(editable by employees)" : "(not editable by employees)")</span> <button class="il-button il-orange" @onclick="() => RemoveTag(tag)">Remove Tag</button>
+                <span>@tag.FullTitle</span> <button class="il-button il-orange" @onclick="() => RemoveTag(tag)">Remove Tag</button>
             </div>
         }
     </il-section>
@@ -34,9 +34,23 @@ else if (AreaTags != null)
             </div>
             <div class="iled-input-box-parent">
                 <div class="iled-input-box">
-                    <label for="ed-editable">Is Editable By Employee?</label>
+                    <label for="ed-editable">Can Employee Change this on Profile?</label>
                     <input id="ed-editable" type="checkbox" @bind="NewTagEditable">
                 </div>
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-filter">Who is this tag for?</label>
+                <select id="ed-filter" @bind="NewTagFilter">
+                    @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                    {
+                        <option value="@enumtype">@(enumtype == ProfileCategoryTypeEnum.None ? "No restrictions" : @enumtype.ToPrettyString() + " only")</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                Change this if you only want certain job types to use this tag.
             </div>
         </div>
         <div class="iled-buttons-left">

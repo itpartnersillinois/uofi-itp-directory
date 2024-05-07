@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uofi_itp_directory_data.Data;
 
@@ -11,9 +12,11 @@ using uofi_itp_directory_data.Data;
 namespace uofi_itp_directory_data.Migrations
 {
     [DbContext(typeof(DirectoryContext))]
-    partial class DirectoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240504104305_Sprint2AddFilter")]
+    partial class Sprint2AddFilter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -750,9 +753,6 @@ namespace uofi_itp_directory_data.Migrations
                     b.Property<int>("OfficeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("UseJobSpecificDescription")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OfficeId")
@@ -819,7 +819,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 6, 15, 5, 41, 893, DateTimeKind.Local).AddTicks(4534),
+                            LastUpdated = new DateTime(2024, 5, 4, 5, 43, 4, 877, DateTimeKind.Local).AddTicks(4),
                             ListedNameFirst = "Bryan",
                             ListedNameLast = "Jonker"
                         },
@@ -831,7 +831,7 @@ namespace uofi_itp_directory_data.Migrations
                             IsActive = true,
                             IsFullAdmin = true,
                             IsPublic = false,
-                            LastUpdated = new DateTime(2024, 5, 6, 15, 5, 41, 893, DateTimeKind.Local).AddTicks(4717),
+                            LastUpdated = new DateTime(2024, 5, 4, 5, 43, 4, 877, DateTimeKind.Local).AddTicks(133),
                             ListedNameFirst = "Rob",
                             ListedNameLast = "Watson"
                         });

@@ -18,6 +18,7 @@ namespace uofi_itp_directory.Pages.Unit {
 
         public bool NewTagEditable { get; set; }
 
+        public ProfileCategoryTypeEnum NewTagFilter { get; set; }
         public string NewTagName { get; set; } = "";
 
         [Parameter]
@@ -61,7 +62,7 @@ namespace uofi_itp_directory.Pages.Unit {
             if (string.IsNullOrWhiteSpace(NewTagName)) {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag name needs to be filled out");
             } else {
-                var tag = await AreaHelper.AddTagToArea(UnitId.HasValue ? UnitId.Value : 0, NewTagName, NewTagEditable, await AuthenticationStateProvider.GetUser(), UnitTitle);
+                var tag = await AreaHelper.AddTagToArea(UnitId.HasValue ? UnitId.Value : 0, NewTagName, NewTagEditable, NewTagFilter, await AuthenticationStateProvider.GetUser(), UnitTitle);
                 AreaTags?.Add(tag);
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag added");
                 NewTagEditable = false;

@@ -84,7 +84,7 @@ namespace uofi_itp_directory.Pages.Offices {
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
                 } else {
                     CacheHelper.SetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, employeeId);
-                    NavManager.NavigateTo($"/profile/general?back=add");
+                    NavManager.NavigateTo($"/profile/job?back=add");
                 }
                 StateHasChanged();
             } else {
