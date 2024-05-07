@@ -1,7 +1,7 @@
 ﻿@page "/unit/general/{unitid:int?}"
 
-<PageTitle>Unit General | UIUC</PageTitle>
-
+<PageTitle>Unit General | Illinois</PageTitle>
+<NavigationLock OnBeforeInternalNavigation=this.LocationChangingHandler ConfirmExternalNavigation=_isDirty />
 <il-section>
     <h1>@UnitTitle</h1>
     <p>Edit your unit’s general information below.</p>
@@ -20,13 +20,13 @@ else if (Area != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-unitname" class="iled-label-required">Unit Name</label>
-                <input id="ed-unitname" type="text" required @bind="Area.Title">
+                <input id="ed-unitname" type="text" required @bind="Area.Title" @bind:after="SetDirty">
             </div>
         </div>
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-unittype">Unit Type</label>
-                <select id="ed-unittype" @bind="Area.AreaType">
+                <select id="ed-unittype" @bind="Area.AreaType" @bind:after="SetDirty">
                         @foreach (var enumtype in Enum.GetValues<AreaTypeEnum>())
                         {
                         <option value="@enumtype">@enumtype</option>
@@ -38,7 +38,7 @@ else if (Area != null)
     <div class="iled-input-box-parent">
         <div class="iled-input-box">
             <label for="ed-audience">Audience</label>
-            <input id="ed-audience" type="text" @bind="Area.Audience">
+            <input id="ed-audience" type="text" @bind="Area.Audience" @bind:after="SetDirty">
         </div>
         <div class="iled-instructions">
             Who does this unit serve? Students in general, staff, students of a particular college, etc.?
@@ -49,7 +49,7 @@ else if (Area != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-externalurl">External Url</label>
-                <input id="ed-externalurl" type="text" @bind="Area.ExternalUrl">
+                <input id="ed-externalurl" type="text" @bind="Area.ExternalUrl" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 This is the link that outside users will use to access your site.<br />
@@ -59,7 +59,7 @@ else if (Area != null)
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
                 <label for="ed-internalurl">Internal Url</label>
-                <input id="ed-internalurl" type="text" @bind="Area.InternalUrl">
+                <input id="ed-internalurl" type="text" @bind="Area.InternalUrl" @bind:after="SetDirty">
             </div>
             <div class="iled-instructions">
                 This is the link that users inside the University of Illinois should use to get information. If it is the same as your external link, you may leave this blank. <br />

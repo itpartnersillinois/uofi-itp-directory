@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory_data.Cache;
@@ -11,6 +12,7 @@ using uofi_itp_directory_external.Experts;
 namespace uofi_itp_directory.Pages.Profile {
 
     public partial class Activities {
+        private bool _isDirty = false;
         public Employee? Employee { get; set; } = default!;
 
         public string Instructions { get; set; } = "";
@@ -45,12 +47,14 @@ namespace uofi_itp_directory.Pages.Profile {
             if (await JsRuntime.InvokeAsync<bool>("confirm", $"This will delete the activity \"{activity.Title}\". Are you sure?")) {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Activity deleted");
                 _ = await EmployeeActivityHelper.DeleteActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
+                _isDirty = false;
             }
         }
 
         public void New() {
             if (Employee != null) {
                 Employee.EmployeeActivities.Add(new() { InEditState = true });
+                _isDirty = true;
             }
         }
 
@@ -61,6 +65,7 @@ namespace uofi_itp_directory.Pages.Profile {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", $"Activity \"{activity.Title}\" updated");
                 _ = await EmployeeActivityHelper.SaveActivity(activity, Employee?.Id ?? 0, Employee?.NetId ?? "", await AuthenticationStateProvider.GetUser());
                 activity.InEditState = false;
+                _isDirty = false;
             } else {
                 activity.InEditState = true;
             }
@@ -81,5 +86,15 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        protected void SetDirty() => _isDirty = true;
+
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
+        }
     }
 }

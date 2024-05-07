@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -11,6 +12,9 @@ using uofi_itp_directory_data.Security;
 namespace uofi_itp_directory.Pages.Offices {
 
     public partial class Internal {
+        private bool _isDirty = false;
+        protected void SetDirty() => _isDirty = true;
+
         private MultiChoice? _multiChoice = default!;
         private List<AreaOfficeThinObject> _officeThinObjects = default!;
         public Office Office { get; set; } = default!;
@@ -55,6 +59,7 @@ namespace uofi_itp_directory.Pages.Offices {
             _ = OfficeHelper.UpdateOffice(Office, await AuthenticationStateProvider.GetUser());
             _ = OfficeHelper.UpdateOfficeSettings(OfficeSettings, Office.Title, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+            _isDirty = false;
             StateHasChanged();
         }
 
@@ -84,6 +89,13 @@ namespace uofi_itp_directory.Pages.Offices {
                 return 1;
             }
             return 2;
+        }
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
         }
 
         private async Task AssignTextFields() {

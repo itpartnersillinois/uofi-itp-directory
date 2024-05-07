@@ -14,6 +14,7 @@ namespace uofi_itp_directory.Pages.Offices {
     public partial class People {
         private MultiChoice? _multiChoice = default!;
         private List<AreaOfficeThinObject> _officeThinObjects = default!;
+        public bool IsPersonDisabled => SelectedProfile == 0;
         public List<JobProfileThinObject> JobProfiles { get; set; } = default!;
 
         public string NewNetId { get; set; } = string.Empty;
@@ -83,7 +84,7 @@ namespace uofi_itp_directory.Pages.Offices {
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", message);
                 } else {
                     CacheHelper.SetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, employeeId);
-                    NavManager.NavigateTo($"/profile/general?back=add");
+                    NavManager.NavigateTo($"/profile/job?back=add");
                 }
                 StateHasChanged();
             } else {
@@ -109,7 +110,7 @@ namespace uofi_itp_directory.Pages.Offices {
         private async Task AssignTextFields() {
             if (OfficeId.HasValue) {
                 Office = await OfficeHelper.GetOfficeById(OfficeId.Value, await AuthenticationStateProvider.GetUser());
-                JobProfiles = (await JobProfileHelper.GetJobProfileThinObjects(OfficeId.Value)) ?? new List<JobProfileThinObject>();
+                JobProfiles = (await JobProfileHelper.GetJobProfileThinObjects(OfficeId.Value)) ?? [];
             }
         }
 

@@ -18,7 +18,7 @@ namespace uofi_itp_directory_function {
         private readonly QueueManager _queueManager = queueManager;
 
         [Function("LoadPersonAutomatically")]
-        [OpenApiOperation(operationId: "LoadPersonAutomatically", tags: "Load", Description = "Load a person using the default parameters and source information. Note that this account has to be listed as using the default load for this to work properly.")]
+        [OpenApiOperation(operationId: "Load Person Automatically", tags: "Load", Description = "Load a person using the default parameters and source information. Note that this account has to be listed as using the default load for this to work properly.")]
         [OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The NetID of the person you want to load.")]
         [OpenApiParameter(name: "source", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Source value.")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "A status of what it did.")]
@@ -30,17 +30,17 @@ namespace uofi_itp_directory_function {
         [OpenApiParameter(name: "name", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The NetID of the person you want to load.")]
         [OpenApiParameter(name: "source", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Source value.")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "A status of what it did.")]
-        public async Task<IActionResult> LoadPersonManually([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "Load/Manual")] HttpRequest req) {
-            var body = new StreamReader(req.Body).ReadToEnd();
+        public Task<IActionResult> LoadPersonManually([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "Load/Manual")] HttpRequest req) {
+            //TODO Need to implement once someone needs it - must include 'var body = new StreamReader(req.Body).ReadToEnd();'
             try {
-                return new OkObjectResult("Not implemented yet");
+                return Task.FromResult<IActionResult>(new OkObjectResult("Not implemented yet"));
             } catch (Exception e) {
-                return new BadRequestObjectResult(e.Message);
+                return Task.FromResult<IActionResult>(new BadRequestObjectResult(e.Message));
             }
         }
 
         [Function("LoadProcess")]
-        [OpenApiOperation(operationId: "LoadProcess", tags: "Load", Description = "Start the load process. If there are names to process, it will process those names. If there are no names to process and it has been 12 hours since the last full load, it will load all the names from areas marked with the 'Auto-load profiles to directory hook' option. Otherwise, it will do nothing.")]
+        [OpenApiOperation(operationId: "Load Process", tags: "Load", Description = "Start the load process. If there are names to process, it will process those names. If there are no names to process and it has been 12 hours since the last full load, it will load all the names from areas marked with the 'Auto-load profiles to directory hook' option. Otherwise, it will do nothing.")]
         [OpenApiParameter(name: "take", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The number of names to process.")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "A status of what it did. If it loaded names, it will list the net IDs of the names that were loaded.")]
         public async Task<IActionResult> Process([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Load")] HttpRequest req) =>

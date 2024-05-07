@@ -24,6 +24,7 @@ namespace uofi_itp_directory_data.DataModels {
         public bool CanAddPeople { get; set; }
         public string City { get; set; } = "";
 
+        public string Description { get; set; } = "";
         public string Email { get; set; } = "";
 
         public string ExternalUrl { get; set; } = "";

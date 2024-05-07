@@ -1,5 +1,5 @@
 ﻿<div class="iled-section-vertical">
-    @if (!IsDisabled)
+    @if (!IsDisabled && string.IsNullOrWhiteSpace(FileUrl))
     {
         <div class="iled-input-box-parent">
             <div class="iled-input-box">
@@ -13,7 +13,7 @@
             <p class="iled-inline-alert">@DocumentResultsText</p>
             @if (!string.IsNullOrWhiteSpace(FileUrl))
             {
-                <a target="_blank" href="@FileUrl">Document (will open in new tab)</a>
+                <strong><a target="_blank" href="@FileUrl">Document (will open in new tab)</a></strong>
                 <button @onclick="@DeleteFile" disabled="@IsDisabled" class="il-button" @onblur="RemoveMessage">Delete</button>
             }
         </div>

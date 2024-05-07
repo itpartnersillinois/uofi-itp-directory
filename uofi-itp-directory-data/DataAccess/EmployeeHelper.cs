@@ -28,7 +28,7 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<Employee?> GetEmployee(int? id, string name) {
-            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
+            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Tags).Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
             if (employee == null) {
                 return null;
             }
@@ -37,14 +37,24 @@ namespace uofi_itp_directory_data.DataAccess {
                 employee.IsCurrentUser = true;
             }
             var officesEmployeeIsIn = employee.JobProfiles.Select(jp => jp.OfficeId).ToList();
+
             var securityEntriesUserIsIn = (await _directoryRepository.ReadAsync(d => d.SecurityEntries.Where(se => se.Email == name && se.IsActive))).ToList();
-            // TODO Should area owners be able to edit people in all offices they manage? Currently, they do not
 
-            if (securityEntriesUserIsIn.Any(se => se.IsFullAdmin || officesEmployeeIsIn.Contains(se.OfficeId ?? -1) && se.CanEditAllPeopleInUnit))
+            // start: if a security entry has an area, include all the offices in the area
+            var areaIds = securityEntriesUserIsIn.Where(se => se.AreaId != null).Select(se => se.AreaId);
+
+            var officeIdInAreas = areaIds.Any() ? [.. (await _directoryRepository.ReadAsync(d => d.Offices.Where(o => areaIds.Contains(o.AreaId)).Select(o => o.Id)))] : new List<int>();
+
+            var allowFullEdit = officeIdInAreas.Any(officesEmployeeIsIn.Contains);
+            // end: if a security entry has an area, include all the offices in the area
+
+            if (securityEntriesUserIsIn.Any(se => se.IsFullAdmin || allowFullEdit || officesEmployeeIsIn.Contains(se.OfficeId ?? -1) && se.CanEditAllPeopleInUnit)) {
                 employee.IsEntryDisabled = false;
+            }
 
-            foreach (var profile in employee.JobProfiles)
-                profile.IsEntryDisabled = !(securityEntriesUserIsIn.Any(se => se.IsFullAdmin) || securityEntriesUserIsIn.Select(se => se.OfficeId ?? -1).Contains(profile.OfficeId));
+            foreach (var profile in employee.JobProfiles) {
+                profile.IsEntryDisabled = !(securityEntriesUserIsIn.Any(se => se.IsFullAdmin) || officeIdInAreas.Contains(profile.OfficeId) || securityEntriesUserIsIn.Select(se => se.OfficeId ?? -1).Contains(profile.OfficeId));
+            }
 
             return employee;
         }
@@ -53,7 +63,7 @@ namespace uofi_itp_directory_data.DataAccess {
 
         public async Task<Employee?> GetEmployeeReadOnly(string netId, string source) {
             netId = netId.Replace("@illinois.edu", "") + "@illinois.edu";
-            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).ThenInclude(a => a.AreaSettings).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == netId));
+            var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).ThenInclude(a => a.AreaSettings).Include(e => e.JobProfiles).ThenInclude(jp => jp.Tags).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == netId));
             if (employee != null && employee.JobProfiles != null) {
                 employee.JobProfiles = employee.JobProfiles.Where(j => j.Office.Area.AreaSettings.InternalCode == source && j.Office.CanAddPeople).ToList();
             }
@@ -63,6 +73,8 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<AreaSettings> GetEmployeeSettings(Employee? employee) => employee == null ?
             new AreaSettings() :
             await _directoryRepository.ReadAsync(d => d.Offices.Include(o => o.Area).ThenInclude(a => a.AreaSettings).SingleOrDefault(o => o.Id == employee.PrimaryJobProfile.OfficeId)?.Area?.AreaSettings) ?? new AreaSettings();
+
+        public async Task<int> RemoveTag(JobProfileTag? tag) => await _directoryRepository.DeleteAsync(tag);
 
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
             employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);

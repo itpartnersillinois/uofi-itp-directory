@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using uofi_itp_directory.ControlHelper;
 using uofi_itp_directory.Controls;
@@ -11,6 +12,9 @@ using uofi_itp_directory_data.Security;
 namespace uofi_itp_directory.Pages.Unit {
 
     public partial class General {
+        private bool _isDirty = false;
+        protected void SetDirty() => _isDirty = true;
+
         private List<AreaOfficeThinObject> _areaThinObjects = default!;
         private MultiChoice? _multiChoice = default!;
         public Area Area { get; set; } = default!;
@@ -49,7 +53,15 @@ namespace uofi_itp_directory.Pages.Unit {
         public async Task Send() {
             _ = await AreaHelper.UpdateArea(Area, await AuthenticationStateProvider.GetUser());
             _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
+            _isDirty = false;
             StateHasChanged();
+        }
+        private async Task LocationChangingHandler(LocationChangingContext arg) {
+            if (_isDirty) {
+                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                    arg.PreventNavigation();
+                }
+            }
         }
 
         protected override async Task OnInitializedAsync() {

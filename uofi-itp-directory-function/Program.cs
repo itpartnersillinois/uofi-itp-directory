@@ -10,6 +10,7 @@ using uofi_itp_directory_data.DirectoryHook;
 using uofi_itp_directory_data.Helpers;
 using uofi_itp_directory_data.Security;
 using uofi_itp_directory_external.DataWarehouse;
+using uofi_itp_directory_external.Email;
 using uofi_itp_directory_external.Experts;
 using uofi_itp_directory_external.ProgramCourse;
 using uofi_itp_directory_function;
@@ -45,6 +46,7 @@ var host = new HostBuilder()
         _ = services.AddScoped(c => new PersonGetter(hostContext.Configuration["Values:SearchUrl"]));
         _ = services.AddScoped(c => new LoadManager(c.GetService<DataWarehouseManager>(), c.GetService<EmployeeHelper>(), c.GetService<ProgramCourseInformation>(), c.GetService<IllinoisExpertsManager>(), c.GetService<AreaHelper>(), hostContext.Configuration["Values:SearchUrl"]));
         _ = services.AddScoped<DirectoryManager>();
+        _ = services.AddScoped(c => new EmailHandler(hostContext.Configuration["Values:SocketApiKey"]));
     })
     .Build();
 
