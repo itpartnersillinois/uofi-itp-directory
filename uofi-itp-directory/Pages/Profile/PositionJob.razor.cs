@@ -73,11 +73,11 @@
             }
             AreaTags = [];
             foreach (var areaId in Employee.JobProfiles.Select(jp => jp.Office.AreaId).Distinct()) {
-                AreaTags.Add(areaId, await AreaHelper.GetAreaTagsByAreaId(areaId));
+                AreaTags[areaId] = await AreaHelper.GetAreaTagsByAreaId(areaId);
             }
             OfficeDescriptionUsed = [];
             foreach (var officeId in Employee.JobProfiles.Select(jp => jp.Office.Id).Distinct()) {
-                OfficeDescriptionUsed.Add(officeId, await OfficeHelper.GetOfficeSettingJobDescriptionById(officeId));
+                OfficeDescriptionUsed[officeId] = await OfficeHelper.GetOfficeSettingJobDescriptionById(officeId);
             }
             Instructions = await EmployeeAreaHelper.EmployeeInstructions(Employee.NetId);
             PersonName = Employee.ProfileName;
