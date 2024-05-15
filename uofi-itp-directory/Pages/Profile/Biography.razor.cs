@@ -71,9 +71,12 @@ namespace uofi_itp_directory.Pages.Profile {
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
 
         private async Task LocationChangingHandler(LocationChangingContext arg) {
-            if (QuillBiography != null && await QuillBiography.GetHTML() != Employee?.Biography) {
-                if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
-                    arg.PreventNavigation();
+            if (QuillBiography != null) {
+                var html = await QuillBiography.GetHTML();
+                if (!string.IsNullOrWhiteSpace(html) && html != Employee?.Biography) {
+                    if (!(await JsRuntime.InvokeAsync<bool>("confirm", $"You have unsaved changes. Are you sure?"))) {
+                        arg.PreventNavigation();
+                    }
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace uofi_itp_directory_data.DirectoryHook {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
 
         public async Task<string> Process(int count) {
-            var queue = await _directoryRepository.ReadAsync(d => d.DirectoryEntries.Where(de => de.DateRun == null).OrderBy(de => de.DateSubmitted).Take(count));
+            var queue = await _directoryRepository.ReadAsync(d => d.DirectoryEntries.Where(de => de.DateRun == null).Take(count));
             if (queue.Any()) {
                 var responseQueue = new List<DirectoryEntry>();
                 foreach (var directoryEntry in queue) {

@@ -20,6 +20,7 @@ namespace uofi_itp_directory_function.ViewModels {
 
         public IEnumerable<OfficeInformation> Offices { get; set; } = area.Offices.Where(o => o.IsActive && (!officeTypes.Any() || officeTypes.Contains(o.OfficeType)) && !(externalOnly && o.IsInternalOnly)).Select(o => new OfficeInformation(o));
         public int Priority { get; set; } = area.InternalOrder;
+        public IEnumerable<string> Tags { get; set; } = area.AreaTags.Select(a => a.Title);
         public string Title { get; set; } = area.Title;
     }
 }
