@@ -29,6 +29,11 @@ namespace uofi_itp_directory_data.Data {
             return context.SaveChanges();
         }
 
+        public async Task<int> DeleteAllDirectoryEntries() {
+            using var context = _factory.CreateDbContext();
+            return await context.DirectoryEntries.ExecuteDeleteAsync();
+        }
+
         public async Task<int> DeleteAsync<T>(T item) {
             if (item == null) {
                 return 0;

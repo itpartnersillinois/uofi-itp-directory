@@ -29,7 +29,7 @@ namespace uofi_itp_directory_function {
             var search = req.GetSearch();
             var officeTypes = req.GetOfficesTypes();
             return new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Areas
-                .Include(a => a.AreaSettings)
+                .Include(a => a.AreaSettings).Include(a => a.AreaTags)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && (!officeTypes.Any() || a.Offices.Any(o => officeTypes.Contains(o.OfficeType))) && (search == "" || a.Title.Contains(search) || a.Audience.Contains(search) ||
@@ -47,7 +47,7 @@ namespace uofi_itp_directory_function {
             var search = req.GetSearch();
             var officeTypes = req.GetOfficesTypes();
             return new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Areas
-                .Include(a => a.AreaSettings)
+                .Include(a => a.AreaSettings).Include(a => a.AreaTags)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && !a.IsInternalOnly && (!officeTypes.Any() || a.Offices.Any(o => officeTypes.Contains(o.OfficeType))) && (search == "" || a.Title.Contains(search) || a.Audience.Contains(search) || a.Offices.Any(o => o.Title.Contains(search)) || a.Offices.Any(o => o.Audience.Contains(search))))
@@ -63,6 +63,7 @@ namespace uofi_itp_directory_function {
             var officeTypes = req.GetOfficesTypes();
             return new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Areas
                 .Include(a => a.AreaSettings)
+                .Include(a => a.AreaTags)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && a.Id == id)
@@ -76,7 +77,9 @@ namespace uofi_itp_directory_function {
         public async Task<IActionResult> GetAreaCode([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Area/Code/{code}")] HttpRequest req, string code) {
             var officeTypes = req.GetOfficesTypes();
             return new OkObjectResult(await _directoryRepository.ReadAsync(c => c.Areas
-                .Include(a => a.AreaSettings).Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
+                .Include(a => a.AreaSettings)
+                .Include(a => a.AreaTags)
+                .Include(a => a.Offices).ThenInclude(o => o.OfficeHours)
                 .Include(a => a.Offices).ThenInclude(o => o.OfficeSettings)
                 .Where(a => a.IsActive && a.AreaSettings.InternalCode == code)
                 .Select(a => new AreaInformation(a, false, officeTypes)).ToList().Where(a => a.Offices.Any()).FirstOrDefault()));
