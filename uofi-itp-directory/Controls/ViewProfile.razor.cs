@@ -6,6 +6,7 @@ using uofi_itp_directory_data.Helpers;
 namespace uofi_itp_directory.Controls {
 
     public partial class ViewProfile {
+        public string ButtonName { get; set; } = "";
         public bool HasProfile => !string.IsNullOrWhiteSpace(Url);
 
         [Parameter]
@@ -19,6 +20,10 @@ namespace uofi_itp_directory.Controls {
         [Inject]
         protected EmployeeAreaHelper EmployeeAreaHelper { get; set; } = default!;
 
-        protected override async Task OnInitializedAsync() => Url = await EmployeeAreaHelper.ProfileViewUrl(string.IsNullOrWhiteSpace(NetId) ? await AuthenticationStateProvider.GetUser() : NetId);
+        protected override async Task OnInitializedAsync() {
+            var currentUser = await AuthenticationStateProvider.GetUser();
+            Url = await EmployeeAreaHelper.ProfileViewUrl(string.IsNullOrWhiteSpace(NetId) ? currentUser : NetId);
+            ButtonName = string.IsNullOrWhiteSpace(NetId) || NetId == currentUser ? "View My Profile" : $"View Profile {NetId.Replace("@illinois.edu", "")}";
+        }
     }
 }

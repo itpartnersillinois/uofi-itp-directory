@@ -20,6 +20,7 @@ namespace uofi_itp_directory_data.DirectoryHook {
 
         public async Task<int> LoadAreas() {
             var returnValue = 0;
+            _ = _directoryRepository.DeleteAllDirectoryEntries();
             var areasToAdd = (await _directoryRepository.ReadAsync(d => d.AreaSettings.Where(a => a.AutoloadProfiles && a.UrlPeopleRefreshType != PeopleRefreshTypeEnum.None).Select(a => a.AreaId))).ToList();
             foreach (var employeeId in await _directoryRepository.ReadAsync(d => d.JobProfiles.Include(jp => jp.Office)
                 .Where(jp => areasToAdd.Contains(jp.Office.AreaId))
