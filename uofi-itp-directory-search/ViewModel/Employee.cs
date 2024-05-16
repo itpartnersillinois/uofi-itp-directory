@@ -70,6 +70,9 @@ namespace uofi_itp_directory_search.ViewModel {
         [JsonProperty("suggest")]
         public dynamic? Suggest => string.IsNullOrWhiteSpace(NetId) ? null : new { input = new[] { LastName, FirstName }, contexts = new { source = Source } };
 
+        [JsonProperty("tags")]
+        public List<string> Tags { get; set; } = default!;
+
         [JsonProperty("teachingstatement")]
         public string TeachingStatement { get; set; } = "";
 
