@@ -35,6 +35,7 @@ namespace uofi_itp_directory_search.LoadHelper {
             State = ChooseFirstNonBlank(directoryEmployee.State, dataWarehouseItem.State),
             Quote = expertsProfile.Quote,
             ResearchStatement = expertsProfile.ResearchStatement,
+            Tags = directoryEmployee.PrimaryJobProfile.Tags.Select(t => t.Title).ToList() ?? [],
             TeachingStatement = expertsProfile.TeachingStatement,
             TwitterName = expertsProfile.Twitter,
             Uin = dataWarehouseItem.Uin,

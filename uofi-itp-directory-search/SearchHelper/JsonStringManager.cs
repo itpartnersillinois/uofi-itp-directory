@@ -3,25 +3,28 @@
     public static class JsonStringManager {
 
         public static string GetEmployeeJsonByName(string source, string username) {
-            username = MakeSafeForElasticsearch(username);
+            username = MakeSafeForElasticsearch(username, true);
             return "{ \"from\": 0, \"size\": 1, \"query\": { \"bool\": { \"must\": { \"match_all\": { } }, \"filter\": [ { \"bool\": {  \"should\": [ { \"match\": { \"linkname\": \"" + username + "\" } }, { \"match\": { \"netid\": \"" + username + "\"  } } ] } }, { \"term\": { \"source\": \"" + source + "\" } } ] } } }";
         }
 
         public static string GetEmployeeJsonByUin(string source, string username) {
-            username = MakeSafeForElasticsearch(username);
+            username = MakeSafeForElasticsearch(username, true);
             return "{ \"from\": 0, \"size\": 1, \"query\": { \"bool\": { \"must\": { \"match_all\": { } }, \"filter\": [ { \"bool\": {  \"should\": [ { \"match\": { \"uin\": \"" + username + "\" } }, { \"match\": { \"netid\": \"" + username + "\"  } } ] } }, { \"term\": { \"source\": \"" + source + "\" } } ] } } }";
         }
 
-        public static string GetJsonFilter(string source, IEnumerable<string> offices, IEnumerable<string> jobTypes) {
+        public static string GetJsonFilter(string source, IEnumerable<string> offices, IEnumerable<string> jobTypes, IEnumerable<string> tags) {
             var returnValue = new List<string> {
                 GetSingleFilter("source", source)
             };
             if (offices.Any() && jobTypes.Any()) {
-                returnValue.Add(GetSingleFilter("officejobtypelist", from o in offices from j in jobTypes select $"{o} {j}"));
+                returnValue.Add(GetSingleFilter("officejobtypelist", from o in offices from j in jobTypes select $"{o} {j}", true));
             } else if (offices.Any()) {
-                returnValue.Add(GetSingleFilter("officelist", offices));
+                returnValue.Add(GetSingleFilter("officelist", offices, true));
             } else if (jobTypes.Any()) {
-                returnValue.Add(GetSingleFilter("jobtypelist", jobTypes));
+                returnValue.Add(GetSingleFilter("jobtypelist", jobTypes, true));
+            }
+            if (tags.Any()) {
+                returnValue.Add(GetSingleFilter("tags.keyword", tags, false));
             }
             return "\"bool\": { \"must\": [" + string.Join(", ", returnValue.Where(s => !string.IsNullOrWhiteSpace(s))) + "] }";
         }
@@ -46,13 +49,13 @@
                 : "{ \"from\": " + skip + ", \"size\": " + size + ", \"sort\": [\"_score\", \"fullnamereversed\"], \"query\": { \"bool\": { \"must\": { \"multi_match\": { \"query\": \"" + s + "\", \"fields\": [ \"lastname\", \"firstname\", \"username\" ] } }, \"filter\": { " + filter + " } } }, \"suggest\" : { \"suggestion\" : { \"text\" : \"" + s + "\", \"term\" : { \"field\" : \"fullname\" } } } }";
         }
 
-        public static string GetSingleFilter(string termName, string value) => !string.IsNullOrWhiteSpace(value) ? "{ \"bool\": { \"should\": [ { \"term\": { \"" + termName + "\": \"" + MakeSafeForElasticsearch(value) + "\" } } ] } }" : string.Empty;
+        public static string GetSingleFilter(string termName, string value) => !string.IsNullOrWhiteSpace(value) ? "{ \"bool\": { \"should\": [ { \"term\": { \"" + termName + "\": \"" + MakeSafeForElasticsearch(value, true) + "\" } } ] } }" : string.Empty;
 
-        public static string GetSingleFilter(string termName, IEnumerable<string> values) => values.Any(v => v != "") ? "{ \"bool\": { \"should\": [" + string.Join(", ", values.Where(v => v != "").Select(v => "{ \"term\": { \"" + termName + "\": \"" + MakeSafeForElasticsearch(v) + "\" } }")) + "] } }" : string.Empty;
+        public static string GetSingleFilter(string termName, IEnumerable<string> values, bool useLowercase) => values.Any(v => v != "") ? "{ \"bool\": { \"should\": [" + string.Join(", ", values.Where(v => v != "").Select(v => "{ \"term\": { \"" + termName + "\": \"" + MakeSafeForElasticsearch(v, useLowercase) + "\" } }")) + "] } }" : string.Empty;
 
         public static string GetSuggestionJson(string source, string query) => "{ \"_source\": [\"text\"], \"suggest\": { \"suggest\": { \"prefix\": \"" + query + "\", \"completion\": { \"field\": \"suggest\", \"size\": 10, \"skip_duplicates\": true, \"contexts\": { \"source\": [ \"" + source + "\" ] }, \"fuzzy\": { \"fuzziness\": \"AUTO\" } } } } }";
 
-        private static string MakeSafeForElasticsearch(string s) => s.Replace("\"", "\\\"").ToLowerInvariant();
+        private static string MakeSafeForElasticsearch(string s, bool lowercase) => lowercase ? s.Replace("\"", "\\\"").ToLowerInvariant() : MakeSafeForJson(s);
 
         private static string MakeSafeForJson(string s) => s.Replace("\"", "\\\"");
     }

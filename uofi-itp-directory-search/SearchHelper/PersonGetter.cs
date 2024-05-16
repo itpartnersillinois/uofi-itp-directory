@@ -27,8 +27,8 @@ namespace uofi_itp_directory_search.SearchHelper {
             return returnValue;
         }
 
-        public async Task<DirectoryItem> Search(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, bool useFullText, int skip, int size, string source) {
-            var response = await Get(JsonStringManager.GetJsonForSearch(query, skip, size, JsonStringManager.GetJsonFilter(source, offices, jobTypes), useFullText));
+        public async Task<DirectoryItem> Search(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, IEnumerable<string> tags, bool useFullText, int skip, int size, string source) {
+            var response = await Get(JsonStringManager.GetJsonForSearch(query, skip, size, JsonStringManager.GetJsonFilter(source, offices, jobTypes, tags), useFullText));
 
             var returnValue = new DirectoryItem();
             using (var streamReader = new StreamReader(response.Content.ReadAsStream() ?? new MemoryStream())) {
@@ -52,8 +52,8 @@ namespace uofi_itp_directory_search.SearchHelper {
             return returnValue;
         }
 
-        public async Task<DirectoryItem> SearchByArea(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, bool useFullText, string source) {
-            var response = await Get(JsonStringManager.GetJsonForAreaSearch(query, JsonStringManager.GetJsonFilter(source, offices, jobTypes), useFullText));
+        public async Task<DirectoryItem> SearchByArea(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, IEnumerable<string> tags, bool useFullText, string source) {
+            var response = await Get(JsonStringManager.GetJsonForAreaSearch(query, JsonStringManager.GetJsonFilter(source, offices, jobTypes, tags), useFullText));
 
             var returnValue = new DirectoryItem();
             using (var streamReader = new StreamReader(response.Content.ReadAsStream() ?? new MemoryStream())) {

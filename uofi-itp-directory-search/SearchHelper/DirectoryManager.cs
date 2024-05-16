@@ -7,8 +7,8 @@ namespace uofi_itp_directory_search.SearchHelper {
         private readonly AreaHelper _areaHelper = areaHelper;
         private readonly PersonGetter _personGetter = personGetter;
 
-        public async Task<DirectoryFullItem> GetFullDirectory(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, bool useFullText, string source) {
-            var people = await _personGetter.SearchByArea(query, offices, jobTypes, useFullText, source);
+        public async Task<DirectoryFullItem> GetFullDirectory(string query, IEnumerable<string> offices, IEnumerable<string> jobTypes, IEnumerable<string> tags, bool useFullText, string source) {
+            var people = await _personGetter.SearchByArea(query, offices, jobTypes, tags, useFullText, source);
             var officeInformation = await _areaHelper.GetOfficesBySource(source, offices);
 
             var items = officeInformation.Select(o => DirectoryOfficeItemTranslator.Translate(o, people.People)).OrderBy(o => o?.Title).ToList();

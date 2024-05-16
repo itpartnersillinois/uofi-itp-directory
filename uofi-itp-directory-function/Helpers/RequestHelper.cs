@@ -10,6 +10,7 @@ namespace uofi_itp_directory_function.Helpers {
         private const string _searchCriteria = "q";
         private const string _skip = "skip";
         private const string _splitString = "[-]";
+        private const string _tags = "tags";
         private const string _take = "take";
         private const string _useFullText = "useFullText";
 
@@ -22,6 +23,8 @@ namespace uofi_itp_directory_function.Helpers {
         public static string GetSearch(this HttpRequest req) => req.Query[_searchCriteria].FirstOrDefault() ?? "";
 
         public static int GetSkip(this HttpRequest req) => req.Query.ContainsKey(_skip) ? int.Parse(req.Query[_skip].FirstOrDefault() ?? "0") : 0;
+
+        public static IEnumerable<string> GetTags(this HttpRequest req) => req.GetArray(_tags);
 
         public static int GetTake(this HttpRequest req) => req.Query.ContainsKey(_take) ? int.Parse(req.Query[_take].FirstOrDefault() ?? "10") : 10;
 
