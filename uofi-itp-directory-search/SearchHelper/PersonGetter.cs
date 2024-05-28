@@ -44,7 +44,11 @@ namespace uofi_itp_directory_search.SearchHelper {
                 }
             }
             if (offices.Count() == 1) {
-                returnValue.People.ForEach(p => EmployeeCompact.TransferPrimaryOfficeAndTitle(p, offices.First()));
+                foreach (var emp in returnValue.People) {
+                    emp.JobProfiles = emp.JobProfiles.Where(j => j.Office == offices.First()).ToList();
+                    emp.PrimaryOffice = offices.First();
+                    emp.PrimaryTitle = emp.JobProfiles.FirstOrDefault(j => j.Office == offices.FirstOrDefault())?.Title ?? emp.PrimaryTitle;
+                }
                 if (string.IsNullOrWhiteSpace(query)) {
                     returnValue.People = returnValue.People.OrderBy(p => p.JobProfiles.FirstOrDefault()?.DisplayOrder).ThenBy(p => p.FullNameReversed).ToList();
                 }
