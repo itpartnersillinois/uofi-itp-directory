@@ -38,7 +38,7 @@ jobs:
         id: fa
         with:
           app-name: 'itp-function-directory'
-          slot-name: 'Production'
+          slot-name: 'staging'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE }} 
           
