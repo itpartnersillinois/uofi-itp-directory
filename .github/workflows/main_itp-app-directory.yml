@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'itp-app-directory'
           slot-name: 'staging'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C06915CC153E47B39449213E7AF6A099 }}
+          publish-profile: ${{ secrets.AZURE_WEB_PUBLISH_PROFILE }}
           package: .
