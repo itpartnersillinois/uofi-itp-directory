@@ -82,33 +82,32 @@ namespace uofi_itp_directory_search.ViewModel {
         public string Zip { get; set; } = "";
 
         public static EmployeeCompact TransferPrimaryOfficeAndTitle(EmployeeCompact e, string officeName) {
-            if (e.JobProfiles.Count == 1) {
-                return e;
-            }
-            return new EmployeeCompact {
-                JobProfiles = e.JobProfiles.Where(jp => jp.Office == officeName).ToList(),
-                PrimaryOffice = e.JobProfiles.FirstOrDefault(jp => jp.Office == officeName)?.Office ?? e.JobProfiles.First().Office,
-                PrimaryTitle = e.JobProfiles.FirstOrDefault(jp => jp.Office == officeName)?.Title ?? e.JobProfiles.First().Title,
-                Building = e.Building,
-                City = e.City,
-                CvUrl = e.CvUrl,
-                Email = e.Email,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Hours = e.Hours,
-                ImageUrl = e.ImageUrl,
-                Keywords = e.Keywords,
-                LinkName = e.LinkName,
-                NetId = e.NetId,
-                Phone = e.Phone,
-                PreferredPronouns = e.PreferredPronouns,
-                ProfileUrl = e.ProfileUrl,
-                RoomNumber = e.RoomNumber,
-                Source = e.Source,
-                State = e.State,
-                Uin = e.Uin,
-                Zip = e.Zip
-            };
+            return e.JobProfiles.Count == 1
+                ? e
+                : new EmployeeCompact {
+                    JobProfiles = e.JobProfiles.Where(jp => jp.Office == officeName).ToList(),
+                    PrimaryOffice = e.JobProfiles.FirstOrDefault(jp => jp.Office == officeName)?.Office ?? e.JobProfiles.First().Office,
+                    PrimaryTitle = e.JobProfiles.FirstOrDefault(jp => jp.Office == officeName)?.Title ?? e.JobProfiles.First().Title,
+                    Building = e.Building,
+                    City = e.City,
+                    CvUrl = e.CvUrl,
+                    Email = e.Email,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    Hours = e.Hours,
+                    ImageUrl = e.ImageUrl,
+                    Keywords = e.Keywords,
+                    LinkName = e.LinkName,
+                    NetId = e.NetId,
+                    Phone = e.Phone,
+                    PreferredPronouns = e.PreferredPronouns,
+                    ProfileUrl = e.ProfileUrl,
+                    RoomNumber = e.RoomNumber,
+                    Source = e.Source,
+                    State = e.State,
+                    Uin = e.Uin,
+                    Zip = e.Zip
+                };
         }
     }
 }
