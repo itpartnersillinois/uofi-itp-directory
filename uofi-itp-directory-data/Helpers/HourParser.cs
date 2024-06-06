@@ -44,7 +44,10 @@ namespace uofi_itp_directory_data.Helpers {
             return returnValue.TrimEnd([' ', ';']);
         }
 
-        public static string GetOfficeHourString(this List<OfficeHour> hours, bool includeHoliday) {
+        public static string GetOfficeHourString(this List<OfficeHour> hours, string overrideTextString, bool includeHoliday) {
+            if (!string.IsNullOrWhiteSpace(overrideTextString)) {
+                return overrideTextString;
+            }
             var returnValue = "";
             var comparisonValue = "";
             var startValue = "";

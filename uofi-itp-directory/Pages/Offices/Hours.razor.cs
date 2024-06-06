@@ -60,7 +60,7 @@ namespace uofi_itp_directory.Pages.Offices {
                 if (OfficeHours.Any(oh => oh.IsInvalid)) {
                     _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Start Hours must not be after End Hours");
                 } else {
-                    Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursIncludeHolidayMessage);
+                    Office.OfficeHourText = HourParser.GetOfficeHourString([.. OfficeHours], Office.HoursTextOverride, Office.HoursIncludeHolidayMessage);
                     foreach (var officeHour in OfficeHours) {
                         _ = await OfficeHelper.UpdateOfficeHour(officeHour, Office.Title, await AuthenticationStateProvider.GetUser());
                     }

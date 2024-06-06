@@ -52,6 +52,16 @@ else if (OfficeHours != null)
     <div class="iled-input-box-parent">
         Preview: <strong>@Office.OfficeHourText</strong>
     </div>
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-override">Text Override:</label>
+            <input id="ed-override" type="text" @bind="Office.HoursTextOverride" @bind:after="SetDirty">
+        </div>
+        <div class="iled-instructions">
+            If the preview doesn't work (like you are closed for the summer), you can add your own text. This will override the existing preview text. Use only if the preview text does not work. Clear this out to return to the standard generated hours. 
+        </div>
+    </div>
+
 
     <div class="iled-buttons-left">
         <button class="il-button" @onclick="Generate" @onblur="RemoveMessage">Save</button>
