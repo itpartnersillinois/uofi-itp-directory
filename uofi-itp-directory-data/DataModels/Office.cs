@@ -29,6 +29,7 @@ namespace uofi_itp_directory_data.DataModels {
 
         public string ExternalUrl { get; set; } = "";
         public bool HoursIncludeHolidayMessage { get; set; }
+        public string HoursTextOverride { get; set; } = "";
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
