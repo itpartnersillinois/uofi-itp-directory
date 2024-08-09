@@ -49,7 +49,7 @@ namespace uofi_itp_directory.Pages.Profile {
         public async Task Send() {
             if (Employee != null && QuillBiography != null) {
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information starting to update");
-                Employee.Biography = await QuillBiography.GetHTML();
+                Employee.Biography = ConvertNestedLinks(await QuillBiography.GetHTML());
                 _ = await EmployeeSecurityHelper.SaveEmployee(Employee, await AuthenticationStateProvider.GetUser(), "Biography: " + Employee.Biography);
                 _ = await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Information updated");
             }
@@ -69,6 +69,33 @@ namespace uofi_itp_directory.Pages.Profile {
         }
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
+
+        private string ConvertNestedLinks(string html) {
+            if (!html.Contains("<li class=\"ql-indent-1\">")) {
+                return html;
+            }
+            var locationStart = 0;
+            var locationEnd = 0;
+
+            while (locationStart != -1) {
+                locationStart = html.IndexOf("<li class=\"ql-indent-1\">", locationEnd);
+                if (locationStart != -1) {
+                    locationEnd = html.IndexOf("</li><li>", locationStart);
+                    if (locationEnd == -1) {
+                        locationEnd = html.IndexOf("</li></ul>", locationStart);
+                    }
+                    if (locationEnd == -1) {
+                        locationEnd = html.IndexOf("</li></ol>", locationStart);
+                    }
+                    if (locationEnd != -1) {
+                        html = html.Insert(locationEnd, "</li></ul>"); // add ending html
+                        html = html.Remove(locationStart - 5, 5); // remove last </li>, 5 characters
+                        html = html.Insert(locationStart - 5, "<ul>"); // add <ul> where the last </li> was
+                    }
+                }
+            }
+            return html.Replace(" class=\"ql-indent-1\"", "");
+        }
 
         private async Task LocationChangingHandler(LocationChangingContext arg) {
             if (QuillBiography != null) {
