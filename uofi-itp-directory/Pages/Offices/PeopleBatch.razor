@@ -1,0 +1,54 @@
+﻿@page "/office/peoplebatch/{officeid:int?}"
+
+<PageTitle>Office People Batch Load | Illinois</PageTitle>
+
+<il-section>
+    <h1>@OfficeTitle People Batch Load</h1>
+    <p>This allows you to add a batch of people with the same category and job title. Note that these people will be added to your profile on the next run unless you specifically mark them as "None". </p>
+</il-section>
+@if (!OfficeId.HasValue)
+{
+    <MultiChoice @ref="_multiChoice" Type="MultiChoiceTypeEnum.Office" AreaOfficeThinObjects="_officeThinObjects" OnClickCallback="AssignId"></MultiChoice>
+}
+else 
+{
+    <div class="iled-input-box-parent">
+        <div class="iled-input-box">
+            <label for="ed-internalnotes">Net IDs</label>
+            <textarea id="ed-internalnotes" @bind="NewNetIds"></textarea>
+        </div>
+        <div class="iled-instructions">
+            Enter Net IDs, one per line. The <em>@@illinois.edu</em> suffix is optional
+        </div>
+    </div>
+
+    <div class="iled-section-split">
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-new-title">Title</label>
+                <input id="ed-new-title" type="text" @bind="NewTitle">
+            </div>
+        </div>
+        <div class="iled-input-box-parent">
+            <div class="iled-input-box">
+                <label for="ed-new-type">Job Type</label>
+                <select id="ed-new-type" @bind="NewProfileCategory">
+                    @foreach (var enumtype in Enum.GetValues<ProfileCategoryTypeEnum>())
+                    {
+                        <option value="@enumtype">@enumtype.ToPrettyString()</option>
+                    }
+                </select>
+            </div>
+            <div class="iled-instructions">
+                A job type of "None" means the person will not be listed.
+            </div>
+        </div>
+    </div>
+    <div class="iled-buttons-left">
+        <button class="il-button" @onclick="Send" @onblur="RemoveMessage">Add Employees</button>
+        <ClearCacheButton></ClearCacheButton>
+    </div>
+    <div>
+        <p><strong>Results:</strong> @Results</p>
+    </div>
+}
