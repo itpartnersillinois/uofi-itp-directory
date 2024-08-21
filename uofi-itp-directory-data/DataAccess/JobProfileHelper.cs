@@ -13,7 +13,7 @@ namespace uofi_itp_directory_data.DataAccess {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly LogHelper _logHelper = logHelper;
 
-        public async Task<(int employeeId, string message)> GenerateJobProfile(int officeId, string netid, string changedByNetId) {
+        public async Task<(int employeeId, string message)> GenerateJobProfile(int officeId, string netid, string changedByNetId, string title = "", ProfileCategoryTypeEnum profileCategoryTypeEnum = ProfileCategoryTypeEnum.None) {
             if (!netid.EndsWith("@illinois.edu"))
                 netid = netid + "@illinois.edu";
 
@@ -33,7 +33,7 @@ namespace uofi_itp_directory_data.DataAccess {
                     IsActive = true,
                     LastUpdated = DateTime.Now,
                     EmployeeHours = new List<EmployeeHour> { new() { Day = DayOfWeek.Sunday }, new() { Day = DayOfWeek.Monday }, new() { Day = DayOfWeek.Tuesday }, new() { Day = DayOfWeek.Wednesday }, new() { Day = DayOfWeek.Thursday }, new() { Day = DayOfWeek.Friday }, new() { Day = DayOfWeek.Saturday } },
-                    JobProfiles = new List<JobProfile> { new() { IsActive = false, InternalOrder = 2, LastUpdated = DateTime.Now, Title = name.Title, OfficeId = officeId } }
+                    JobProfiles = new List<JobProfile> { new() { IsActive = profileCategoryTypeEnum != ProfileCategoryTypeEnum.None, InternalOrder = 3, LastUpdated = DateTime.Now, Title = !string.IsNullOrWhiteSpace(title) ? title : name.Title, OfficeId = officeId, Category = profileCategoryTypeEnum } }
                 };
                 _ = await _directoryRepository.CreateAsync(employee);
                 _ = await _logHelper.CreateEmployeeLog(changedByNetId, "Added New Employee", "", employee.Id, employee.NetId);
@@ -41,7 +41,7 @@ namespace uofi_itp_directory_data.DataAccess {
                 return (employee.Id, $"Employee {name.Name} created with new information");
             }
 
-            _ = await _directoryRepository.CreateAsync(new JobProfile { IsActive = false, InternalOrder = 2, LastUpdated = DateTime.Now, Title = name.Title, EmployeeProfileId = existingEmployee.Id, OfficeId = officeId });
+            _ = await _directoryRepository.CreateAsync(new JobProfile { IsActive = profileCategoryTypeEnum != ProfileCategoryTypeEnum.None, InternalOrder = 3, LastUpdated = DateTime.Now, Title = !string.IsNullOrWhiteSpace(title) ? title : name.Title, EmployeeProfileId = existingEmployee.Id, OfficeId = officeId, Category = profileCategoryTypeEnum });
             _ = await _logHelper.CreateProfileLog(changedByNetId, "Added Profile to Existing Employee", "", existingEmployee.Id, existingEmployee.NetId);
 
             return (existingEmployee.Id, $"Employee {name.Name} created with existing information");

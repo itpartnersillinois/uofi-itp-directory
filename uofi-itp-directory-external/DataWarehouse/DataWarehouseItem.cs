@@ -9,7 +9,7 @@
         public string FirstName { get; set; } = "";
         public bool IsValid => !string.IsNullOrWhiteSpace(FirstName) || !string.IsNullOrWhiteSpace(LastName);
         public string LastName { get; set; } = "";
-        public string Name => IsValid ? $"{FirstName} {LastName} ({Title})" : "";
+        public string Name => IsValid ? $"{FirstName} {LastName} ({(string.IsNullOrWhiteSpace(Title) ? "N/A" : Title)})" : "";
         public string NetId { get; set; } = "";
         public string Phone { get; set; } = "";
         public string PhoneAreaCode { get; set; } = "";
