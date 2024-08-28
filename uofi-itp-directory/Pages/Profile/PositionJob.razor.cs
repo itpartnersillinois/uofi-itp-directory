@@ -61,9 +61,10 @@
             }
         }
 
-        protected async Task AddTag(AreaTag tag, JobProfile profile) => _ = Employee?.JobProfiles.FirstOrDefault(jp => jp.Id == profile.Id)?.AddTag(tag.Title, tag.AllowEmployeeToEdit) ?? false
-                ? await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag added")
-                : await JsRuntime.InvokeAsync<bool>("alertOnScreen", "Tag already added");
+        protected async Task AddTag(AreaTag tag, JobProfile profile) {
+            Employee?.JobProfiles.FirstOrDefault(jp => jp.Id == profile.Id)?.AddTag(tag.Title, tag.AllowEmployeeToEdit);
+            _isDirty = true;
+        }
 
         protected override async Task OnInitializedAsync() {
             var employeeId = CacheHelper.GetCachedEmployee(await AuthenticationStateProvider.GetAuthenticationStateAsync(), CacheHolder, Refresh);
@@ -85,11 +86,15 @@
 
         protected override async Task OnParametersSetAsync() => await OnInitializedAsync();
 
-        protected async Task RemoveTag(JobProfileTag tag, JobProfile profile) {
-            if (tag.Id != 0) {
-                _ = await EmployeeSecurityHelper.RemoveTag(tag);
+        protected async Task RemoveTag(AreaTag tag, JobProfile profile) {
+            var profileTag = profile.Tags.FirstOrDefault(p => p.Title == tag.Title);
+            if (profile != null) {
+                if (profileTag?.Id != 0) {
+                    _ = await EmployeeSecurityHelper.RemoveTag(profileTag);
+                }
+                Employee?.JobProfiles.FirstOrDefault(jp => jp.Id == profile.Id)?.Tags.Remove(profileTag);
             }
-            Employee?.JobProfiles.FirstOrDefault(jp => jp.Id == profile.Id)?.Tags.Remove(tag);
+            _isDirty = true;
         }
 
         protected void SetDirty() => _isDirty = true;
