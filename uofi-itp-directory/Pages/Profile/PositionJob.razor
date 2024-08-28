@@ -94,26 +94,20 @@
             </div>
             @if (AreaTags.ContainsKey(profile.Office.AreaId) && AreaTags[profile.Office.AreaId].Any(t => t.IsShown(profile.Category)))
             {
-                <div class="iled-section-split">
-                    <div class="iled-input-box-parent iled-input-box-buttons">
-                        <h5>Available Tags</h5>
-                        @foreach (var tag in AreaTags[profile.Office.AreaId].Where(t => t.IsShown(profile.Category)))
+                <div class="iled-input-box-parent iled-input-box-buttons">
+                    <h5>Tags</h5>
+                    @foreach (var tag in AreaTags[profile.Office.AreaId].Where(t => t.IsShown(profile.Category)))
+                    {
+                        @if (profile.Tags.Select(t => t.Title).Contains(tag.Title))
                         {
-                            <button disabled="@(profile.IsEntryDisabled && tag.AllowEmployeeToEdit)" class="il-button" @onclick="() => AddTag(tag, profile)">@tag.Title</button>
-                        }
-                        <div class="iled-instructions">
-                            These are a list of tags that <strong>can be</strong> chosen for this profile. You may click on a tag to add it to this profile.
-                        </div>
-                    </div>
-                    <div class="iled-input-box-parent iled-input-box-buttons">
-                        <h5>Tags Applied to Profile</h5>
-                        @foreach (var tag in profile.Tags)
+                            <button disabled="@(profile.IsEntryDisabled && !tag.AllowEmployeeToEdit)" class="il-button il-theme-orange" @onclick="() => RemoveTag(tag, profile)">Remove @tag.Title (this is added)</button>
+                        } else
                         {
-                            <button disabled="@(profile.IsEntryDisabled && tag.AllowEmployeeToEdit)" class="il-button" @onclick="() => RemoveTag(tag, profile)">@tag.Title</button>
+                            <button disabled="@(profile.IsEntryDisabled && !tag.AllowEmployeeToEdit)" class="il-button" @onclick="() => AddTag(tag, profile)">@tag.Title</button>
                         }
-                        <div class="iled-instructions">
-                            These are a list of tags that <strong>have been</strong> chosen for this profile. You may click on a tag to remove it from this profile.
-                        </div>
+                    }
+                    <div class="iled-instructions">
+                        These are a list of tags that <strong>can be</strong> chosen for this profile. You may click on a tag to add or remove it to this profile. If you do not have access to add or remove a tag, contact your office administrator. 
                     </div>
                 </div>
             }
