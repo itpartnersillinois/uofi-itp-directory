@@ -89,7 +89,6 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<int> UpdateAllEmployeeUrlProfiles(int areaId, string url) {
-            ArgumentNullException.ThrowIfNull(_directoryRepository);
             var returnValue = 0;
             foreach (var employee in await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Where(e => e.JobProfiles.Any(jp => jp.Office.AreaId == areaId)))) {
                 if (employee.PrimaryJobProfile.Office.AreaId == areaId) {
