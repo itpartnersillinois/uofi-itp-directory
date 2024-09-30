@@ -73,5 +73,10 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+app.Lifetime.ApplicationStarted.Register(() => {
+    using var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+    var context = serviceScope.ServiceProvider.GetRequiredService<DirectoryContext>();
+    _ = context.Database.EnsureCreated();
+});
 
 app.Run();

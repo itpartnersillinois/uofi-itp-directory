@@ -7,14 +7,16 @@ using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory_data.DataAccess {
 
-    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, DirectoryContext directoryContext, EmployeeAreaHelper employeeAreaHelper, LogHelper logHelper) {
-        private readonly DirectoryContext _directoryContext = directoryContext;
-        private readonly DirectoryHookHelper _directoryHookHelper = directoryHookHelper;
-        private readonly DirectoryRepository _directoryRepository = directoryRepository;
-        private readonly EmployeeAreaHelper _employeeAreaHelper = employeeAreaHelper;
-        private readonly LogHelper _logHelper = logHelper;
+    public class EmployeeHelper(DirectoryRepository? directoryRepository, DirectoryHookHelper? directoryHookHelper, DirectoryContext? directoryContext, EmployeeAreaHelper? employeeAreaHelper, LogHelper? logHelper) {
+        private readonly DirectoryContext? _directoryContext = directoryContext;
+        private readonly DirectoryHookHelper? _directoryHookHelper = directoryHookHelper;
+        private readonly DirectoryRepository? _directoryRepository = directoryRepository;
+        private readonly EmployeeAreaHelper? _employeeAreaHelper = employeeAreaHelper;
+        private readonly LogHelper? _logHelper = logHelper;
 
         public async Task<int> DeleteEmployee(string netId) {
+            ArgumentNullException.ThrowIfNull(_directoryContext);
+            ArgumentNullException.ThrowIfNull(_directoryRepository);
             var returnValue = 0;
             var employeeId = (await _directoryRepository.ReadAsync(d => d.Employees.FirstOrDefault(e => e.NetId == netId)))?.Id ?? 0;
             if (employeeId != 0) {
@@ -28,6 +30,7 @@ namespace uofi_itp_directory_data.DataAccess {
         }
 
         public async Task<Employee?> GetEmployee(int? id, string name) {
+            ArgumentNullException.ThrowIfNull(_directoryRepository);
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Tags).Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
             if (employee == null) {
                 return null;
@@ -62,6 +65,7 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<Employee?> GetEmployeeForSignature(int? id, string name) => await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).FirstOrDefault(e => e.NetId == name && id == null || e.Id == id));
 
         public async Task<Employee?> GetEmployeeReadOnly(string netId, string source) {
+            ArgumentNullException.ThrowIfNull(_directoryRepository);
             netId = netId.Replace("@illinois.edu", "") + "@illinois.edu";
             var employee = await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).ThenInclude(o => o.Area).ThenInclude(a => a.AreaSettings).Include(e => e.JobProfiles).ThenInclude(jp => jp.Tags).Include(e => e.EmployeeActivities).Include(e => e.EmployeeHours).FirstOrDefault(e => e.NetId == netId));
             if (employee != null && employee.JobProfiles != null) {
@@ -77,14 +81,21 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<int> RemoveTag(JobProfileTag? tag) => await _directoryRepository.DeleteAsync(tag);
 
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
+            ArgumentNullException.ThrowIfNull(_employeeAreaHelper);
+            ArgumentNullException.ThrowIfNull(_directoryRepository);
             employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);
             var returnValue = await _directoryRepository.UpdateAsync(employee);
-            _ = await _directoryHookHelper.SendHook(employee.Id, true);
-            _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, employee.ToString(), employee.Id, employee.NetId);
+            if (_directoryHookHelper != null) {
+                _ = await _directoryHookHelper.SendHook(employee.Id, true);
+            }
+            if (_logHelper != null) {
+                _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, employee.ToString(), employee.Id, employee.NetId);
+            }
             return returnValue;
         }
 
         public async Task<int> UpdateAllEmployeeUrlProfiles(int areaId, string url) {
+            ArgumentNullException.ThrowIfNull(_directoryRepository);
             var returnValue = 0;
             foreach (var employee in await _directoryRepository.ReadAsync(d => d.Employees.Include(e => e.JobProfiles).ThenInclude(jp => jp.Office).Where(e => e.JobProfiles.Any(jp => jp.Office.AreaId == areaId)))) {
                 if (employee.PrimaryJobProfile.Office.AreaId == areaId) {
