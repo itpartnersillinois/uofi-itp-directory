@@ -54,10 +54,6 @@ namespace uofi_itp_directory_search.LoadHelper {
             if (_logOnly) {
                 return "";
             }
-            return await CreateMapping();
-        }
-
-        private async Task<string> CreateMapping() {
             using var httpClient = new HttpClient();
             var response = await httpClient.SendAsync(new HttpRequestMessage {
                 Version = HttpVersion.Version10,
@@ -65,7 +61,6 @@ namespace uofi_itp_directory_search.LoadHelper {
                 RequestUri = new Uri(_mapUrl),
                 Method = HttpMethod.Put
             }).ConfigureAwait(continueOnCapturedContext: false);
-            // _ = response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
     }
