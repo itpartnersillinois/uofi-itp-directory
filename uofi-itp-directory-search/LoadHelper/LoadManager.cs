@@ -17,17 +17,6 @@ namespace uofi_itp_directory_search.LoadHelper {
         private readonly ProgramCourseInformation _programCourseInformation = programCourseInformation ?? default!;
         private readonly string _searchUrl = searchUrl ?? "";
 
-        public async Task<string> LoadMapping() {
-            AddLog($"Starting mapping process");
-            try {
-                var personMapper = new PersonMapper(_searchUrl, AddLog);
-                AddLog(await personMapper.Map() ? "Mapping loaded complete" : "Mapping did not load");
-            } catch (Exception e) {
-                AddLog($"Error in process, aborting: {e.Message}");
-            }
-            return _logger.ToString();
-        }
-
         public async Task<string> LoadPerson(string netId, string source) {
             AddLog($"Starting process with Net ID {netId} and source {source}");
             try {

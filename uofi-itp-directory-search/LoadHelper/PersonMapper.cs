@@ -3,7 +3,7 @@ using System.Text;
 
 namespace uofi_itp_directory_search.LoadHelper {
 
-    public class PersonMapper(string mapUrl, Action<string> logger) {
+    public class PersonMapper(string? mapUrl, Action<string> logger) {
 
         private const string _map = "{ \"settings\": { \"analysis\": { \"filter\": { \"english_stop\": { \"type\": \"stop\", \"stopwords\": \"_english_\" }, \"english_stemmer\": { \"type\": \"stemmer\", \"language\": \"english\" }, \"english_possessive_stemmer\": { \"type\": \"stemmer\", \"language\": \"possessive_english\" } }, \"analyzer\": { \"english\": { \"tokenizer\": \"standard\", \"filter\": [ \"lowercase\", \"english_possessive_stemmer\", \"english_stop\", \"english_stemmer\" ] } } } }, " +
                 "\"mappings\" : { \"properties\" : { " +
@@ -47,17 +47,13 @@ namespace uofi_itp_directory_search.LoadHelper {
 
         private readonly Action<string> _logger = logger;
         private readonly bool _logOnly = string.IsNullOrWhiteSpace(mapUrl);
-        private readonly string _mapUrl = (mapUrl.TrimEnd('/') ?? "") + "/dr_person";
+        private readonly string _mapUrl = (mapUrl?.TrimEnd('/') ?? "") + "/dr_person";
 
-        public async Task<bool> Map() {
+        public async Task<string> Map() {
             _logger($"{_mapUrl}: PUT {(_logOnly ? _map : "")}");
             if (_logOnly) {
-                return true;
+                return "";
             }
-            return await CreateMapping();
-        }
-
-        private async Task<bool> CreateMapping() {
             using var httpClient = new HttpClient();
             var response = await httpClient.SendAsync(new HttpRequestMessage {
                 Version = HttpVersion.Version10,
@@ -65,8 +61,7 @@ namespace uofi_itp_directory_search.LoadHelper {
                 RequestUri = new Uri(_mapUrl),
                 Method = HttpMethod.Put
             }).ConfigureAwait(continueOnCapturedContext: false);
-            _ = response.EnsureSuccessStatusCode();
-            return true;
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

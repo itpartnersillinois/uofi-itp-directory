@@ -34,11 +34,12 @@ var host = new HostBuilder()
         _ = services.ConfigureFunctionsApplicationInsights();
         _ = services.AddDbContextFactory<DirectoryContext>(options => options.UseSqlServer(hostContext.Configuration["Values:AppConnection"]).EnableSensitiveDataLogging(true));
         _ = services.AddScoped<DirectoryRepository>();
+        _ = services.AddScoped(c => new PersonMapper(hostContext.Configuration["Values:SearchUrl"], Console.WriteLine));
         _ = services.AddScoped<LogHelper>();
         _ = services.AddScoped<EmployeeAreaHelper>();
         _ = services.AddScoped<AreaHelper>();
-        _ = services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), hostContext.Configuration["Values:FacultyLoadUrl"]));
-        _ = services.AddScoped<EmployeeHelper>();
+        _ = services.AddScoped(c => new DirectoryHookHelper(c.GetService<DirectoryRepository>(), ""));
+        _ = services.AddScoped(c => new EmployeeHelper(c.GetService<DirectoryRepository>(), null, c.GetService<DirectoryContext>(), c.GetService<EmployeeAreaHelper>(), c.GetService<LogHelper>()));
         _ = services.AddScoped<QueueManager>();
         _ = services.AddScoped(c => new DataWarehouseManager(hostContext.Configuration["Values:DataWarehouseUrl"], hostContext.Configuration["Values:DataWarehouseKey"]));
         _ = services.AddScoped(c => new IllinoisExpertsManager(hostContext.Configuration["Values:ExpertsUrl"], hostContext.Configuration["Values:ExpertsSecretKey"]));
@@ -49,5 +50,10 @@ var host = new HostBuilder()
         _ = services.AddScoped(c => new EmailHandler(hostContext.Configuration["Values:SocketApiKey"]));
     })
     .Build();
+
+using var scope = host.Services.CreateScope();
+var services = scope.ServiceProvider;
+var personMapper = services.GetService<PersonMapper>() ?? throw new NullReferenceException("personMapper");
+Console.WriteLine(await personMapper.Map());
 
 host.Run();

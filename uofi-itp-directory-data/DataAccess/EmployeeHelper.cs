@@ -7,12 +7,12 @@ using uofi_itp_directory_data.Security;
 
 namespace uofi_itp_directory_data.DataAccess {
 
-    public class EmployeeHelper(DirectoryRepository directoryRepository, DirectoryHookHelper directoryHookHelper, DirectoryContext directoryContext, EmployeeAreaHelper employeeAreaHelper, LogHelper logHelper) {
-        private readonly DirectoryContext _directoryContext = directoryContext;
-        private readonly DirectoryHookHelper _directoryHookHelper = directoryHookHelper;
-        private readonly DirectoryRepository _directoryRepository = directoryRepository;
-        private readonly EmployeeAreaHelper _employeeAreaHelper = employeeAreaHelper;
-        private readonly LogHelper _logHelper = logHelper;
+    public class EmployeeHelper(DirectoryRepository? directoryRepository, DirectoryHookHelper? directoryHookHelper, DirectoryContext? directoryContext, EmployeeAreaHelper? employeeAreaHelper, LogHelper? logHelper) {
+        private readonly DirectoryContext _directoryContext = directoryContext ?? throw new ArgumentNullException("directoryContext");
+        private readonly DirectoryHookHelper? _directoryHookHelper = directoryHookHelper;
+        private readonly DirectoryRepository _directoryRepository = directoryRepository ?? throw new ArgumentNullException("directoryRepository");
+        private readonly EmployeeAreaHelper _employeeAreaHelper = employeeAreaHelper ?? throw new ArgumentNullException("employeeAreaHelper");
+        private readonly LogHelper? _logHelper = logHelper;
 
         public async Task<int> DeleteEmployee(string netId) {
             var returnValue = 0;
@@ -79,8 +79,12 @@ namespace uofi_itp_directory_data.DataAccess {
         public async Task<int> SaveEmployee(Employee employee, string changedByNetId, string message) {
             employee.ProfileUrl = await _employeeAreaHelper.ProfileViewUrl(employee.NetId);
             var returnValue = await _directoryRepository.UpdateAsync(employee);
-            _ = await _directoryHookHelper.SendHook(employee.Id, true);
-            _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, employee.ToString(), employee.Id, employee.NetId);
+            if (_directoryHookHelper != null) {
+                _ = await _directoryHookHelper.SendHook(employee.Id, true);
+            }
+            if (_logHelper != null) {
+                _ = await _logHelper.CreateEmployeeLog(changedByNetId, message, employee.ToString(), employee.Id, employee.NetId);
+            }
             return returnValue;
         }
 
