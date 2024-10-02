@@ -53,6 +53,7 @@ var host = new HostBuilder()
 
 using var scope = host.Services.CreateScope();
 var services = scope.ServiceProvider;
-Console.WriteLine(await services.GetService<PersonMapper>()?.Map());
+var personMapper = services.GetService<PersonMapper>() ?? throw new NullReferenceException("personMapper");
+Console.WriteLine(await personMapper.Map());
 
 host.Run();

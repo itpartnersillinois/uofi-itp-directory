@@ -74,7 +74,8 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.Lifetime.ApplicationStarted.Register(() => {
-    using var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+    var factory = app.Services.GetService<IServiceScopeFactory>() ?? throw new NullReferenceException("service scope factory is null");
+    using var serviceScope = factory.CreateScope();
     var context = serviceScope.ServiceProvider.GetRequiredService<DirectoryContext>();
     _ = context.Database.EnsureCreated();
 });

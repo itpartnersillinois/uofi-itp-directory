@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using uofi_itp_directory_data.Data;
 using uofi_itp_directory_data.DataAccess;
 using uofi_itp_directory_external.DataWarehouse;
+using uofi_itp_directory_function.ViewModels;
 
 namespace uofi_itp_directory_function {
 
@@ -16,6 +17,14 @@ namespace uofi_itp_directory_function {
         private readonly DirectoryRepository _directoryRepository = directoryRepository;
         private readonly EmployeeHelper _employeeHelper = employeeHelper;
         private readonly ILogger<EdwRefreshFunction> _logger = logger;
+
+        [Function("EdwPull")]
+        [OpenApiOperation(operationId: "EdwPull", tags: "Load", Description = "Look up first and last names of users from EDW")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(NameInformation), Description = "First and Last Name of person")]
+        public async Task<IActionResult> Pull([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "EdwPull/{username}")] HttpRequest req, string username) {
+            var edw = await _dataWarehouseManager.GetDataWarehouseItem(username);
+            return new OkObjectResult(new NameInformation() { NetId = username, FirstName = edw.FirstName, LastName = edw.LastName });
+        }
 
         [Function("EdwRefresh")]
         [OpenApiOperation(operationId: "EdwRefresh", tags: "Load", Description = "Purge the directory database if names are no longer in EDW. This will run a long time.")]
