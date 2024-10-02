@@ -21,7 +21,7 @@ namespace uofi_itp_directory_function {
         [Function("EdwPull")]
         [OpenApiOperation(operationId: "EdwPull", tags: "Load", Description = "Look up first and last names of users from EDW")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(NameInformation), Description = "First and Last Name of person")]
-        public async Task<IActionResult> Pull([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "EdwPull/{username}")] HttpRequest req, string username) {
+        public async Task<IActionResult> Pull([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "EdwPull/{username}")] HttpRequest req, string username) {
             var edw = await _dataWarehouseManager.GetDataWarehouseItem(username);
             return new OkObjectResult(new NameInformation() { NetId = username, FirstName = edw.FirstName, LastName = edw.LastName });
         }
