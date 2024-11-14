@@ -3,6 +3,8 @@
     public static class DirectoryImage {
         private const string _blank = "https://directory.illinois.edu/webservices/public/ds/profile.png";
 
+        public static string Blank => _blank;
+
         public static string CheckImage(string url) {
             if (string.IsNullOrWhiteSpace(url)) {
                 return _blank;
